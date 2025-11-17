@@ -2,13 +2,22 @@
   "name": "website",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "payload": "payload",
+    "generate": "bun generate:types && bun generate:importmap",
+    "generate:importmap": "payload generate:importmap",
+    "generate:types": "payload generate:types"
   },
   "dependencies": {
+    "@payloadcms/db-sqlite": "^3.63.0",
+    "@payloadcms/next": "^3.63.0",
+    "@payloadcms/plugin-seo": "^3.63.0",
+    "@payloadcms/richtext-lexical": "^3.63.0",
     "@radix-ui/react-slot": "^1.2.4",
     "@tailwindcss/postcss": "^4.1.17",
     "@types/node": "24.10.0",
@@ -18,10 +27,14 @@
     "clsx": "^2.1.1",
     "eslint": "9.39.1",
     "eslint-config-next": "16.0.1",
+    "graphql": "^16.12.0",
     "lucide-react": "^0.553.0",
     "next": "16.0.1",
+    "payload": "^3.63.0",
+    "prism-react-renderer": "^2.4.1",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "sharp": "^0.34.5",
     "tailwind-merge": "^3.4.0",
     "typescript": "5.9.3"
   },

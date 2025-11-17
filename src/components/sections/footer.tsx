@@ -1,12 +1,6 @@
 import Link from "next/link"
 import { Container } from "@/components/layout/container"
-
-const navItems = [
-  { label: "Docs", href: "/docs" },
-  { label: "Company", href: "/roadmap" },
-  { label: "Blog", href: "/blog" },
-  { label: "Community", href: "/community" },
-];
+import { navigation } from "@/constants";
 
 export function SiteFooter() {
   return (
@@ -20,7 +14,7 @@ export function SiteFooter() {
           </p>
         </div>
         <nav className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-          {navItems.map((link) => (
+          {navigation.map((link) => (
             <Link
               key={link.label}
               href={link.href}

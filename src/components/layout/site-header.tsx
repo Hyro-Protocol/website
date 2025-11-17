@@ -8,13 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
+import { navigation } from "@/constants";
 
-const navItems = [
-  { label: "Docs", href: "/docs" },
-  { label: "Company", href: "/roadmap" },
-  { label: "Blog", href: "/blog" },
-  { label: "Community", href: "/community" },
-];
 
 export function SiteHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -60,7 +55,7 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
-          {navItems.map((item) => (
+          {navigation.map((item) => (
             <Link
               key={item.href}
               href={item.href}
