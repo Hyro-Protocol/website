@@ -30,7 +30,7 @@ export function FeaturesSection() {
     <section id="docs" className="bg-background py-24">
       <Container className="space-y-12">
         <div className="max-w-2xl space-y-4">
-          <Badge variant="neutral" className="border border-white/5 bg-white/5 text-foreground">
+          <Badge variant="outline" className="border border-white/5 bg-white/5 text-foreground">
             Designed for builders
           </Badge>
           <h2 className="text-3xl font-semibold text-foreground sm:text-4xl">

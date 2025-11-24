@@ -1,13 +1,11 @@
 import type { Metadata } from 'next/types'
 
-import { Pagination } from '@/components/ui/pagination'
-import configPromise from '@/payload-config'
-import { getPayload } from 'payload'
-import React from 'react'
-import PageClient from './page.client'
 import Blog from '@/components/blog'
-import { Post } from '@/payload-types'
 import { BlogPagination } from '@/components/blog-pagination'
+import configPromise from '@/payload-config'
+import { Post } from '@/payload-types'
+import { getPayload } from 'payload'
+import PageClient from './page.client'
 
 export const dynamic = 'force-static'
 export const revalidate = 600

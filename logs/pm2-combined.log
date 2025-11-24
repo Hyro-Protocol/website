@@ -1,0 +1,111 @@
+2025-11-18T09:00:31: 
+2025-11-18T09:00:31: > website@0.1.0 start
+2025-11-18T09:00:31: > next start
+2025-11-18T09:00:31: 
+2025-11-18T09:00:31:    ▲ Next.js 16.0.1
+2025-11-18T09:00:31:    - Local:        http://localhost:3000
+2025-11-18T09:00:31:    - Network:      http://46.101.116.174:3000
+2025-11-18T09:00:31: 
+2025-11-18T09:00:31:  ✓ Starting...
+2025-11-18T09:00:31:  ✓ Ready in 329ms
+2025-11-18T09:04:00: 
+2025-11-18T09:04:00: > website@0.1.0 start
+2025-11-18T09:04:00: > next start
+2025-11-18T09:04:00: 
+2025-11-18T09:04:00:    ▲ Next.js 16.0.1
+2025-11-18T09:04:00:    - Local:        http://localhost:3000
+2025-11-18T09:04:00:    - Network:      http://46.101.116.174:3000
+2025-11-18T09:04:00: 
+2025-11-18T09:04:00:  ✓ Starting...
+2025-11-18T09:04:01:  ✓ Ready in 274ms
+2025-11-18T09:04:24: [09:04:24] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/logo.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/logo.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/logo.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/logo.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/logo.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/logo.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/logo.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/logo.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/logo.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/logo.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/logo.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/logo.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/logo.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/logo.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/logo.png received null
+2025-11-19T00:05:07: Error: The requested resource isn't a valid image.
+2025-11-19T00:05:07:     at ignore-listed frames {
+2025-11-19T00:05:07:   statusCode: 400
+2025-11-19T00:05:07: }
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/hero-collab-hackish.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/hero-collab-hackish.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/hero-collab-hackish.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/hero-collab-hackish.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/hero-collab-hackish.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/hero-collab-hackish.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/hero-collab-hackish.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/hero-collab-hackish.png received null
+2025-11-19T00:05:07: Error: The requested resource isn't a valid image.
+2025-11-19T00:05:07:     at ignore-listed frames {
+2025-11-19T00:05:07:   statusCode: 400
+2025-11-19T00:05:07: }
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/hero-collab-stables.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/hero-collab-stables.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/hero-collab-stables.png received null
+2025-11-19T00:05:07:  ⨯ The requested resource isn't a valid image for /images/hero-collab-stables.png received null
+2025-11-19T00:05:08:  ⨯ The requested resource isn't a valid image for /images/hero-collab-stables.png received null
+2025-11-19T00:05:08:  ⨯ The requested resource isn't a valid image for /images/hero-collab-stables.png received null
+2025-11-19T00:05:08:  ⨯ The requested resource isn't a valid image for /images/hero-collab-stables.png received null
+2025-11-19T00:05:08:  ⨯ The requested resource isn't a valid image for /images/hero-collab-stables.png received null
+2025-11-19T00:05:08: Error: The requested resource isn't a valid image.
+2025-11-19T00:05:08:     at ignore-listed frames {
+2025-11-19T00:05:08:   statusCode: 400
+2025-11-19T00:05:08: }
+2025-11-19T00:05:08:  ⨯ The requested resource isn't a valid image for /images/product-trader-2.png received null
+2025-11-19T00:05:08:  ⨯ The requested resource isn't a valid image for /images/product-trader-2.png received null
+2025-11-19T00:05:08: Error: The requested resource isn't a valid image.
+2025-11-19T00:05:08:     at ignore-listed frames {
+2025-11-19T00:05:08:   statusCode: 400
+2025-11-19T00:05:08: }
+2025-11-19T00:05:08:  ⨯ The requested resource isn't a valid image for /images/roadmap-tower-2.png received null
+2025-11-19T00:05:08:  ⨯ The requested resource isn't a valid image for /images/roadmap-tower-2.png received null
+2025-11-19T00:05:08:  ⨯ The requested resource isn't a valid image for /images/roadmap-tower-2.png received null
+2025-11-19T00:05:08:  ⨯ The requested resource isn't a valid image for /images/roadmap-tower-2.png received null
+2025-11-19T00:05:08:  ⨯ The requested resource isn't a valid image for /images/roadmap-tower-2.png received null
+2025-11-19T00:05:08:  ⨯ The requested resource isn't a valid image for /images/roadmap-tower-2.png received null
+2025-11-19T00:05:08:  ⨯ The requested resource isn't a valid image for /images/roadmap-tower-2.png received null
+2025-11-19T00:05:08:  ⨯ The requested resource isn't a valid image for /images/roadmap-tower-2.png received null
+2025-11-19T00:05:08:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:05:08:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:05:08:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:05:09:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:05:09:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:05:09:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:05:09:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:05:09:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:05:09:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:05:09:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:05:09:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:05:09:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:05:09:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:05:09:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:05:09:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:34:37:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:34:42:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:34:43:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:34:44:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:34:45:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:34:45:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:34:46:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:34:56:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:34:57:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:34:58:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:35:00:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:35:01:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:35:03:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:35:03:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T00:35:04:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T01:15:51:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T01:17:37:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-19T01:38:02:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
