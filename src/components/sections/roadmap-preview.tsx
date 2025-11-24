@@ -40,7 +40,7 @@ export function RoadmapPreviewSection() {
         <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,_1.2fr)_minmax(0,_500px)]">
           <div className="space-y-4">
             <Badge
-              variant="neutral"
+              variant="outline"
               className="border border-white/5 bg-white/5 text-foreground"
             >
               Roadmap
