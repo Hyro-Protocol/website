@@ -1,4 +1,4 @@
-import { readFile } from 'fs/promises';
+import { readFile, stat } from 'fs/promises';
 import { join } from 'path';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
@@ -9,11 +9,25 @@ import rehypeSlug from 'rehype-slug';
 import { CodeBlock } from './CodeBlock.client';
 import { DocsNavigation } from './DocsNavigation';
 import { getDocsTree } from './getDocsTree';
+import { RecommendedDocs } from './RecommendedDocs';
 
-function getFilePath(pathArray: string[]): string {
-  return pathArray.length === 0 
-    ? join(process.cwd(), 'src', 'docs', 'index.md')
-    : join(process.cwd(), 'src', 'docs', ...pathArray) + '.md';
+async function getFilePath(pathArray: string[]): Promise<string> {
+  const docsDir = join(process.cwd(), 'src', 'docs');
+  
+  if (pathArray.length === 0) {
+    return join(docsDir, 'index.md');
+  }
+  
+  // Try index.md in the directory first
+  const indexPath = join(docsDir, ...pathArray, 'index.md');
+  try {
+    await stat(indexPath);
+    return indexPath;
+  } catch {
+    // If index.md doesn't exist, try as a .md file
+    const filePath = join(docsDir, ...pathArray) + '.md';
+    return filePath;
+  }
 }
 
 function extractTitle(content: string): string {
@@ -48,12 +62,13 @@ export default async function DocsPage({
   params: Promise<{ path: string[] }>;
 }) {
   const { path: pathArray } = await params;
-  const filePath = getFilePath(pathArray);
+  const filePath = await getFilePath(pathArray);
 
   let content: string;
   try {
     content = await readFile(filePath, 'utf-8');
   } catch (error) {
+    console.error(error);
     notFound();
   }
 
@@ -104,6 +119,7 @@ export default async function DocsPage({
                 {content}
               </ReactMarkdown>
             </div>
+            {pathArray.length === 0 && <RecommendedDocs />}
           </div>
         </div>
       </div>
@@ -117,7 +133,7 @@ export async function generateMetadata({
   params: Promise<{ path: string[] }>;
 }): Promise<Metadata> {
   const { path: pathArray } = await params;
-  const filePath = getFilePath(pathArray);
+  const filePath = await getFilePath(pathArray);
 
   let content: string;
   try {

@@ -1,6 +1,5 @@
-import { readdir, stat } from 'fs/promises';
+import { readdir, stat, readFile } from 'fs/promises';
 import { join } from 'path';
-import { readFile } from 'fs/promises';
 
 export type DocPage = {
   path: string[];
@@ -51,9 +50,14 @@ async function scanDirectory(dirPath: string, pathPrefix: string[]): Promise<Doc
   // Process directories
   for (const { name: entry, fullPath } of directories) {
     const subPages = await scanDirectory(fullPath, [...pathPrefix, entry]);
-    if (subPages.length > 0) {
-      // Check if there's a corresponding .md file with the same name
-      const correspondingMdFile = files.find(f => f.name === `${entry}.md`);
+    
+    // Check if there's a corresponding .md file with the same name
+    const correspondingMdFile = files.find(f => f.name === `${entry}.md`);
+    const indexPath = join(fullPath, 'index.md');
+    const hasIndex = await stat(indexPath).then(() => true).catch(() => false);
+    
+    // Include directory if it has children OR has an index.md file
+    if (subPages.length > 0 || hasIndex) {
       let title = entry;
       
       if (correspondingMdFile) {
@@ -67,9 +71,8 @@ async function scanDirectory(dirPath: string, pathPrefix: string[]): Promise<Doc
         } catch {
           // Fallback to directory name
         }
-      } else {
+      } else if (hasIndex) {
         // Check for index.md in the directory
-        const indexPath = join(fullPath, 'index.md');
         try {
           const content = await readFile(indexPath, 'utf-8');
           const titleMatch = content.match(/^#\s+(.+)$/m);
@@ -77,14 +80,14 @@ async function scanDirectory(dirPath: string, pathPrefix: string[]): Promise<Doc
             title = titleMatch[1];
           }
         } catch {
-          // No index.md, use directory name
+          // Fallback to directory name
         }
       }
       
       pages.push({
         path: [...pathPrefix, entry],
         title,
-        children: subPages,
+        children: subPages.length > 0 ? subPages : undefined,
       });
     }
   }
