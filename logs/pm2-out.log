@@ -19,3 +19,294 @@
 2025-11-18T09:04:00:  ✓ Starting...
 2025-11-18T09:04:01:  ✓ Ready in 274ms
 2025-11-18T09:04:24: [09:04:24] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+2025-11-24T09:33:45: [09:33:45] [31mERROR[39m: [36mattempt to write a readonly database[39m
+2025-11-24T09:33:45:     err: {
+2025-11-24T09:33:45:       "type": "Error",
+2025-11-24T09:33:45:       "message": "attempt to write a readonly database",
+2025-11-24T09:33:45:       "stack":
+2025-11-24T09:33:45:           Error: attempt to write a readonly database
+2025-11-24T09:33:45:               at Object.next (/root/hyro/website/node_modules/libsql/index.js:335:20)
+2025-11-24T09:33:45:               at Statement.all (/root/hyro/website/node_modules/libsql/index.js:360:16)
+2025-11-24T09:33:45:               at executeStmt (file:///root/hyro/website/node_modules/@libsql/client/lib-esm/sqlite3.js:261:34)
+2025-11-24T09:33:45:               at Sqlite3Client.execute (file:///root/hyro/website/node_modules/@libsql/client/lib-esm/sqlite3.js:79:16)
+2025-11-24T09:33:45:               at file:///root/hyro/website/node_modules/drizzle-orm/libsql/session.js:195:61
+2025-11-24T09:33:45:               at LibSQLPreparedQuery.queryWithCache (file:///root/hyro/website/node_modules/drizzle-orm/sqlite-core/session.js:41:22)
+2025-11-24T09:33:45:               at LibSQLPreparedQuery.values (file:///root/hyro/website/node_modules/drizzle-orm/libsql/session.js:193:23)
+2025-11-24T09:33:45:               at LibSQLPreparedQuery.all (file:///root/hyro/website/node_modules/drizzle-orm/libsql/session.js:136:29)
+2025-11-24T09:33:45:               at QueryPromise.all (file:///root/hyro/website/node_modules/drizzle-orm/sqlite-core/query-builders/insert.js:165:28)
+2025-11-24T09:33:45:               at QueryPromise.execute (file:///root/hyro/website/node_modules/drizzle-orm/sqlite-core/query-builders/insert.js:174:41)
+2025-11-24T09:33:45:       "rawCode": 1032,
+2025-11-24T09:33:45:       "code": "SQLITE_READONLY_DBMOVED",
+2025-11-24T09:33:45:       "libsqlError": true
+2025-11-24T09:33:45:     }
+2025-11-24T09:33:54: [09:33:54] [31mERROR[39m: [36mThe email or password provided is incorrect.[39m
+2025-11-24T09:33:54:     err: {
+2025-11-24T09:33:54:       "type": "AuthenticationError",
+2025-11-24T09:33:54:       "message": "The email or password provided is incorrect.",
+2025-11-24T09:33:54:       "stack":
+2025-11-24T09:33:54:           AuthenticationError: The email or password provided is incorrect.
+2025-11-24T09:33:54:               at checkLoginPermission (/root/hyro/website/.next/server/chunks/ssr/_b30c54bf._.js:139:34494)
+2025-11-24T09:33:54:               at loginOperation (/root/hyro/website/.next/server/chunks/ssr/_b30c54bf._.js:139:36167)
+2025-11-24T09:33:54:               at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+2025-11-24T09:33:54:               at async aE (/root/hyro/website/.next/server/chunks/ssr/_b30c54bf._.js:140:80030)
+2025-11-24T09:33:54:               at async m (/root/hyro/website/.next/server/chunks/node_modules_c03ef67b._.js:1:9348)
+2025-11-24T09:33:54:               at async /root/hyro/website/.next/server/chunks/node_modules_c03ef67b._.js:1:18041
+2025-11-24T09:33:54:               at async r$.do (/root/hyro/website/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.prod.js:23:20293)
+2025-11-24T09:33:54:               at async r$.handle (/root/hyro/website/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.prod.js:23:25083)
+2025-11-24T09:33:54:               at async u (/root/hyro/website/.next/server/chunks/[root-of-the-server]__a8cc47c5._.js:1:25360)
+2025-11-24T09:33:54:               at async r$.handleResponse (/root/hyro/website/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.prod.js:19:73806)
+2025-11-24T09:33:54:       "data": null,
+2025-11-24T09:33:54:       "isOperational": true,
+2025-11-24T09:33:54:       "isPublic": false,
+2025-11-24T09:33:54:       "status": 401,
+2025-11-24T09:33:54:       "name": "AuthenticationError"
+2025-11-24T09:33:54:     }
+2025-11-24T09:34:04: [09:34:04] [31mERROR[39m: [36mThe email or password provided is incorrect.[39m
+2025-11-24T09:34:04:     err: {
+2025-11-24T09:34:04:       "type": "AuthenticationError",
+2025-11-24T09:34:04:       "message": "The email or password provided is incorrect.",
+2025-11-24T09:34:04:       "stack":
+2025-11-24T09:34:04:           AuthenticationError: The email or password provided is incorrect.
+2025-11-24T09:34:04:               at checkLoginPermission (/root/hyro/website/.next/server/chunks/ssr/_b30c54bf._.js:139:34494)
+2025-11-24T09:34:04:               at loginOperation (/root/hyro/website/.next/server/chunks/ssr/_b30c54bf._.js:139:36167)
+2025-11-24T09:34:04:               at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+2025-11-24T09:34:04:               at async aE (/root/hyro/website/.next/server/chunks/ssr/_b30c54bf._.js:140:80030)
+2025-11-24T09:34:04:               at async m (/root/hyro/website/.next/server/chunks/node_modules_c03ef67b._.js:1:9348)
+2025-11-24T09:34:04:               at async /root/hyro/website/.next/server/chunks/node_modules_c03ef67b._.js:1:18041
+2025-11-24T09:34:04:               at async r$.do (/root/hyro/website/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.prod.js:23:20293)
+2025-11-24T09:34:04:               at async r$.handle (/root/hyro/website/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.prod.js:23:25083)
+2025-11-24T09:34:04:               at async u (/root/hyro/website/.next/server/chunks/[root-of-the-server]__a8cc47c5._.js:1:25360)
+2025-11-24T09:34:04:               at async r$.handleResponse (/root/hyro/website/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.prod.js:19:73806)
+2025-11-24T09:34:04:       "data": null,
+2025-11-24T09:34:04:       "isOperational": true,
+2025-11-24T09:34:04:       "isPublic": false,
+2025-11-24T09:34:04:       "status": 401,
+2025-11-24T09:34:04:       "name": "AuthenticationError"
+2025-11-24T09:34:04:     }
+2025-11-24T09:34:11: [09:34:11] [31mERROR[39m: [36mThe email or password provided is incorrect.[39m
+2025-11-24T09:34:11:     err: {
+2025-11-24T09:34:11:       "type": "AuthenticationError",
+2025-11-24T09:34:11:       "message": "The email or password provided is incorrect.",
+2025-11-24T09:34:11:       "stack":
+2025-11-24T09:34:11:           AuthenticationError: The email or password provided is incorrect.
+2025-11-24T09:34:11:               at checkLoginPermission (/root/hyro/website/.next/server/chunks/ssr/_b30c54bf._.js:139:34494)
+2025-11-24T09:34:11:               at loginOperation (/root/hyro/website/.next/server/chunks/ssr/_b30c54bf._.js:139:36167)
+2025-11-24T09:34:11:               at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+2025-11-24T09:34:11:               at async aE (/root/hyro/website/.next/server/chunks/ssr/_b30c54bf._.js:140:80030)
+2025-11-24T09:34:11:               at async m (/root/hyro/website/.next/server/chunks/node_modules_c03ef67b._.js:1:9348)
+2025-11-24T09:34:11:               at async /root/hyro/website/.next/server/chunks/node_modules_c03ef67b._.js:1:18041
+2025-11-24T09:34:11:               at async r$.do (/root/hyro/website/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.prod.js:23:20293)
+2025-11-24T09:34:11:               at async r$.handle (/root/hyro/website/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.prod.js:23:25083)
+2025-11-24T09:34:11:               at async u (/root/hyro/website/.next/server/chunks/[root-of-the-server]__a8cc47c5._.js:1:25360)
+2025-11-24T09:34:11:               at async r$.handleResponse (/root/hyro/website/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.prod.js:19:73806)
+2025-11-24T09:34:11:       "data": null,
+2025-11-24T09:34:11:       "isOperational": true,
+2025-11-24T09:34:11:       "isPublic": false,
+2025-11-24T09:34:11:       "status": 401,
+2025-11-24T09:34:11:       "name": "AuthenticationError"
+2025-11-24T09:34:11:     }
+2025-11-24T09:34:44: 
+2025-11-24T09:34:44: > website@0.1.0 start
+2025-11-24T09:34:44: > next start
+2025-11-24T09:34:44: 
+2025-11-24T09:34:45:    ▲ Next.js 16.0.1
+2025-11-24T09:34:45:    - Local:        http://localhost:3000
+2025-11-24T09:34:45:    - Network:      http://46.101.116.174:3000
+2025-11-24T09:34:45: 
+2025-11-24T09:34:45:  ✓ Starting...
+2025-11-24T09:34:49: 
+2025-11-24T09:34:49: > website@0.1.0 start
+2025-11-24T09:34:49: > next start
+2025-11-24T09:34:49: 
+2025-11-24T09:34:49:    ▲ Next.js 16.0.1
+2025-11-24T09:34:49:    - Local:        http://localhost:3000
+2025-11-24T09:34:49:    - Network:      http://46.101.116.174:3000
+2025-11-24T09:34:49: 
+2025-11-24T09:34:49:  ✓ Starting...
+2025-11-24T09:34:53: 
+2025-11-24T09:34:53: > website@0.1.0 start
+2025-11-24T09:34:53: > next start
+2025-11-24T09:34:53: 
+2025-11-24T09:34:54:    ▲ Next.js 16.0.1
+2025-11-24T09:34:54:    - Local:        http://localhost:3000
+2025-11-24T09:34:54:    - Network:      http://46.101.116.174:3000
+2025-11-24T09:34:54: 
+2025-11-24T09:34:54:  ✓ Starting...
+2025-11-24T09:34:58: 
+2025-11-24T09:34:58: > website@0.1.0 start
+2025-11-24T09:34:58: > next start
+2025-11-24T09:34:58: 
+2025-11-24T09:34:58:    ▲ Next.js 16.0.1
+2025-11-24T09:34:58:    - Local:        http://localhost:3000
+2025-11-24T09:34:58:    - Network:      http://46.101.116.174:3000
+2025-11-24T09:34:58: 
+2025-11-24T09:34:58:  ✓ Starting...
+2025-11-24T09:35:03: 
+2025-11-24T09:35:03: > website@0.1.0 start
+2025-11-24T09:35:03: > next start
+2025-11-24T09:35:03: 
+2025-11-24T09:35:04:    ▲ Next.js 16.0.1
+2025-11-24T09:35:04:    - Local:        http://localhost:3000
+2025-11-24T09:35:04:    - Network:      http://46.101.116.174:3000
+2025-11-24T09:35:04: 
+2025-11-24T09:35:04:  ✓ Starting...
+2025-11-24T09:35:08: 
+2025-11-24T09:35:08: > website@0.1.0 start
+2025-11-24T09:35:08: > next start
+2025-11-24T09:35:08: 
+2025-11-24T09:35:09:    ▲ Next.js 16.0.1
+2025-11-24T09:35:09:    - Local:        http://localhost:3000
+2025-11-24T09:35:09:    - Network:      http://46.101.116.174:3000
+2025-11-24T09:35:09: 
+2025-11-24T09:35:09:  ✓ Starting...
+2025-11-24T09:35:13: 
+2025-11-24T09:35:13: > website@0.1.0 start
+2025-11-24T09:35:13: > next start
+2025-11-24T09:35:13: 
+2025-11-24T09:35:13:    ▲ Next.js 16.0.1
+2025-11-24T09:35:13:    - Local:        http://localhost:3000
+2025-11-24T09:35:13:    - Network:      http://46.101.116.174:3000
+2025-11-24T09:35:13: 
+2025-11-24T09:35:13:  ✓ Starting...
+2025-11-24T09:35:18: 
+2025-11-24T09:35:18: > website@0.1.0 start
+2025-11-24T09:35:18: > next start
+2025-11-24T09:35:18: 
+2025-11-24T09:35:18:    ▲ Next.js 16.0.1
+2025-11-24T09:35:18:    - Local:        http://localhost:3000
+2025-11-24T09:35:18:    - Network:      http://46.101.116.174:3000
+2025-11-24T09:35:18: 
+2025-11-24T09:35:18:  ✓ Starting...
+2025-11-24T09:35:23: 
+2025-11-24T09:35:23: > website@0.1.0 start
+2025-11-24T09:35:23: > next start
+2025-11-24T09:35:23: 
+2025-11-24T09:35:23:    ▲ Next.js 16.0.1
+2025-11-24T09:35:23:    - Local:        http://localhost:3000
+2025-11-24T09:35:23:    - Network:      http://46.101.116.174:3000
+2025-11-24T09:35:23: 
+2025-11-24T09:35:23:  ✓ Starting...
+2025-11-24T09:35:28: 
+2025-11-24T09:35:28: > website@0.1.0 start
+2025-11-24T09:35:28: > next start
+2025-11-24T09:35:28: 
+2025-11-24T09:35:28:    ▲ Next.js 16.0.1
+2025-11-24T09:35:28:    - Local:        http://localhost:3000
+2025-11-24T09:35:28:    - Network:      http://46.101.116.174:3000
+2025-11-24T09:35:28: 
+2025-11-24T09:35:28:  ✓ Starting...
+2025-11-24T09:36:26: 
+2025-11-24T09:36:26: > website@0.1.0 start
+2025-11-24T09:36:26: > next start
+2025-11-24T09:36:26: 
+2025-11-24T09:36:26:    ▲ Next.js 16.0.1
+2025-11-24T09:36:26:    - Local:        http://localhost:3000
+2025-11-24T09:36:26:    - Network:      http://46.101.116.174:3000
+2025-11-24T09:36:26: 
+2025-11-24T09:36:26:  ✓ Starting...
+2025-11-24T09:36:26:  ✓ Ready in 286ms
+2025-11-24T09:36:37: [09:36:37] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+2025-11-24T09:37:07: [09:37:07] [32mINFO[39m: [36mRevalidating old post at path: /posts/test-p[39m
+2025-11-24T09:37:36: [09:37:36] [32mINFO[39m: [36mRevalidating post at path: /posts/test-p[39m
+2025-11-24T09:39:29: 
+2025-11-24T09:39:29: > website@0.1.0 start
+2025-11-24T09:39:29: > next start
+2025-11-24T09:39:29: 
+2025-11-24T09:39:29:    ▲ Next.js 16.0.1
+2025-11-24T09:39:29:    - Local:        http://localhost:3000
+2025-11-24T09:39:29:    - Network:      http://46.101.116.174:3000
+2025-11-24T09:39:29: 
+2025-11-24T09:39:29:  ✓ Starting...
+2025-11-24T09:39:29:  ✓ Ready in 300ms
+2025-11-24T09:42:20: [09:42:20] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+2025-11-24T09:42:20: [09:42:20] [32mINFO[39m: [36mRevalidating old post at path: /posts/test-p[39m
+2025-11-24T09:45:10: 
+2025-11-24T09:45:10: > website@0.1.0 start
+2025-11-24T09:45:10: > next start
+2025-11-24T09:45:10: 
+2025-11-24T09:45:10:    ▲ Next.js 16.0.1
+2025-11-24T09:45:10:    - Local:        http://localhost:3000
+2025-11-24T09:45:10:    - Network:      http://46.101.116.174:3000
+2025-11-24T09:45:10: 
+2025-11-24T09:45:10:  ✓ Starting...
+2025-11-24T09:45:10:  ✓ Ready in 282ms
+2025-11-24T09:54:38: 
+2025-11-24T09:54:38: > website@0.1.0 start
+2025-11-24T09:54:38: > next start
+2025-11-24T09:54:38: 
+2025-11-24T09:54:38:    ▲ Next.js 16.0.1
+2025-11-24T09:54:38:    - Local:        http://localhost:3000
+2025-11-24T09:54:38:    - Network:      http://46.101.116.174:3000
+2025-11-24T09:54:38: 
+2025-11-24T09:54:38:  ✓ Starting...
+2025-11-24T09:54:38:  ✓ Ready in 362ms
+2025-11-24T10:42:35: 
+2025-11-24T10:42:35: > website@0.1.0 start
+2025-11-24T10:42:35: > next start
+2025-11-24T10:42:35: 
+2025-11-24T10:42:36:    ▲ Next.js 16.0.1
+2025-11-24T10:42:36:    - Local:        http://localhost:3000
+2025-11-24T10:42:36:    - Network:      http://46.101.116.174:3000
+2025-11-24T10:42:36: 
+2025-11-24T10:42:36:  ✓ Starting...
+2025-11-24T10:42:36:  ✓ Ready in 386ms
+2025-11-24T10:57:11: 
+2025-11-24T10:57:11: > website@0.1.0 start
+2025-11-24T10:57:11: > next start
+2025-11-24T10:57:11: 
+2025-11-24T10:57:12:    ▲ Next.js 16.0.1
+2025-11-24T10:57:12:    - Local:        http://localhost:3000
+2025-11-24T10:57:12:    - Network:      http://46.101.116.174:3000
+2025-11-24T10:57:12: 
+2025-11-24T10:57:12:  ✓ Starting...
+2025-11-24T10:57:12:  ✓ Ready in 303ms
+2025-11-24T10:57:20: [10:57:20] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+2025-11-24T11:07:10: 
+2025-11-24T11:07:10: > website@0.1.0 start
+2025-11-24T11:07:10: > next start
+2025-11-24T11:07:10: 
+2025-11-24T11:07:10:    ▲ Next.js 16.0.1
+2025-11-24T11:07:10:    - Local:        http://localhost:3000
+2025-11-24T11:07:10:    - Network:      http://46.101.116.174:3000
+2025-11-24T11:07:10: 
+2025-11-24T11:07:10:  ✓ Starting...
+2025-11-24T11:07:11:  ✓ Ready in 380ms
+2025-11-24T11:08:46: [11:08:46] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+2025-11-24T11:12:19: 
+2025-11-24T11:12:19: > website@0.1.0 start
+2025-11-24T11:12:19: > next start
+2025-11-24T11:12:19: 
+2025-11-24T11:12:20:    ▲ Next.js 16.0.1
+2025-11-24T11:12:20:    - Local:        http://localhost:3000
+2025-11-24T11:12:20:    - Network:      http://46.101.116.174:3000
+2025-11-24T11:12:20: 
+2025-11-24T11:12:20:  ✓ Starting...
+2025-11-24T11:12:20:  ✓ Ready in 304ms
+2025-11-24T11:14:50: [11:14:50] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+2025-11-24T11:15:18: [11:15:18] [32mINFO[39m: [36mRevalidating post at path: /posts/test-p[39m
+2025-11-24T11:17:31: 
+2025-11-24T11:17:31: > website@0.1.0 start
+2025-11-24T11:17:31: > next start
+2025-11-24T11:17:31: 
+2025-11-24T11:17:32:    ▲ Next.js 16.0.1
+2025-11-24T11:17:32:    - Local:        http://localhost:3000
+2025-11-24T11:17:32:    - Network:      http://46.101.116.174:3000
+2025-11-24T11:17:32: 
+2025-11-24T11:17:32:  ✓ Starting...
+2025-11-24T11:17:32:  ✓ Ready in 282ms
+2025-11-24T11:18:58: [11:18:58] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+2025-11-24T11:21:34: 
+2025-11-24T11:21:34: > website@0.1.0 start
+2025-11-24T11:21:34: > next start
+2025-11-24T11:21:34: 
+2025-11-24T11:21:35:    ▲ Next.js 16.0.1
+2025-11-24T11:21:35:    - Local:        http://localhost:3000
+2025-11-24T11:21:35:    - Network:      http://46.101.116.174:3000
+2025-11-24T11:21:35: 
+2025-11-24T11:21:35:  ✓ Starting...
+2025-11-24T11:21:35:  ✓ Ready in 282ms
+2025-11-24T11:22:51: [11:22:51] [33mWARN[39m: [36mNo email adapter provided. Email will be written to console. More info at https://payloadcms.com/docs/email/overview.[39m
+2025-11-24T11:33:29: [11:33:29] [32mINFO[39m: [36mRevalidating old post at path: /posts/test-p[39m
+2025-11-24T11:40:40: [11:40:40] [32mINFO[39m: [36mRevalidating post at path: /posts/test-p[39m
+2025-11-24T11:41:09: [11:41:09] [32mINFO[39m: [36mRevalidating old post at path: /posts/test-p[39m
+2025-11-24T11:41:10: [11:41:10] [32mINFO[39m: [36mRevalidating post at path: /posts/why-hyr0[39m

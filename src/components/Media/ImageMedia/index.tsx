@@ -58,6 +58,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
 
   return (
     <picture className={cn(pictureClassName)}>
+      <pre className='hidden'>{JSON.stringify({src, sizes, resource}, null, 2)}</pre>
       <NextImage
         alt={alt || ''}
         className={cn(imgClassName)}

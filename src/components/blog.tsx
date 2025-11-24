@@ -27,7 +27,7 @@ const Blog = ({ posts, categories }: { posts: Post[]; categories: CategoryWithCo
               <Media
                 resource={post.meta?.image}
                 className="relative shrink-0 aspect-video grow sm:w-56 sm:aspect-square bg-muted rounded-lg object-cover"
-                size="256px"
+                size="33vw"
                 fill
                 imgClassName="object-cover"
               />

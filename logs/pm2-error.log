@@ -88,3 +88,54 @@
 2025-11-19T01:15:51:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
 2025-11-19T01:17:37:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
 2025-11-19T01:38:02:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 530
+2025-11-24T09:34:45: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-11-24T09:34:45:     at ignore-listed frames
+2025-11-24T09:34:49: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-11-24T09:34:49:     at ignore-listed frames
+2025-11-24T09:34:54: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-11-24T09:34:54:     at ignore-listed frames
+2025-11-24T09:34:58: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-11-24T09:34:58:     at ignore-listed frames
+2025-11-24T09:35:04: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-11-24T09:35:04:     at ignore-listed frames
+2025-11-24T09:35:09: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-11-24T09:35:09:     at ignore-listed frames
+2025-11-24T09:35:13: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-11-24T09:35:13:     at ignore-listed frames
+2025-11-24T09:35:18: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-11-24T09:35:18:     at ignore-listed frames
+2025-11-24T09:35:23: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-11-24T09:35:23:     at ignore-listed frames
+2025-11-24T09:35:28: Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server. https://nextjs.org/docs/messages/production-start-no-build-id
+2025-11-24T09:35:28:     at ignore-listed frames
+2025-11-24T09:37:47:  ⨯ upstream image response failed for https://app.local.tookey.cloud/api/media/file/generation-46598102-6fa5-46cc-a65a-caab86adfe57.png?2025-11-14T14%3A24%3A37.542Z 500
+2025-11-24T09:45:33:  ⨯ TypeError: fetch failed
+2025-11-24T09:45:33:     at ignore-listed frames {
+2025-11-24T09:45:33:   [cause]: Error: connect ECONNREFUSED 46.101.116.174:443
+2025-11-24T09:45:33:       at <unknown> (Error: connect ECONNREFUSED 46.101.116.174:443) {
+2025-11-24T09:45:33:     errno: -111,
+2025-11-24T09:45:33:     code: 'ECONNREFUSED',
+2025-11-24T09:45:33:     syscall: 'connect',
+2025-11-24T09:45:33:     address: '46.101.116.174',
+2025-11-24T09:45:33:     port: 443
+2025-11-24T09:45:33:   }
+2025-11-24T09:45:33: }
+2025-11-24T09:45:35:  ⨯ TypeError: fetch failed
+2025-11-24T09:45:35:     at ignore-listed frames {
+2025-11-24T09:45:35:   [cause]: Error: connect ECONNREFUSED 46.101.116.174:443
+2025-11-24T09:45:35:       at <unknown> (Error: connect ECONNREFUSED 46.101.116.174:443) {
+2025-11-24T09:45:35:     errno: -111,
+2025-11-24T09:45:35:     code: 'ECONNREFUSED',
+2025-11-24T09:45:35:     syscall: 'connect',
+2025-11-24T09:45:35:     address: '46.101.116.174',
+2025-11-24T09:45:35:     port: 443
+2025-11-24T09:45:35:   }
+2025-11-24T09:45:35: }
+2025-11-24T11:20:56: Error [InvariantError]: Invariant: Expected clientReferenceManifest to be defined. This is a bug in Next.js.
+2025-11-24T11:20:56:     at ignore-listed frames
+2025-11-24T11:20:56:  ⨯ Error [InvariantError]: Invariant: Expected clientReferenceManifest to be defined. This is a bug in Next.js.
+2025-11-24T11:20:56:     at ignore-listed frames
+2025-11-24T11:20:56:  ⨯ Error [InvariantError]: Invariant: Expected clientReferenceManifest to be defined. This is a bug in Next.js.
+2025-11-24T11:20:56:     at ignore-listed frames
+2025-11-24T11:34:56: (node:387075) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2025-11-24T11:34:56: (Use `node --trace-deprecation ...` to show where the warning was created)

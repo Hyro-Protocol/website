@@ -3,6 +3,15 @@ import { withPayload } from '@payloadcms/next/withPayload'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    deviceSizes: [
+      1920,
+      1536,
+      1280,
+      1024,
+      768,
+      640,
+    ],
+    qualities: [10, 50, 75, 100],
     remotePatterns: [
       {
         protocol: "https",
@@ -19,7 +28,11 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "app.local.tookey.cloud",
-      }
+      },
+      {
+        protocol: "https",
+        hostname: "hyr0.xyz",
+      },
     ],
   },
 }

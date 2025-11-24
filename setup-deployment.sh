@@ -83,9 +83,16 @@ echo -e "${YELLOW}Creating logs directory...${NC}"
 mkdir -p /root/hyro/website/logs
 chmod 755 /root/hyro/website/logs
 
-# Copy Nginx configuration
+# Copy Nginx configuration based on SSL certificate availability
 echo -e "${YELLOW}Setting up Nginx configuration...${NC}"
-cp /root/hyro/website/nginx-hyr0.xyz.conf /etc/nginx/sites-available/hyr0.xyz
+SSL_CERT_PATH="/etc/letsencrypt/live/hyr0.xyz/fullchain.pem"
+if [ -f "$SSL_CERT_PATH" ]; then
+    echo -e "${GREEN}SSL certificates found - using production config with HTTPS redirect${NC}"
+    cp /root/hyro/website/nginx-hyr0.xyz.conf.ssl /etc/nginx/sites-available/hyr0.xyz
+else
+    echo -e "${YELLOW}SSL certificates not found - using HTTP-only config for setup${NC}"
+    cp /root/hyro/website/nginx-hyr0.xyz.conf.no-ssl /etc/nginx/sites-available/hyr0.xyz
+fi
 
 # Create symlink if it doesn't exist
 if [ ! -L /etc/nginx/sites-enabled/hyr0.xyz ]; then
@@ -99,16 +106,62 @@ fi
 
 # Test Nginx configuration
 echo -e "${YELLOW}Testing Nginx configuration...${NC}"
-if nginx -t; then
+if nginx -t 2>&1; then
     echo -e "${GREEN}Nginx configuration is valid${NC}"
 else
     echo -e "${RED}Nginx configuration test failed${NC}"
+    echo -e "${YELLOW}Please check the configuration file: /etc/nginx/sites-available/hyr0.xyz${NC}"
     exit 1
 fi
 
 # Start Nginx
 systemctl restart nginx
 echo -e "${GREEN}Nginx started${NC}"
+
+# If SSL certificates don't exist, try to obtain them with certbot
+if [ ! -f "$SSL_CERT_PATH" ]; then
+    echo -e "${YELLOW}Attempting to obtain SSL certificates with certbot...${NC}"
+    echo -e "${YELLOW}Make sure your domain hyr0.xyz points to this server's IP address${NC}"
+    
+    # Use email from environment variable or default
+    CERTBOT_EMAIL="${CERTBOT_EMAIL:-admin@hyr0.xyz}"
+    
+    # Run certbot in non-interactive mode (will fail gracefully if domain doesn't point here)
+    # Note: certbot will modify nginx config, but we'll overwrite it with our clean config
+    if certbot certonly --nginx -d hyr0.xyz -d www.hyr0.xyz \
+        --non-interactive \
+        --agree-tos \
+        --email "$CERTBOT_EMAIL" \
+        --keep-until-expiring 2>&1; then
+        
+        # Check if certificates were created
+        if [ -f "$SSL_CERT_PATH" ]; then
+            echo -e "${GREEN}SSL certificates obtained successfully!${NC}"
+            echo -e "${YELLOW}Switching to production SSL configuration...${NC}"
+            cp /root/hyro/website/nginx-hyr0.xyz.conf.ssl /etc/nginx/sites-available/hyr0.xyz
+            
+            # Test and reload nginx
+            if nginx -t 2>&1; then
+                systemctl reload nginx
+                echo -e "${GREEN}Production SSL configuration activated${NC}"
+            else
+                echo -e "${RED}SSL configuration test failed${NC}"
+                echo -e "${YELLOW}Reverting to HTTP-only config...${NC}"
+                cp /root/hyro/website/nginx-hyr0.xyz.conf.no-ssl /etc/nginx/sites-available/hyr0.xyz
+                nginx -t && systemctl reload nginx
+            fi
+        fi
+    else
+        echo -e "${YELLOW}Certbot failed - this is normal if:${NC}"
+        echo -e "${YELLOW}  - The domain doesn't point to this server yet${NC}"
+        echo -e "${YELLOW}  - Port 80 is not accessible from the internet${NC}"
+        echo -e "${YELLOW}  - DNS hasn't propagated yet${NC}"
+        echo ""
+        echo -e "${YELLOW}You can run certbot manually later:${NC}"
+        echo -e "${YELLOW}  certbot --nginx -d hyr0.xyz -d www.hyr0.xyz${NC}"
+        echo -e "${YELLOW}Then run this script again to switch to SSL configuration${NC}"
+    fi
+fi
 
 # Build the Next.js application
 echo -e "${YELLOW}Building Next.js application...${NC}"
@@ -142,10 +195,16 @@ pm2 status
 echo ""
 echo -e "${GREEN}=== Setup Complete ===${NC}"
 echo ""
-echo "Next steps:"
-echo "1. Make sure your domain hyr0.xyz points to this server's IP address"
-echo "2. Run: certbot --nginx -d hyr0.xyz -d www.hyr0.xyz"
-echo ""
+if [ -f "$SSL_CERT_PATH" ]; then
+    echo -e "${GREEN}SSL is configured and active!${NC}"
+else
+    echo "Next steps:"
+    echo "1. Make sure your domain hyr0.xyz points to this server's IP address"
+    echo "2. Run this script again to automatically obtain SSL certificates:"
+    echo "   ./setup-deployment.sh"
+    echo "   (Or manually: certbot --nginx -d hyr0.xyz -d www.hyr0.xyz)"
+    echo ""
+fi
 echo "Application is now running with PM2 and will start automatically on server reboot."
 echo ""
 echo "PM2 Management Commands:"
