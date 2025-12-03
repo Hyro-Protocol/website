@@ -1,4 +1,3 @@
-import * as HyroProtocol from "@/protocol/index";
 import {
   Address,
   Commitment,
@@ -15,6 +14,12 @@ import { ReactNode } from "react";
 import { ProtocolContext } from "./protocol-context";
 import { useConnection } from "./connection-context";
 import { createRecentSignatureConfirmationPromiseFactory } from "@solana/transaction-confirmation";
+import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from "@/protocol/hyroProtocol";
+import { POLICY_LIMIT_TRANSFER_PROGRAM_ADDRESS } from "@/protocol/policyLimitTransfer";
+import { POLICY_OWNERS_PROGRAM_ADDRESS } from "@/protocol/policyOwners";
+import { POLICY_MULTISIG_PROGRAM_ADDRESS } from "@/protocol/policyMultisig";
+import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from "@/protocol/policyChallenges";
+import { Buffer } from "buffer";
 
 // Define the props type
 type ProtocolContextProviderProps = {
@@ -72,7 +77,6 @@ export function ProtocolContextProvider({
   return (
     <ProtocolContext.Provider
       value={{
-        protocol: HyroProtocol,
         helpers: {
           waitForConfirmation: async (
             signature: Signature,
@@ -91,12 +95,12 @@ export function ProtocolContextProvider({
           },
           getVaultPda: async (seed: string) => {
             const vault = await getPDAAndBump(
-              HyroProtocol.hyroProtocol.HYRO_PROTOCOL_PROGRAM_ADDRESS,
+              HYRO_PROTOCOL_PROGRAM_ADDRESS,
               [seed]
             );
 
             const authority = await getPDAAndBump(
-              HyroProtocol.hyroProtocol.HYRO_PROTOCOL_PROGRAM_ADDRESS,
+              HYRO_PROTOCOL_PROGRAM_ADDRESS,
               [vault[0]]
             );
 
@@ -108,7 +112,7 @@ export function ProtocolContextProvider({
           ) => {
             console.log('getLimitTransferPda', seed)
             const policy = await getPDAAndBump(
-              HyroProtocol.policyLimitTransfer.POLICY_LIMIT_TRANSFER_PROGRAM_ADDRESS,
+              POLICY_LIMIT_TRANSFER_PROGRAM_ADDRESS,
               [seed]
             );
             return policy;
@@ -117,7 +121,7 @@ export function ProtocolContextProvider({
           getOwnersPolicyPda: async (seed: string, owners: Address[]) => {
             console.log("getOwnersPolicyPda", seed, owners);
             const policy = await getPDAAndBump(
-              HyroProtocol.policyOwners.POLICY_OWNERS_PROGRAM_ADDRESS,
+              POLICY_OWNERS_PROGRAM_ADDRESS,
               [seed] // TEMPORARY: , ...owners]
             );
             return policy;
@@ -126,7 +130,7 @@ export function ProtocolContextProvider({
           getMultisigPolicyPda: async (seed: string) => {
             console.log("getMultisigPolicyPda", seed);
             const policy = await getPDAAndBump(
-              HyroProtocol.policyMultisig.POLICY_MULTISIG_PROGRAM_ADDRESS,
+              POLICY_MULTISIG_PROGRAM_ADDRESS,
               [seed]
             );
             return policy;
@@ -134,7 +138,7 @@ export function ProtocolContextProvider({
 
           getTransactionPda: async (vault: ProgramDerivedAddress, nonce: number) => {
             const transaction = await getPDAAndBump(
-              HyroProtocol.hyroProtocol.HYRO_PROTOCOL_PROGRAM_ADDRESS,
+              HYRO_PROTOCOL_PROGRAM_ADDRESS,
               [vault[0], nonce]
             );
             return transaction;
@@ -142,7 +146,7 @@ export function ProtocolContextProvider({
 
           getChallengeTemplatePda: async (stageId: number) => {
             const template = await getPDAAndBump(
-              HyroProtocol.policyChallenges.POLICY_CHALLENGES_PROGRAM_ADDRESS,
+              POLICY_CHALLENGES_PROGRAM_ADDRESS,
               [stageId]
             );
             return template;
@@ -150,7 +154,7 @@ export function ProtocolContextProvider({
 
           getChallengePda: async (participant: Address, challengeId: string) => {
             const challenge = await getPDAAndBump(
-              HyroProtocol.policyChallenges.POLICY_CHALLENGES_PROGRAM_ADDRESS,
+              POLICY_CHALLENGES_PROGRAM_ADDRESS,
               [participant, challengeId]
             );
             return challenge;
@@ -158,7 +162,7 @@ export function ProtocolContextProvider({
 
           getManagerRegistryPda: async () => {
             const registry = await getPDAAndBump(
-              HyroProtocol.hyroProtocol.HYRO_PROTOCOL_PROGRAM_ADDRESS,
+              HYRO_PROTOCOL_PROGRAM_ADDRESS,
               ["manager_registry"]
             );
             return registry;
@@ -166,7 +170,7 @@ export function ProtocolContextProvider({
 
           getManagerProfilePda: async (managerAddress: Address) => {
             const profile = await getPDAAndBump(
-              HyroProtocol.hyroProtocol.HYRO_PROTOCOL_PROGRAM_ADDRESS,
+              HYRO_PROTOCOL_PROGRAM_ADDRESS,
               ["manager_profile", managerAddress]
             );
             return profile;
@@ -174,7 +178,7 @@ export function ProtocolContextProvider({
 
           getShareSignerPda: async (vault: ProgramDerivedAddress) => {
             const signer = await getPDAAndBump(
-              HyroProtocol.hyroProtocol.HYRO_PROTOCOL_PROGRAM_ADDRESS,
+              HYRO_PROTOCOL_PROGRAM_ADDRESS,
               ["vault_share_signer", vault[0]]
             );
             return signer;
@@ -182,7 +186,7 @@ export function ProtocolContextProvider({
           
           getShareMintPda: async (vault: ProgramDerivedAddress) => {
             const mint = await getPDAAndBump(
-              HyroProtocol.hyroProtocol.HYRO_PROTOCOL_PROGRAM_ADDRESS,
+              HYRO_PROTOCOL_PROGRAM_ADDRESS,
               ["vault_share_mint", vault[0]]
             );
             return mint;
@@ -190,7 +194,7 @@ export function ProtocolContextProvider({
           
           getVaultTokenAccountPda: async (vault: ProgramDerivedAddress, underlyingMint: Address) => {
             const tokenAccount = await getPDAAndBump(
-              HyroProtocol.hyroProtocol.HYRO_PROTOCOL_PROGRAM_ADDRESS,
+              HYRO_PROTOCOL_PROGRAM_ADDRESS,
               ["vault_token_account", vault[0], underlyingMint]
             );
             return tokenAccount;

@@ -4,7 +4,7 @@ import { devnet, mainnet, testnet } from "@solana/kit";
 import { useCallback, useMemo } from "react";
 import { ChainContext, DEFAULT_CHAIN_CONFIG } from "./chain-context";
 import { useAtom } from "jotai";
-import { Chains, selectedChain } from "@/protocol/atoms";
+import { Chains, selectedChain } from "@/lib/atoms";
 
 const STORAGE_KEY = "hyro-protocol:selected-chain";
 
@@ -45,13 +45,6 @@ export function ChainContextProvider({
           solanaRpcSubscriptionsUrl: testnet("wss://api.testnet.solana.com"),
           solanaRpcUrl: testnet("https://api.testnet.solana.com"),
         };
-      // return {
-      //   chain: "solana:localnet",
-      //   displayName: "Localnet",
-      //   solanaExplorerClusterName: "localnet",
-      //   solanaRpcSubscriptionsUrl: "ws://127.0.0.1:8900",
-      //   solanaRpcUrl: "http://127.0.0.1:8899",
-      // };
       case "solana:devnet":
         return {
           chain: "solana:devnet",

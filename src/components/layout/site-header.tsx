@@ -67,7 +67,7 @@ export function SiteHeader() {
         </nav>
 
         <Button asChild size="sm" className="shadow-glow-primary">
-          <Link href="#vaults">
+          <Link href="/explore">
             Explore vaults
             <ArrowUpRight className="size-4" />
           </Link>

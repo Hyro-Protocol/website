@@ -14,7 +14,7 @@ import {
   DropdownMenuContent,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import { ConnectWalletMenuItem } from "./connect-wallet-menu-item";
 import { WalletAccountIcon } from "./wallet-account-icon";
 import { useSetWallet, useWallet } from "./wallet-context";

@@ -1,10 +1,7 @@
-
-import * as HyroProtocol from "@/protocol/index";
 import type { Address, Commitment, ProgramDerivedAddress, Signature } from "@solana/kit";
 import { createContext, useContext } from "react";
 
 export type ProtocolContext = Readonly<{
-    protocol: typeof HyroProtocol,
     helpers: {
       getVaultPda(seed: string): Promise<[ProgramDerivedAddress, ProgramDerivedAddress]>,
       getLimitPolicyPda(seed: string): Promise<ProgramDerivedAddress>,
