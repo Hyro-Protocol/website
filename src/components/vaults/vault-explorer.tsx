@@ -72,6 +72,17 @@ import { Transaction } from "@/lib/solana/transaction";
 import { useConnection } from "../onchain/connection-context";
 import { ConnectWalletMenu } from "../wallet/connect-wallet-menu";
 import { useProtocol } from "../onchain/protocol-context";
+import {
+  fetchManagerRegistry,
+  fetchMaybeManagerRegistry,
+  getInitializeManagerRegistryInstructionAsync,
+  getInitializeVaultInstruction,
+  getInitializeVaultInstructionAsync,
+  getRegisterManagerInstructionAsync,
+  getVerifyManagerInstruction,
+  RiskRating,
+  VerificationStatus,
+} from "@/protocol/hyroProtocol";
 
 interface VaultExplorerProps {
   initialData?: VaultListResponse;
@@ -186,6 +197,72 @@ export function VaultExplorer({ initialData }: VaultExplorerProps) {
   const protocol = useProtocol();
   const connection = useConnection();
 
+  const ensureManagerRegistryMut = useMutation({
+    mutationKey: ["ensureManagerRegistry"],
+    mutationFn: async () => {
+      const [managerRegistry] = await protocol.helpers.getManagerRegistryPda();
+
+      return fetchMaybeManagerRegistry(
+        connection.connection,
+        managerRegistry
+      ).then(async (result) => {
+        if (result.exists) {
+          return result;
+        } else {
+          if (!signer) throw new Error("Signer not found");
+
+          console.log("Creating new manager registry", managerRegistry);
+          // create new manager registry
+          const ix = await getInitializeManagerRegistryInstructionAsync({
+            admin: signer,
+          });
+
+          return Transaction.send({
+            rpc: connection.connection as Rpc<SolanaRpcApi>,
+            subscription: connection.subscription,
+            signer: signer,
+            instructions: [ix],
+            simulation: {
+              computeUnitLimit: 200000,
+            },
+          })
+            .then(async (signature) => {
+              console.log("Manager registry created", signature);
+
+              const tx = await connection.connection
+                .getTransaction(signature, {
+                  maxSupportedTransactionVersion: 0,
+                  encoding: "jsonParsed",
+                })
+                .send();
+
+              console.log("tx", tx);
+              return fetchManagerRegistry(
+                connection.connection,
+                managerRegistry
+              );
+            })
+            .catch(async (e) => {
+              console.error("error", e);
+              if ("signature" in e && typeof e.signature === "string") {
+                const tx = await connection.connection
+                  .getTransaction(e.signature, {
+                    maxSupportedTransactionVersion: 0,
+                    encoding: "jsonParsed",
+                  })
+                  .send();
+
+                if (tx) {
+                  console.log("tx", tx);
+                }
+              }
+              throw e;
+            });
+        }
+      });
+    },
+  });
+
   const handleVaultCreation = useMutation({
     onSuccess: (data) => {
       console.log("data", data);
@@ -196,21 +273,25 @@ export function VaultExplorer({ initialData }: VaultExplorerProps) {
     mutationFn: async (seed: string) => {
       if (!signer) throw new Error("Signer not found");
 
-      const stageId = BigInt(
-        Math.floor(Math.random() * 65535)
-      );
+      const managerRegistry = await ensureManagerRegistryMut.mutateAsync();
 
-      const [challengeTemplateAccount] = await protocol.helpers.getChallengeTemplatePda(Number(stageId));
+      if (!managerRegistry) throw new Error("Manager registry not found");
+
+      const stageId = BigInt(Math.floor(Math.random() * 30000));
+
+      const [challengeTemplateAccount] =
+        await protocol.helpers.getChallengeTemplatePda(Number(stageId));
+
+      const USDC = address("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v");
+      const ORACLE = address("F9nB3BKFkXpA6WzLkogUP4RHyvwXZGAh8PhHPPkDNAa");
 
       const templateData = {
         stageSequence: 1,
         stageType: StageType.Evaluation,
         startingDeposit: 10000 * 10 ** 6,
-        admin: address("F9nB3BKFkXpA6WzLkogUP4RHyvwXZGAh8PhHPPkDNAa"), // hardcoded oracle
+        admin: ORACLE, // hardcoded oracle
         entranceCost: 100 * 10 ** 6,
-        entranceTokenMint: address(
-          "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
-        ), // USDC
+        entranceTokenMint: USDC, // USDC
         minimumTradingDays: [3],
         dailyDrawdown: [100],
         maximumLoss: [200],
@@ -221,11 +302,16 @@ export function VaultExplorer({ initialData }: VaultExplorerProps) {
 
       const createChallengeTemplateIx =
         await getCreateChallengeTemplateInstructionAsync({
-          stageId: 1,
+          stageId,
           dto: templateData,
           challengeTemplateAccount,
           signer,
         });
+
+      const [challengeAccount] = await protocol.helpers.getChallengePda(
+        signer.address,
+        seed
+      );
 
       const startingDeposit = BigInt(templateData.startingDeposit);
       const profitTargetAmount =
@@ -235,8 +321,9 @@ export function VaultExplorer({ initialData }: VaultExplorerProps) {
       const dailyDrawdownLimitAmount =
         (startingDeposit * BigInt(templateData.dailyDrawdown[0])) / 10000n;
 
-      const createChallengeIx = await getJoinChallengeInstructionAsync({
+      const joinChallengeIx = await getJoinChallengeInstructionAsync({
         challengeTemplateAccount,
+        challengeAccount,
         participant: signer,
         challengeId: seed,
         stageId: Number(stageId),
@@ -273,11 +360,41 @@ export function VaultExplorer({ initialData }: VaultExplorerProps) {
         createdAt: BigInt(Math.floor(Date.now() / 1000)),
       });
 
+      const newVaultIx = await getInitializeVaultInstructionAsync({
+        signer,
+        underlyingMint: USDC,
+        seed: seed,
+        policyProgram: POLICY_CHALLENGES_PROGRAM_ADDRESS,
+      });
+
+      const setupManagerIx = await getRegisterManagerInstructionAsync({
+        admin: signer,
+        manager: challengeAccount,
+        registry: managerRegistry.address,
+        riskRating: RiskRating.Conservative,
+      });
+
+      const [managerProfile] = await protocol.helpers.getManagerProfilePda(
+        challengeAccount
+      );
+      const verifyManagerIx = await getVerifyManagerInstruction({
+        admin: signer,
+        managerProfile: managerProfile,
+        registry: managerRegistry.address,
+        verificationStatus: VerificationStatus.Verified,
+      });
+
       return Transaction.send({
         rpc: connection.connection as Rpc<SolanaRpcApi>,
         subscription: connection.subscription,
         signer: signer,
-        instructions: [createChallengeTemplateIx, createChallengeIx],
+        instructions: [
+          createChallengeTemplateIx,
+          joinChallengeIx,
+          newVaultIx,
+          setupManagerIx,
+          verifyManagerIx,
+        ],
         simulation: {
           computeUnitLimit: 200000,
         },

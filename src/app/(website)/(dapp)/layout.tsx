@@ -1,13 +1,15 @@
+import { ConnectionDrawer } from "@/components/connection-drawer";
 import { Providers } from "@/components/providers";
 
 export default function DappLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    return (
-        <Providers>
-            {children}
-        </Providers>
-    );
+  return (
+    <Providers>
+      <ConnectionDrawer />
+      {children}
+    </Providers>
+  );
 }

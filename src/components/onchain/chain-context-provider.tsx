@@ -45,6 +45,13 @@ export function ChainContextProvider({
           solanaRpcSubscriptionsUrl: testnet("wss://api.testnet.solana.com"),
           solanaRpcUrl: testnet("https://api.testnet.solana.com"),
         };
+      // return {
+      //   chain: "solana:localnet",
+      //   displayName: "Localnet",
+      //   solanaExplorerClusterName: "localnet",
+      //   solanaRpcSubscriptionsUrl: "ws://127.0.0.1:8900",
+      //   solanaRpcUrl: "http://127.0.0.1:8899",
+      // };
       case "solana:devnet":
         return {
           chain: "solana:devnet",

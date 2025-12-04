@@ -77,6 +77,10 @@ export function ProtocolContextProvider({
   return (
     <ProtocolContext.Provider
       value={{
+        sizes: {
+          challengeTemplate: 113,
+          challenge: 210,
+        },
         helpers: {
           waitForConfirmation: async (
             signature: Signature,
