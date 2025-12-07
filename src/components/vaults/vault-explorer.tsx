@@ -1,10 +1,8 @@
 "use client";
 
-import { Buffer } from "buffer";
-import { useState, useEffect, useTransition, useCallback } from "react";
-import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -12,77 +10,38 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import {
-  Search,
+  BadgeCheck,
   LayoutGrid,
   LayoutList,
-  Filter,
-  BadgeCheck,
-  X,
   RefreshCw,
-  TrendingUp,
+  Search,
+  X
 } from "lucide-react";
+import { useEffect, useState } from "react";
 
+import {
+  getVaultList
+} from "@/lib/vaults/actions";
 import type {
   VaultData,
   VaultFilters,
   VaultListResponse,
 } from "@/lib/vaults/types";
-import { getVaultList, getVaultStats } from "@/lib/vaults/actions";
-import { VaultTable } from "./vault-table";
-import { VaultCard, VaultCardSkeleton } from "./vault-card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { useMutation } from "@tanstack/react-query";
-import {
-  ChallengeStatus,
-  ChallengeTemplateUpdateInsertDtoArgs,
-  DrawdownType,
-  getCreateChallengeTemplateInstruction,
-  getCreateChallengeTemplateInstructionAsync,
-  getJoinChallengeInstruction,
-  getJoinChallengeInstructionAsync,
-  POLICY_CHALLENGES_PROGRAM_ADDRESS,
-  StageType,
-} from "@/protocol/policyChallenges";
-import {
-  address,
-  getProgramDerivedAddress,
-  Rpc,
-  Signature,
-  SolanaRpcApi,
-} from "@solana/kit";
-import { useSigner } from "../wallet/wallet-context";
-import { Transaction } from "@/lib/solana/transaction";
-import { useConnection } from "../onchain/connection-context";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ConnectWalletMenu } from "../wallet/connect-wallet-menu";
-import { useProtocol } from "../onchain/protocol-context";
-import {
-  fetchManagerRegistry,
-  fetchMaybeManagerRegistry,
-  getInitializeManagerRegistryInstructionAsync,
-  getInitializeVaultInstruction,
-  getInitializeVaultInstructionAsync,
-  getRegisterManagerInstructionAsync,
-  getVerifyManagerInstruction,
-  RiskRating,
-  VerificationStatus,
-} from "@/protocol/hyroProtocol";
+import { useSigner } from "../wallet/wallet-context";
+import { CreateNewChallenge } from "./create-new-challenge";
+import { VaultCard, VaultCardSkeleton } from "./vault-card";
+import { VaultTable } from "./vault-table";
 
 interface VaultExplorerProps {
   initialData?: VaultListResponse;
@@ -120,11 +79,7 @@ const riskOptions = [
 ] as const;
 
 export function VaultExplorer({ initialData }: VaultExplorerProps) {
-  const [isPending, startTransition] = useTransition();
-  const [viewMode, setViewMode] = useState<"table" | "grid">("table");
-  const [vaults, setVaults] = useState<VaultData[]>(initialData?.vaults || []);
-  const [totalTvl, setTotalTvl] = useState(initialData?.totalTvl || 0);
-  const [totalCount, setTotalCount] = useState(initialData?.totalCount || 0);
+  const signer = useSigner();
 
   const [filters, setFilters] = useState<VaultFilters>({
     search: "",
@@ -134,8 +89,37 @@ export function VaultExplorer({ initialData }: VaultExplorerProps) {
     sortOrder: "desc",
     timeframe: "1m",
   });
-
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const {
+    data: vaultAccounts,
+    refetch: fetchVaults,
+    isPending,
+  } = useQuery({
+    queryKey: ["vaults-list", filters, debouncedSearch],
+    queryFn: () =>
+      getVaultList({
+        ...filters,
+        search: debouncedSearch,
+        riskRating: filters.riskRating === "all" ? null : filters.riskRating,
+      }),
+    placeholderData: initialData,
+  });
+  const [viewMode, setViewMode] = useState<"table" | "grid">("table");
+  const [vaults, setVaults] = useState<VaultData[]>(
+    vaultAccounts?.vaults || []
+  );
+  const [totalTvl, setTotalTvl] = useState(vaultAccounts?.totalTvl || 0);
+  const [totalCount, setTotalCount] = useState(vaultAccounts?.totalCount || 0);
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    console.log("vaultAccounts", vaultAccounts);
+    if (vaultAccounts) {
+      setVaults(vaultAccounts.vaults);
+      setTotalTvl(vaultAccounts.totalTvl);
+      setTotalCount(vaultAccounts.totalCount);
+    }
+  }, [vaultAccounts]);
 
   // Debounce search input
   useEffect(() => {
@@ -144,25 +128,6 @@ export function VaultExplorer({ initialData }: VaultExplorerProps) {
     }, 300);
     return () => clearTimeout(timer);
   }, [filters.search]);
-
-  // Fetch vaults when filters change
-  const fetchVaults = useCallback(async () => {
-    startTransition(async () => {
-      const filtersToSend = {
-        ...filters,
-        search: debouncedSearch,
-        riskRating: filters.riskRating === "all" ? null : filters.riskRating,
-      };
-      const data = await getVaultList(filtersToSend);
-      setVaults(data.vaults);
-      setTotalTvl(data.totalTvl);
-      setTotalCount(data.totalCount);
-    });
-  }, [filters, debouncedSearch]);
-
-  useEffect(() => {
-    fetchVaults();
-  }, [fetchVaults]);
 
   const handleSort = (sortBy: VaultFilters["sortBy"]) => {
     setFilters((prev) => ({
@@ -193,222 +158,6 @@ export function VaultExplorer({ initialData }: VaultExplorerProps) {
     filters.managerVerified !== null ||
     (filters.riskRating !== null && filters.riskRating !== "all");
 
-  const signer = useSigner();
-  const protocol = useProtocol();
-  const connection = useConnection();
-
-  const ensureManagerRegistryMut = useMutation({
-    mutationKey: ["ensureManagerRegistry"],
-    mutationFn: async () => {
-      const [managerRegistry] = await protocol.helpers.getManagerRegistryPda();
-
-      return fetchMaybeManagerRegistry(
-        connection.connection,
-        managerRegistry
-      ).then(async (result) => {
-        if (result.exists) {
-          return result;
-        } else {
-          if (!signer) throw new Error("Signer not found");
-
-          console.log("Creating new manager registry", managerRegistry);
-          // create new manager registry
-          const ix = await getInitializeManagerRegistryInstructionAsync({
-            admin: signer,
-          });
-
-          return Transaction.send({
-            rpc: connection.connection as Rpc<SolanaRpcApi>,
-            subscription: connection.subscription,
-            signer: signer,
-            instructions: [ix],
-            simulation: {
-              computeUnitLimit: 200000,
-            },
-          })
-            .then(async (signature) => {
-              console.log("Manager registry created", signature);
-
-              const tx = await connection.connection
-                .getTransaction(signature, {
-                  maxSupportedTransactionVersion: 0,
-                  encoding: "jsonParsed",
-                })
-                .send();
-
-              console.log("tx", tx);
-              return fetchManagerRegistry(
-                connection.connection,
-                managerRegistry
-              );
-            })
-            .catch(async (e) => {
-              console.error("error", e);
-              if ("signature" in e && typeof e.signature === "string") {
-                const tx = await connection.connection
-                  .getTransaction(e.signature, {
-                    maxSupportedTransactionVersion: 0,
-                    encoding: "jsonParsed",
-                  })
-                  .send();
-
-                if (tx) {
-                  console.log("tx", tx);
-                }
-              }
-              throw e;
-            });
-        }
-      });
-    },
-  });
-
-  const handleVaultCreation = useMutation({
-    onSuccess: (data) => {
-      console.log("data", data);
-    },
-    onError: (error) => {
-      console.error("error", error);
-    },
-    mutationFn: async (seed: string) => {
-      if (!signer) throw new Error("Signer not found");
-
-      const managerRegistry = await ensureManagerRegistryMut.mutateAsync();
-
-      if (!managerRegistry) throw new Error("Manager registry not found");
-
-      const stageId = BigInt(Math.floor(Math.random() * 30000));
-
-      const [challengeTemplateAccount] =
-        await protocol.helpers.getChallengeTemplatePda(Number(stageId));
-
-      const USDC = address("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v");
-      const ORACLE = address("F9nB3BKFkXpA6WzLkogUP4RHyvwXZGAh8PhHPPkDNAa");
-
-      const templateData = {
-        stageSequence: 1,
-        stageType: StageType.Evaluation,
-        startingDeposit: 10000 * 10 ** 6,
-        admin: ORACLE, // hardcoded oracle
-        entranceCost: 100 * 10 ** 6,
-        entranceTokenMint: USDC, // USDC
-        minimumTradingDays: [3],
-        dailyDrawdown: [100],
-        maximumLoss: [200],
-        profitTarget: [300],
-        maxParticipants: [50],
-        isActive: true,
-      } as ChallengeTemplateUpdateInsertDtoArgs;
-
-      const createChallengeTemplateIx =
-        await getCreateChallengeTemplateInstructionAsync({
-          stageId,
-          dto: templateData,
-          challengeTemplateAccount,
-          signer,
-        });
-
-      const [challengeAccount] = await protocol.helpers.getChallengePda(
-        signer.address,
-        seed
-      );
-
-      const startingDeposit = BigInt(templateData.startingDeposit);
-      const profitTargetAmount =
-        (startingDeposit * BigInt(templateData.profitTarget[0])) / 10000n;
-      const maximumLossAmount =
-        (startingDeposit * BigInt(templateData.maximumLoss[0])) / 10000n;
-      const dailyDrawdownLimitAmount =
-        (startingDeposit * BigInt(templateData.dailyDrawdown[0])) / 10000n;
-
-      const joinChallengeIx = await getJoinChallengeInstructionAsync({
-        challengeTemplateAccount,
-        challengeAccount,
-        participant: signer,
-        challengeId: seed,
-        stageId: Number(stageId),
-        stageSequence: 0,
-        profitTarget: {
-          target: [templateData.profitTarget[0]],
-          targetAmount: [profitTargetAmount],
-          achieved: [0],
-          achievedAmount: [0n],
-        },
-        tradingDays: {
-          required: [templateData.minimumTradingDays[0]],
-          completed: [0],
-          requirementsMet: false,
-          remainingDays: [templateData.minimumTradingDays[0]],
-        },
-        maximumLoss: {
-          maximumLossPercentage: [templateData.maximumLoss[0]],
-          maximumLossAmount: [maximumLossAmount],
-          currentLossAchieved: [0],
-          currentLossAchievedAmount: [0n],
-        },
-        dailyDrawdown: {
-          drawdownType: DrawdownType.Static,
-          limitPercentage: [templateData.dailyDrawdown[0]],
-          limitAmount: [dailyDrawdownLimitAmount],
-          maxEquity: [0n],
-          currentDrawdownPercentage: [0],
-          currentDrawdownAmount: [0n],
-          violationTriggered: false,
-        },
-        status: ChallengeStatus.Active,
-        payout: 0n,
-        createdAt: BigInt(Math.floor(Date.now() / 1000)),
-      });
-
-      const newVaultIx = await getInitializeVaultInstructionAsync({
-        signer,
-        underlyingMint: USDC,
-        seed: seed,
-        policyProgram: POLICY_CHALLENGES_PROGRAM_ADDRESS,
-      });
-
-      const setupManagerIx = await getRegisterManagerInstructionAsync({
-        admin: signer,
-        manager: challengeAccount,
-        registry: managerRegistry.address,
-        riskRating: RiskRating.Conservative,
-      });
-
-      const [managerProfile] = await protocol.helpers.getManagerProfilePda(
-        challengeAccount
-      );
-      const verifyManagerIx = await getVerifyManagerInstruction({
-        admin: signer,
-        managerProfile: managerProfile,
-        registry: managerRegistry.address,
-        verificationStatus: VerificationStatus.Verified,
-      });
-
-      return Transaction.send({
-        rpc: connection.connection as Rpc<SolanaRpcApi>,
-        subscription: connection.subscription,
-        signer: signer,
-        instructions: [
-          createChallengeTemplateIx,
-          joinChallengeIx,
-          newVaultIx,
-          setupManagerIx,
-          verifyManagerIx,
-        ],
-        simulation: {
-          computeUnitLimit: 200000,
-        },
-      }).catch(async (e) =>
-        connection.connection
-          .getTransaction(e.signature as Signature, {
-            maxSupportedTransactionVersion: 0,
-            encoding: "jsonParsed",
-          })
-          .send()
-      );
-    },
-  });
-
   return (
     <div className="space-y-6">
       {/* Stats Header */}
@@ -430,39 +179,7 @@ export function VaultExplorer({ initialData }: VaultExplorerProps) {
         </div>
         <div className="ml-auto hidden lg:flex items-center gap-2 text-sm text-muted-foreground">
           {!signer && <ConnectWalletMenu>Connect Wallet</ConnectWalletMenu>}
-          {signer && (
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button>Create new vault</Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Create new vault</DialogTitle>
-                </DialogHeader>
-                <DialogDescription>
-                  Create a new vault to start earning rewards.
-                </DialogDescription>
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    const formData = new FormData(e.target as HTMLFormElement);
-                    const seed = formData.get("seed") as string;
-                    console.log("seed", seed);
-
-                    handleVaultCreation.mutate(seed);
-                  }}
-                >
-                  <Input placeholder="Vault seed" name="seed" />
-                  <Button
-                    type="submit"
-                    disabled={handleVaultCreation.isPending}
-                  >
-                    Create
-                  </Button>
-                </form>
-              </DialogContent>
-            </Dialog>
-          )}
+          {signer && <CreateNewChallenge />}
         </div>
       </div>
 
@@ -609,7 +326,7 @@ export function VaultExplorer({ initialData }: VaultExplorerProps) {
                   variant="outline"
                   size="sm"
                   className="border-border/50 bg-card/50"
-                  onClick={fetchVaults}
+                  onClick={() => fetchVaults()}
                   disabled={isPending}
                 >
                   <RefreshCw

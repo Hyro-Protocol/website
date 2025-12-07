@@ -1,7 +1,8 @@
 import { withPayload } from '@payloadcms/next/withPayload'
+import { withSuperjson } from 'next-superjson'
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig = withSuperjson({
   images: {
     deviceSizes: [
       1920,
@@ -35,7 +36,7 @@ const nextConfig = {
       },
     ],
   },
-}
+})
 
 // Make sure you wrap your `nextConfig`
 // with the `withPayload` plugin

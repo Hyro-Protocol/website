@@ -15,6 +15,7 @@ import {
   getBase58Decoder,
   getBase64EncodedWireTransaction,
   Instruction,
+  InstructionPlan,
   MessageModifyingSigner,
   pipe,
   Rpc,
@@ -31,7 +32,7 @@ import {
   TransactionMessageBytes,
   TransactionMessageWithFeePayer,
   TransactionModifyingSigner,
-  TransactionSendingSigner
+  TransactionSendingSigner,
 } from "@solana/kit";
 import { TransactionWithLastValidBlockHeight } from "@solana/transaction-confirmation";
 
@@ -87,7 +88,7 @@ export class Transaction {
       MessageModifyingSigner;
     instructions: Instruction[];
     simulation?: SolanaTransactionSimulation;
-    remainingAccounts?: AccountMeta[]
+    remainingAccounts?: AccountMeta[];
   }) {
     console.log("@@@@@ prepare", args);
     const { rpc, signer, instructions, simulation } = args;
@@ -173,6 +174,47 @@ export class Transaction {
     };
   }
 
+  /**
+   * Recursively collect all Instructions from an InstructionPlan.
+   * 
+   * @param plan InstructionPlan or array of plans (to help generic use)
+   * @returns Instruction[]
+   */
+  static collectInstructions(plan: InstructionPlan | InstructionPlan[]): Instruction[] {
+    // Allow passing an array of plans for convenience
+    if (Array.isArray(plan)) {
+      return plan.flatMap((p) => this.collectInstructions(p));
+    }
+
+    switch (plan.kind) {
+      case 'single':
+        return [plan.instruction];
+      case 'sequential':
+      case 'parallel':
+        // These have a "plans" property (array of subplans)
+        return plan.plans.flatMap((subplan) => this.collectInstructions(subplan));
+      default:
+        // Unknown plan kind
+        return [];
+    }
+  }
+
+  static async sendInstructionPlan(args: {
+    rpc: Rpc<SolanaRpcApi>;
+    subscription: RpcSubscriptions<SolanaRpcSubscriptionsApi>;
+    signer: TransactionSendingSigner &
+      TransactionModifyingSigner &
+      MessageModifyingSigner;
+    plan: InstructionPlan;
+    alt?: Address;
+    simulation?: SolanaTransactionSimulation;
+  }) {
+    return this.send({
+      ...args,
+      instructions: this.collectInstructions(args.plan),
+    });
+  }
+
   static async send(args: {
     rpc: Rpc<SolanaRpcApi>;
     subscription: RpcSubscriptions<SolanaRpcSubscriptionsApi>;
@@ -182,7 +224,7 @@ export class Transaction {
     instructions: Instruction[];
     alt?: Address;
     simulation?: SolanaTransactionSimulation;
-  }): Promise<Signature> {
+  }) {
     const txm = await this.prepare(args);
 
     // Please don't remove this code. It's helpful to debug the transaction size.
@@ -222,14 +264,25 @@ export class Transaction {
         commitment: "confirmed",
         maxRetries: 0n,
       }
-    ).catch(e => {
-      throw { ...e, signature }
+    ).catch((e) => {
+      throw { ...e, signature };
     });
 
     if (!signatureBytes) {
       throw new Error("No signature");
     }
 
-    return signature;
+    const {
+      value: [status],
+    } = await args.rpc
+      .getSignatureStatuses([signature], {
+        searchTransactionHistory: true,
+      })
+      .send();
+
+    return {
+      signature,
+      status,
+    };
   }
 }

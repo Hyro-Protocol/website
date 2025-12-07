@@ -50,7 +50,7 @@ export function Sparkline({
     const lastVal = values[values.length - 1];
     const positive = lastVal >= firstVal;
 
-    const id = `gradient-${Math.random().toString(36).substr(2, 9)}`;
+    const id = `gradient-${firstVal.toPrecision(5)}-${lastVal.toPrecision(5)}`;
 
     return {
       path: pathD,

@@ -1,5 +1,8 @@
 // Types for the vault explore page
 
+import { Challenge } from "@/protocol/policyChallenges";
+import { SanitizedAccount } from "../solana/helpers";
+
 export interface VaultHistoricalSnapshot {
   timestamp: number;
   tvl: number;
@@ -68,7 +71,9 @@ export interface VaultListResponse {
 }
 
 // Mock data generator for development
-export function generateMockVaults(count: number = 15): VaultData[] {
+export function generateMockVaults(accounts: SanitizedAccount<Challenge, string>[]): VaultData[] {
+  const count = accounts.length;
+  
   const strategies = [
     'Arbitrage Alpha',
     'DeFi Yield Optimizer',

@@ -1,6 +1,6 @@
 "use server";
 
-import { unstable_cache } from "next/cache";
+import { revalidateTag, unstable_cache } from "next/cache";
 import {
   type VaultData,
   type VaultListResponse,
@@ -14,7 +14,13 @@ import {
   getVaultDecoder,
   HYRO_PROTOCOL_PROGRAM_ADDRESS,
 } from "@/protocol/hyroProtocol";
-import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from "@/protocol/policyChallenges";
+import {
+  Challenge,
+  getChallengeDecoder,
+  POLICY_CHALLENGES_PROGRAM_ADDRESS,
+} from "@/protocol/policyChallenges";
+import { decodeAccount } from "@solana/kit";
+import { sanitizeAccount } from "../solana/helpers";
 
 // Cache tags for revalidation
 const CACHE_TAGS = {
@@ -141,13 +147,76 @@ export const getVaultStats = unstable_cache(
 
 export const getVaultAccounts = unstable_cache(
   async () => {
-    await rpc
-      .getProgramAccounts(HYRO_PROTOCOL_PROGRAM_ADDRESS, {
+    const rawAccounts = await rpc
+      .getProgramAccounts(POLICY_CHALLENGES_PROGRAM_ADDRESS, {
         commitment: "confirmed",
-        encoding: "jsonParsed",
-        // TODO: Add datasize filter for vault account
+        encoding: "base64",
+        filters: [
+          {
+            dataSize: 210n,
+          },
+        ],
       })
-      .send();
+      .send()
+      .then(
+        (accounts) => (
+          console.log("fetched policy challenges accounts", accounts),
+          accounts.map(({ account, pubkey }) => ({
+            ...account,
+            address: pubkey,
+            data: Buffer.from(account.data[0], "base64"),
+            programAddress: POLICY_CHALLENGES_PROGRAM_ADDRESS,
+          }))
+        )
+      )
+      .then(
+        (accounts) => {
+          const sanitizeAccounts = [];
+          for (const account of accounts) {
+            try {
+              sanitizeAccounts.push(
+                sanitizeAccount<Challenge>(
+                  decodeAccount(account, getChallengeDecoder())
+                )
+              );
+            } catch (error) {
+              console.error("Failed to sanitize account", error);
+            }
+          }
+          return sanitizeAccounts;
+        }
+        // accounts.map((account) =>
+        //   sanitizeAccount<Challenge>(
+        //     decodeAccount(account, getChallengeDecoder())
+        //   )
+        // )
+      );
+
+    return rawAccounts;
+    // .then((accounts) =>
+    //   Promise.all(
+    //     accounts.map(async (account) => {
+    //       const signatures = await rpc
+    //         .getSignaturesForAddress(account.address, {
+    //           commitment: "confirmed",
+    //         })
+    //         .send();
+    //       const transactions = await Promise.all(
+    //         signatures.map(async ({ signature }) =>
+    //           rpc.getTransaction(signature, {
+    //             commitment: "confirmed",
+    //             encoding: "jsonParsed",
+    //           })
+    //         )
+    //       );
+    //       return {
+    //         ...account,
+    //         transactions,
+    //         signatures,
+    //       };
+    //     })
+    //   )
+    // );
   },
 
   ["vault-accounts"],
@@ -156,6 +225,16 @@ export const getVaultAccounts = unstable_cache(
     revalidate: CACHE_DURATIONS.vaultList,
   }
 );
+
+export const revalidateCache = async () => {
+  console.log("revalidating cache");
+
+  revalidateTag(CACHE_TAGS.vaults, "max");
+  revalidateTag(CACHE_TAGS.vaultHistory, "max");
+  revalidateTag(CACHE_TAGS.vaultStats, "max");
+
+  await Promise.resolve();
+};
 
 /**
  * Fetch the list of vaults with filtering and sorting
@@ -172,8 +251,8 @@ export const getVaultList = unstable_cache(
     // 2. Decode vault data
     // 3. Enrich with cached historical/performance data
     // 4. Apply filters and sorting
-
-    let vaults = generateMockVaults(50);
+    const accounts = await getVaultAccounts();
+    let vaults = generateMockVaults(accounts);
 
     // Apply filters
     if (filters?.search) {
