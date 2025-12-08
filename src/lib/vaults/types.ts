@@ -71,8 +71,7 @@ export interface VaultListResponse {
 }
 
 // Mock data generator for development
-export function generateMockVaults(accounts: SanitizedAccount<Challenge, string>[]): VaultData[] {
-  const count = accounts.length;
+export function generateMockVaults(count: number): VaultData[] {
   
   const strategies = [
     'Arbitrage Alpha',

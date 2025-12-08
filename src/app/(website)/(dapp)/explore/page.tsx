@@ -72,14 +72,14 @@ export default function ExplorePage() {
           }}
         />
         
-        <Container className="relative py-16 lg:py-24">
+        <Container className="relative py-8 lg:py-12">
           <div className="max-w-3xl">
-            <h1 className="text-4xl lg:text-5xl font-bold tracking-tight mb-4">
+            <h1 className="text-2xl lg:text-3xl font-bold tracking-tight mb-2">
               <span className="bg-gradient-to-r from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent">
                 Explore Vaults
               </span>
             </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl">
+            <p className="text-muted-foreground leading-relaxed max-w-2xl">
               Discover algorithmic trading strategies managed by verified professionals. 
               Deposit assets and let expert traders grow your portfolio on Solana.
             </p>

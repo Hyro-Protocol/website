@@ -1,7 +1,7 @@
 "use client";
 
 import { Transaction } from "@/features/transaction/transaction";
-import { vaultsAtom } from "@/protocol/atoms";
+import { vaultsAtom } from "@/atoms";
 import {
   address as asAddress,
   Instruction,

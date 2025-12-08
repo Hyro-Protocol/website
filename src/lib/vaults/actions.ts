@@ -252,7 +252,7 @@ export const getVaultList = unstable_cache(
     // 3. Enrich with cached historical/performance data
     // 4. Apply filters and sorting
     const accounts = await getVaultAccounts();
-    let vaults = generateMockVaults(accounts);
+    let vaults = generateMockVaults(accounts.length || 100);
 
     // Apply filters
     if (filters?.search) {

@@ -24,6 +24,7 @@ import {
   LayoutList,
   RefreshCw,
   Search,
+  StarIcon,
   X
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -42,6 +43,8 @@ import { useSigner } from "../wallet/wallet-context";
 import { CreateNewChallenge } from "./create-new-challenge";
 import { VaultCard, VaultCardSkeleton } from "./vault-card";
 import { VaultTable } from "./vault-table";
+import { FeaturedVaultCard } from "./featured-vault-card";
+import { useMemo } from "react";
 
 interface VaultExplorerProps {
   initialData?: VaultListResponse;
@@ -89,6 +92,7 @@ export function VaultExplorer({ initialData }: VaultExplorerProps) {
     sortOrder: "desc",
     timeframe: "1m",
   });
+  const [featuredSort, setFeaturedSort] = useState<"tvl" | "performance" | "score">("tvl");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const {
     data: vaultAccounts,
@@ -158,15 +162,113 @@ export function VaultExplorer({ initialData }: VaultExplorerProps) {
     filters.managerVerified !== null ||
     (filters.riskRating !== null && filters.riskRating !== "all");
 
+  // Compute top 3 featured vaults based on selected sort
+  const featuredVaults = useMemo(() => {
+    if (!vaults || vaults.length === 0) return [];
+
+    const sorted = [...vaults].sort((a, b) => {
+      switch (featuredSort) {
+        case "tvl":
+          return b.tvl - a.tvl;
+        case "performance": {
+          const perfA = a.performance.month3 ?? a.performance.allTime ?? 0;
+          const perfB = b.performance.month3 ?? b.performance.allTime ?? 0;
+          return perfB - perfA;
+        }
+        case "score": {
+          // Simple score: combine TVL and performance
+          const scoreA = (a.tvl / 1_000_000) * 0.3 + ((a.performance.month3 ?? a.performance.allTime ?? 0) / 100) * 0.7;
+          const scoreB = (b.tvl / 1_000_000) * 0.3 + ((b.performance.month3 ?? b.performance.allTime ?? 0) / 100) * 0.7;
+          return scoreB - scoreA;
+        }
+        default:
+          return 0;
+      }
+    });
+
+    return sorted.slice(0, 3);
+  }, [vaults, featuredSort]);
+
+  // Determine timeframe for featured vaults based on age
+  const getFeaturedTimeframe = (vault: VaultData): "3m" | "1y" => {
+    return vault.ageDays >= 90 ? "3m" : vault.ageDays >= 365 ? "1y" : "3m";
+  };
+
   return (
     <div className="space-y-6">
+      {/* Top Vaults Section */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-semibold">Top Vaults</h2>
+          <div className="flex items-center gap-2">
+            <Button
+              variant={featuredSort === "tvl" ? "default" : "outline"}
+              data-active={featuredSort === "tvl"}
+              size="sm"
+              className={cn(
+                "text-xs",
+                featuredSort !== "tvl" && "border-border/50 bg-card/50"
+              )}
+              onClick={() => setFeaturedSort("tvl")}
+            >
+              <StarIcon className="size-3! text-amber-500 fill-current stroke-0 in-data-[active=true]:text-foreground" /> Featured
+            </Button>
+            <Button
+              variant={featuredSort === "performance" ? "default" : "outline"}
+              data-active={featuredSort === "performance"}
+              size="sm"
+              className={cn(
+                "text-xs",
+                featuredSort !== "performance" && "border-border/50 bg-card/50"
+              )}
+              onClick={() => setFeaturedSort("performance")}
+            >
+              Top Performing
+            </Button>
+            <Button
+              variant={featuredSort === "score" ? "default" : "outline"}
+              data-active={featuredSort === "score"}
+              size="sm"
+              className={cn(
+                "text-xs",
+                featuredSort !== "score" && "border-border/50 bg-card/50"
+              )}
+              onClick={() => setFeaturedSort("score")}
+            >
+              Top Score
+            </Button>
+          </div>
+        </div>
+
+        {isPending ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div
+                key={i}
+                className="h-[320px] rounded-lg border border-border/50 bg-card/50 animate-pulse"
+              />
+            ))}
+          </div>
+        ) : featuredVaults.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {featuredVaults.map((vault) => (
+              <FeaturedVaultCard
+                key={vault.address}
+                vault={vault}
+                timeframe={getFeaturedTimeframe(vault)}
+              />
+            ))}
+          </div>
+        ) : null}
+      </div>
+
       {/* Stats Header */}
       <div className="flex flex-wrap items-center gap-6 pb-6 border-b border-border/50">
         <div>
           <p className="text-sm text-muted-foreground mb-1">
             Total Value Locked
           </p>
-          <p className="text-3xl font-bold font-mono tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+          <p className="text-3xl font-bold font-mono tracking-tight">
             {formatTvl(totalTvl)}
           </p>
         </div>
