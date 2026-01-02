@@ -6,14 +6,19 @@ import {
   Challenge,
   CHALLENGE_DISCRIMINATOR,
   getChallengeDecoder,
+  getOracleCreateOrUpdateChallengeDiscriminatorBytes,
   getOracleCreateOrUpdateChallengeInstructionDataDecoder,
+  getUpdateChallengeDiscriminatorBytes,
   getUpdateChallengeInstructionDataDecoder,
+  OracleCreateOrUpdateChallengeInstructionData,
   POLICY_CHALLENGES_PROGRAM_ADDRESS,
 } from "@/protocol/policyChallenges";
 import {
   address,
   Base64EncodedBytes,
   decodeAccount,
+  getBase58Decoder,
+  getBase58Encoder,
   type Account,
   type Address,
 } from "@solana/kit";
@@ -25,6 +30,7 @@ import {
   type SanitizedAccount,
 } from "../solana/helpers";
 import { inspect } from "util";
+import { parse } from "path";
 
 // Cache tags for revalidation
 const CACHE_TAGS = {
@@ -46,6 +52,7 @@ export interface ChallengeWithHistory {
     slot: number;
     blockTime: number | null;
     err: any;
+    balance: number | null;
   }>;
 }
 
@@ -114,10 +121,6 @@ export const getChallengeUpdateSignatures = unstable_cache(
         })
         .send();
 
-      console.log(
-        "signatures",
-        signatures.filter((sig) => !sig.err).map((sig) => sig.signature)
-      );
       // Filter signatures to only successful transactions
       const successfulSignatures = signatures.filter((sig) => !sig.err);
 
@@ -192,28 +195,55 @@ type a = Prettify<Sanitized<ChallengeWithHistory>>;
 export const getChallengesWithHistory = unstable_cache(
   async (): Promise<Sanitized<ChallengeWithHistory>[]> => {
     const accounts = await getChallengeAccounts();
-
     const allUpdateSignatures = await getProgramUpdateSignatures();
 
-    console.log(
-      "allUpdateSignatures",
-      inspect(allUpdateSignatures, { depth: null })
-    );
+    // Build a map of challenge address -> update signatures with balance
+    const challengeUpdatesMap = new Map<
+      string,
+      Array<{
+        signature: string;
+        slot: number;
+        blockTime: number | null;
+        err: any;
+        balance: number | null;
+      }>
+    >();
 
-    // Fetch update signatures for each challenge
-    const challengesWithHistory = await Promise.all(
-      accounts.map(async (account) => {
-        // const updateSignatures = await getChallengeUpdateSignatures(
-        //   address(account.address as Address)
-        // );
+    // Process all update signatures and group by challenge address
+    for (const update of allUpdateSignatures) {
+      const { challengeAddress } = update;
 
-        return {
-          account,
-          address: account.address,
-          updateSignatures: [],
-        };
-      })
-    );
+      if (!challengeUpdatesMap.has(challengeAddress)) {
+        challengeUpdatesMap.set(challengeAddress, []);
+      }
+
+      challengeUpdatesMap.get(challengeAddress)!.push({
+        signature: update.signature,
+        slot: update.slot,
+        blockTime: update.blockTime,
+        err: null,
+        balance: update.balance || null,
+      });
+    }
+
+    // Match challenges with their update history
+    const challengesWithHistory = accounts.map((account) => {
+      const challengeAddress = account.address;
+      const updateSignatures = challengeUpdatesMap.get(challengeAddress) || [];
+
+      // Sort by blockTime (oldest first)
+      updateSignatures.sort((a, b) => {
+        const timeA = a.blockTime || 0;
+        const timeB = b.blockTime || 0;
+        return timeA - timeB;
+      });
+
+      return {
+        account,
+        address: challengeAddress,
+        updateSignatures,
+      };
+    });
 
     return challengesWithHistory.map(sanitize);
   },
@@ -230,6 +260,9 @@ export const getChallengesWithHistory = unstable_cache(
  */
 export const getProgramUpdateSignatures = unstable_cache(
   async () => {
+    const base58Decoder = getBase58Decoder();
+    const base58Encoder = getBase58Encoder();
+
     try {
       // Get signatures for the program address
       const signatures = await rpc
@@ -256,63 +289,54 @@ export const getProgramUpdateSignatures = unstable_cache(
 
             if (!tx) return null;
 
-            console.log(
-              "instructions",
-              tx.transaction.message.instructions
-                .map((ix) => {
-                  if ("data" in ix) {
-                    const decoders = [
-                      getUpdateChallengeInstructionDataDecoder(),
-                      getOracleCreateOrUpdateChallengeInstructionDataDecoder(),
-                    ];
-
-                    const decoded = decoders
-                      .map((decoder) => {
-                        try {
-                          return decoder.decode(Buffer.from(ix.data, "base64"));
-                        } catch (e) {
-                          console.error("Failed to decode instruction data:", e);
-                          return null;
-                        }
-                      })
-                      .find((decoded) => decoded !== null);
-
-                    return decoded ? decoded : null;
-                  } else {
-                    return null;
+            // Check if this is an update transaction and extract balance data
+            const parsedData = await new Promise<{
+              data: OracleCreateOrUpdateChallengeInstructionData;
+              challengeAddress: Address;
+            } | null>((resolve) => {
+              const instructions = tx.transaction.message.instructions || [];
+              for (const ix of instructions) {
+                if ("data" in ix) {
+                  const data = base58Encoder.encode(ix.data);
+                  try {
+                    return resolve({
+                      data: getOracleCreateOrUpdateChallengeInstructionDataDecoder().decode(
+                        data
+                      ),
+                      challengeAddress: ix.accounts[1],
+                    });
+                  } catch {
+                    continue;
                   }
-                })
-                .filter(Boolean)
-                .join(", ")
-            );
-            // Check if this is an update transaction
-            const instructions = tx.transaction.message.instructions || [];
-            const isUpdate = instructions.some((ix: any) => {
-              // Check if instruction is update_challenge or oracle_create_or_update_challenge
-              // This is a simplified check - in production you'd decode instruction data
-              return (
-                ix.programId === POLICY_CHALLENGES_PROGRAM_ADDRESS &&
-                "parsed" in ix &&
-                (ix.parsed?.type === "updateChallenge" ||
-                  ix.parsed?.type === "oracleCreateOrUpdateChallenge")
-              );
+                }
+              }
+
+              resolve(null);
             });
 
-            console.log("isUpdate", isUpdate);
+            if (!parsedData) return null;
 
-            return isUpdate
-              ? {
-                  signature,
-                  slot: tx.slot,
-                  blockTime: tx.blockTime,
-                  transaction: tx,
-                }
-              : null;
+            // Extract balance from parsed instruction data
+            const parsed = parsedData;
+            return {
+              signature,
+              slot: tx.slot,
+              blockTime: tx.blockTime,
+              transaction: tx,
+              balance: Number(parsed.data.updateDto.latestBalance),
+              challengeId: parsed.data.challengeId,
+              challengeAddress: parsed.challengeAddress,
+            };
           } catch (error) {
             console.error(`Failed to fetch transaction ${signature}:`, error);
             return null;
           }
         })
+      );
+
+      console.log(
+        "updateTransactions",
+        updateTransactions.filter(Boolean).length
       );
 
       return updateTransactions

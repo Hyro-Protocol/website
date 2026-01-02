@@ -28,6 +28,10 @@ export type SanitizedAccount<
 };
 
 export const sanitize = <T>(data: T): Sanitized<T> => {
+  if (Array.isArray(data)) {
+    return data.map(sanitize) as Sanitized<T>;
+  }
+
   if (typeof data === "object" && data !== null) {
     return Object.fromEntries(
       Object.entries(data).map(([key, value]) => [key, sanitize(value)])
