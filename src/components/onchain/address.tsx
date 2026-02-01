@@ -70,7 +70,7 @@ export const Address = ({
           onClick={() => handleCopyAddress()}
           disabled={isError || isSuccess}
           variant={
-            isSuccess ? "constructive" : isError ? "destructive" : "secondary"
+            isSuccess ? "default" : isError ? "destructive" : "secondary"
           }
           {...rest}
         >

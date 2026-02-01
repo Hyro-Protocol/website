@@ -101,7 +101,6 @@ export function ConnectWalletMenuItem({
                   Connect
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  variant="destructive"
                   onSelect={async (event) => {
                     event.preventDefault();
                     try {

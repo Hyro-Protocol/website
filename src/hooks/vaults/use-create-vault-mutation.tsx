@@ -12,6 +12,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { getCreateMintInstructionPlan } from "@solana-program/token";
 import { useEnsureTokenMint } from "./use-ensure-token-mint";
+import { FEE_COLLECTION_PROGRAM_ADDRESS } from "@/protocol/feeCollection";
 
 const USDC = address("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v");
 const ORACLE = address("F9nB3BKFkXpA6WzLkogUP4RHyvwXZGAh8PhHPPkDNAa");
@@ -48,6 +49,7 @@ export const useCreateVaultMutation = () => {
         underlyingMint: USDC,
         seed,
         policyProgram: POLICY_ALLOW_ANY_PROGRAM_ADDRESS,
+        feeCollectionProgram: FEE_COLLECTION_PROGRAM_ADDRESS,
         name,
         description,
       });
