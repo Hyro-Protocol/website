@@ -20,8 +20,10 @@ export const useCreateVaultMutation = () => {
   const signer = useSigner();
   const protocol = useProtocol();
   const connection = useConnection();
-  const queryClient = useQueryClient();
-  const getOrCreateUnderlyingMint = useEnsureTokenMint({ symbol: "USDC", decimals: 6 });
+  const getOrCreateUnderlyingMint = useEnsureTokenMint({
+    symbol: "USDC",
+    decimals: 6,
+  });
   return useMutation({
     mutationKey: ["createVault"],
     mutationFn: async ({

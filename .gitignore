@@ -43,4 +43,4 @@ next-env.d.ts
 /logs/*
 
 # generated on-chain protocol client
-/src/protocol
+# /src/protocol
