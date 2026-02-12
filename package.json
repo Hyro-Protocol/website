@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "packageManager": "bun@1.3.2",
   "scripts": {
     "dev": "next dev",
     "predev": "bun generate:dev",
@@ -20,8 +19,8 @@
     "generate:client": "anchor build -- --features mainnet && bun create-codama-client.ts"
   },
   "dependencies": {
-    "@hyr0-xyz/program": "file:../../sdk-program",
-    "@hyr0-xyz/react": "file:../../sdk-react",
+    "@hyr0-xyz/program": "^0.0.11",
+    "@hyr0-xyz/react": "^0.0.2",
     "@payloadcms/db-sqlite": "^3.64.0",
     "@payloadcms/next": "^3.64.0",
     "@payloadcms/plugin-seo": "^3.64.0",

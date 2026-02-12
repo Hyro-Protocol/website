@@ -45,6 +45,7 @@ import { VaultCard, VaultCardSkeleton } from "./vault-card";
 import { VaultTable } from "./vault-table";
 import { FeaturedVaultCard } from "./featured-vault-card";
 import { useMemo } from "react";
+import { useExploreVaults, useHyro, useVault } from "@hyr0-xyz/react";
 
 interface VaultExplorerProps {
   initialData?: VaultListResponse;
@@ -83,7 +84,6 @@ const riskOptions = [
 
 export function VaultExplorer({ initialData }: VaultExplorerProps) {
   const signer = useSigner();
-
   const [filters, setFilters] = useState<VaultFilters>({
     search: "",
     managerVerified: null,

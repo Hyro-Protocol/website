@@ -14,52 +14,32 @@ import {
 } from "@solana/kit";
 import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from "../programs";
 
-/** UnauthorizedAdmin: Unauthorized admin access. */
-export const HYRO_PROTOCOL_ERROR__UNAUTHORIZED_ADMIN = 0x1770; // 6000
-/** InvalidManager: Invalid manager profile. */
-export const HYRO_PROTOCOL_ERROR__INVALID_MANAGER = 0x1771; // 6001
-/** UnverifiedManager: Manager is not verified. */
-export const HYRO_PROTOCOL_ERROR__UNVERIFIED_MANAGER = 0x1772; // 6002
-/** InsufficientFunds: Insufficient funds for allocation. */
-export const HYRO_PROTOCOL_ERROR__INSUFFICIENT_FUNDS = 0x1773; // 6003
-/** InvalidAllocation: Invalid allocation amount. */
-export const HYRO_PROTOCOL_ERROR__INVALID_ALLOCATION = 0x1774; // 6004
-/** InvalidPolicyAccount: Invalid policy account - PDA derivation failed. */
-export const HYRO_PROTOCOL_ERROR__INVALID_POLICY_ACCOUNT = 0x1775; // 6005
-/** InvalidPolicyProgram: Invalid policy program. */
-export const HYRO_PROTOCOL_ERROR__INVALID_POLICY_PROGRAM = 0x1776; // 6006
-/** InvalidFeeCollectionProgram: Invalid fee collection program. */
-export const HYRO_PROTOCOL_ERROR__INVALID_FEE_COLLECTION_PROGRAM = 0x1777; // 6007
-/** InsufficientFeeAccounts: Insufficient fee accounts - requires vault_fees, fee_calc_program, and fee_calc_config. */
-export const HYRO_PROTOCOL_ERROR__INSUFFICIENT_FEE_ACCOUNTS = 0x1778; // 6008
-/** InvalidRecipient: Invalid recipient - token account owner does not match recipient. */
-export const HYRO_PROTOCOL_ERROR__INVALID_RECIPIENT = 0x1779; // 6009
+/** TransactionAlreadyExecuted: Transaction already executed. */
+export const HYRO_PROTOCOL_ERROR__TRANSACTION_ALREADY_EXECUTED = 0x1770; // 6000
+/** TransactionNotFound: Transaction not found. */
+export const HYRO_PROTOCOL_ERROR__TRANSACTION_NOT_FOUND = 0x1771; // 6001
+/** TransactionNotExecutable: Transaction not executable. */
+export const HYRO_PROTOCOL_ERROR__TRANSACTION_NOT_EXECUTABLE = 0x1772; // 6002
+/** InvalidUnderlyingMint: Invalid underlying mint. */
+export const HYRO_PROTOCOL_ERROR__INVALID_UNDERLYING_MINT = 0x1773; // 6003
+/** InvalidShareMint: Invalid share mint. */
+export const HYRO_PROTOCOL_ERROR__INVALID_SHARE_MINT = 0x1774; // 6004
 
 export type HyroProtocolError =
-  | typeof HYRO_PROTOCOL_ERROR__INSUFFICIENT_FEE_ACCOUNTS
-  | typeof HYRO_PROTOCOL_ERROR__INSUFFICIENT_FUNDS
-  | typeof HYRO_PROTOCOL_ERROR__INVALID_ALLOCATION
-  | typeof HYRO_PROTOCOL_ERROR__INVALID_FEE_COLLECTION_PROGRAM
-  | typeof HYRO_PROTOCOL_ERROR__INVALID_MANAGER
-  | typeof HYRO_PROTOCOL_ERROR__INVALID_POLICY_ACCOUNT
-  | typeof HYRO_PROTOCOL_ERROR__INVALID_POLICY_PROGRAM
-  | typeof HYRO_PROTOCOL_ERROR__INVALID_RECIPIENT
-  | typeof HYRO_PROTOCOL_ERROR__UNAUTHORIZED_ADMIN
-  | typeof HYRO_PROTOCOL_ERROR__UNVERIFIED_MANAGER;
+  | typeof HYRO_PROTOCOL_ERROR__INVALID_SHARE_MINT
+  | typeof HYRO_PROTOCOL_ERROR__INVALID_UNDERLYING_MINT
+  | typeof HYRO_PROTOCOL_ERROR__TRANSACTION_ALREADY_EXECUTED
+  | typeof HYRO_PROTOCOL_ERROR__TRANSACTION_NOT_EXECUTABLE
+  | typeof HYRO_PROTOCOL_ERROR__TRANSACTION_NOT_FOUND;
 
 let hyroProtocolErrorMessages: Record<HyroProtocolError, string> | undefined;
 if (process.env.NODE_ENV !== "production") {
   hyroProtocolErrorMessages = {
-    [HYRO_PROTOCOL_ERROR__INSUFFICIENT_FEE_ACCOUNTS]: `Insufficient fee accounts - requires vault_fees, fee_calc_program, and fee_calc_config.`,
-    [HYRO_PROTOCOL_ERROR__INSUFFICIENT_FUNDS]: `Insufficient funds for allocation.`,
-    [HYRO_PROTOCOL_ERROR__INVALID_ALLOCATION]: `Invalid allocation amount.`,
-    [HYRO_PROTOCOL_ERROR__INVALID_FEE_COLLECTION_PROGRAM]: `Invalid fee collection program.`,
-    [HYRO_PROTOCOL_ERROR__INVALID_MANAGER]: `Invalid manager profile.`,
-    [HYRO_PROTOCOL_ERROR__INVALID_POLICY_ACCOUNT]: `Invalid policy account - PDA derivation failed.`,
-    [HYRO_PROTOCOL_ERROR__INVALID_POLICY_PROGRAM]: `Invalid policy program.`,
-    [HYRO_PROTOCOL_ERROR__INVALID_RECIPIENT]: `Invalid recipient - token account owner does not match recipient.`,
-    [HYRO_PROTOCOL_ERROR__UNAUTHORIZED_ADMIN]: `Unauthorized admin access.`,
-    [HYRO_PROTOCOL_ERROR__UNVERIFIED_MANAGER]: `Manager is not verified.`,
+    [HYRO_PROTOCOL_ERROR__INVALID_SHARE_MINT]: `Invalid share mint.`,
+    [HYRO_PROTOCOL_ERROR__INVALID_UNDERLYING_MINT]: `Invalid underlying mint.`,
+    [HYRO_PROTOCOL_ERROR__TRANSACTION_ALREADY_EXECUTED]: `Transaction already executed.`,
+    [HYRO_PROTOCOL_ERROR__TRANSACTION_NOT_EXECUTABLE]: `Transaction not executable.`,
+    [HYRO_PROTOCOL_ERROR__TRANSACTION_NOT_FOUND]: `Transaction not found.`,
   };
 }
 
