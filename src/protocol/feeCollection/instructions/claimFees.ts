@@ -30,19 +30,19 @@ import {
   type ReadonlyAccount,
   type ReadonlyUint8Array,
   type WritableAccount,
-} from '@solana/kit';
-import { FEE_COLLECTION_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { FEE_COLLECTION_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 import {
   getFeeTypeDecoder,
   getFeeTypeEncoder,
   type FeeType,
   type FeeTypeArgs,
-} from '../types';
+} from "../types";
 
 export const CLAIM_FEES_DISCRIMINATOR = new Uint8Array([
   82, 251, 233, 156, 12, 52, 184, 202,
@@ -89,19 +89,19 @@ export type ClaimFeesInstructionDataArgs = {
 export function getClaimFeesInstructionDataEncoder(): FixedSizeEncoder<ClaimFeesInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['feeType', getFeeTypeEncoder()],
-      ['amount', getU64Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["feeType", getFeeTypeEncoder()],
+      ["amount", getU64Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: CLAIM_FEES_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: CLAIM_FEES_DISCRIMINATOR }),
   );
 }
 
 export function getClaimFeesInstructionDataDecoder(): FixedSizeDecoder<ClaimFeesInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['feeType', getFeeTypeDecoder()],
-    ['amount', getU64Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["feeType", getFeeTypeDecoder()],
+    ["amount", getU64Decoder()],
   ]);
 }
 
@@ -111,7 +111,7 @@ export function getClaimFeesInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getClaimFeesInstructionDataEncoder(),
-    getClaimFeesInstructionDataDecoder()
+    getClaimFeesInstructionDataDecoder(),
   );
 }
 
@@ -124,8 +124,8 @@ export type ClaimFeesAsyncInput<
   vaultFees?: Address<TAccountVaultFees>;
   /** The recipient address - must match the verified recipient for the fee type */
   recipient: Address<TAccountRecipient>;
-  feeType: ClaimFeesInstructionDataArgs['feeType'];
-  amount: ClaimFeesInstructionDataArgs['amount'];
+  feeType: ClaimFeesInstructionDataArgs["feeType"];
+  amount: ClaimFeesInstructionDataArgs["amount"];
 };
 
 export async function getClaimFeesInstructionAsync<
@@ -139,7 +139,7 @@ export async function getClaimFeesInstructionAsync<
     TAccountVaultFees,
     TAccountRecipient
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   ClaimFeesInstruction<
     TProgramAddress,
@@ -172,14 +172,14 @@ export async function getClaimFeesInstructionAsync<
       programAddress,
       seeds: [
         getBytesEncoder().encode(
-          new Uint8Array([118, 97, 117, 108, 116, 95, 102, 101, 101, 115])
+          new Uint8Array([118, 97, 117, 108, 116, 95, 102, 101, 101, 115]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
       ],
     });
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -187,7 +187,7 @@ export async function getClaimFeesInstructionAsync<
       getAccountMeta(accounts.recipient),
     ],
     data: getClaimFeesInstructionDataEncoder().encode(
-      args as ClaimFeesInstructionDataArgs
+      args as ClaimFeesInstructionDataArgs,
     ),
     programAddress,
   } as ClaimFeesInstruction<
@@ -207,8 +207,8 @@ export type ClaimFeesInput<
   vaultFees: Address<TAccountVaultFees>;
   /** The recipient address - must match the verified recipient for the fee type */
   recipient: Address<TAccountRecipient>;
-  feeType: ClaimFeesInstructionDataArgs['feeType'];
-  amount: ClaimFeesInstructionDataArgs['amount'];
+  feeType: ClaimFeesInstructionDataArgs["feeType"];
+  amount: ClaimFeesInstructionDataArgs["amount"];
 };
 
 export function getClaimFeesInstruction<
@@ -218,7 +218,7 @@ export function getClaimFeesInstruction<
   TProgramAddress extends Address = typeof FEE_COLLECTION_PROGRAM_ADDRESS,
 >(
   input: ClaimFeesInput<TAccountVault, TAccountVaultFees, TAccountRecipient>,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): ClaimFeesInstruction<
   TProgramAddress,
   TAccountVault,
@@ -243,7 +243,7 @@ export function getClaimFeesInstruction<
   // Original args.
   const args = { ...input };
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -251,7 +251,7 @@ export function getClaimFeesInstruction<
       getAccountMeta(accounts.recipient),
     ],
     data: getClaimFeesInstructionDataEncoder().encode(
-      args as ClaimFeesInstructionDataArgs
+      args as ClaimFeesInstructionDataArgs,
     ),
     programAddress,
   } as ClaimFeesInstruction<
@@ -282,11 +282,11 @@ export function parseClaimFeesInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedClaimFeesInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 3) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

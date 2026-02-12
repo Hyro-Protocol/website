@@ -15,7 +15,7 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 
 /** Percentage-based fee configuration (basis points) */
 export type FractionConfig = {
@@ -33,19 +33,19 @@ export type FractionConfigArgs = FractionConfig;
 
 export function getFractionConfigEncoder(): FixedSizeEncoder<FractionConfigArgs> {
   return getStructEncoder([
-    ['lpFeeBps', getU16Encoder()],
-    ['managerFeeBps', getU16Encoder()],
-    ['protocolFeeBps', getU16Encoder()],
-    ['performanceFeeBps', getU16Encoder()],
+    ["lpFeeBps", getU16Encoder()],
+    ["managerFeeBps", getU16Encoder()],
+    ["protocolFeeBps", getU16Encoder()],
+    ["performanceFeeBps", getU16Encoder()],
   ]);
 }
 
 export function getFractionConfigDecoder(): FixedSizeDecoder<FractionConfig> {
   return getStructDecoder([
-    ['lpFeeBps', getU16Decoder()],
-    ['managerFeeBps', getU16Decoder()],
-    ['protocolFeeBps', getU16Decoder()],
-    ['performanceFeeBps', getU16Decoder()],
+    ["lpFeeBps", getU16Decoder()],
+    ["managerFeeBps", getU16Decoder()],
+    ["protocolFeeBps", getU16Decoder()],
+    ["performanceFeeBps", getU16Decoder()],
   ]);
 }
 

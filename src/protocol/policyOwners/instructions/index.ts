@@ -6,5 +6,5 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './initializeOwners';
-export * from './validate';
+export * from "./initializeOwners";
+export * from "./validate";

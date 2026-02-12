@@ -6,20 +6,20 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './claimPayout';
-export * from './createChallengeTemplate';
-export * from './joinChallenge';
-export * from './oracleCreateChallenge';
-export * from './oracleCreateOrUpdateChallenge';
-export * from './updateChallenge';
-export * from './updateChallengeTemplate';
-export * from './updateChallengeTemplateAdmin';
-export * from './updateChallengeTemplateDailyDrawdown';
-export * from './updateChallengeTemplateEntranceCost';
-export * from './updateChallengeTemplateEntranceTokenMint';
-export * from './updateChallengeTemplateIsActive';
-export * from './updateChallengeTemplateMaximumLoss';
-export * from './updateChallengeTemplateMaxParticipants';
-export * from './updateChallengeTemplateMinimumTradingDays';
-export * from './updateChallengeTemplateProfitTarget';
-export * from './validate';
+export * from "./claimPayout";
+export * from "./createChallengeTemplate";
+export * from "./joinChallenge";
+export * from "./oracleCreateChallenge";
+export * from "./oracleCreateOrUpdateChallenge";
+export * from "./updateChallenge";
+export * from "./updateChallengeTemplate";
+export * from "./updateChallengeTemplateAdmin";
+export * from "./updateChallengeTemplateDailyDrawdown";
+export * from "./updateChallengeTemplateEntranceCost";
+export * from "./updateChallengeTemplateEntranceTokenMint";
+export * from "./updateChallengeTemplateIsActive";
+export * from "./updateChallengeTemplateMaximumLoss";
+export * from "./updateChallengeTemplateMaxParticipants";
+export * from "./updateChallengeTemplateMinimumTradingDays";
+export * from "./updateChallengeTemplateProfitTarget";
+export * from "./validate";

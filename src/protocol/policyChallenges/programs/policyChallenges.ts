@@ -7,13 +7,33 @@
  */
 
 import {
+  assertIsInstructionWithAccounts,
   containsBytes,
   fixEncoderSize,
   getBytesEncoder,
   type Address,
+  type Instruction,
+  type InstructionWithData,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
+  parseClaimPayoutInstruction,
+  parseCreateChallengeTemplateInstruction,
+  parseJoinChallengeInstruction,
+  parseOracleCreateChallengeInstruction,
+  parseOracleCreateOrUpdateChallengeInstruction,
+  parseUpdateChallengeInstruction,
+  parseUpdateChallengeTemplateAdminInstruction,
+  parseUpdateChallengeTemplateDailyDrawdownInstruction,
+  parseUpdateChallengeTemplateEntranceCostInstruction,
+  parseUpdateChallengeTemplateEntranceTokenMintInstruction,
+  parseUpdateChallengeTemplateInstruction,
+  parseUpdateChallengeTemplateIsActiveInstruction,
+  parseUpdateChallengeTemplateMaximumLossInstruction,
+  parseUpdateChallengeTemplateMaxParticipantsInstruction,
+  parseUpdateChallengeTemplateMinimumTradingDaysInstruction,
+  parseUpdateChallengeTemplateProfitTargetInstruction,
+  parseValidateInstruction,
   type ParsedClaimPayoutInstruction,
   type ParsedCreateChallengeTemplateInstruction,
   type ParsedJoinChallengeInstruction,
@@ -31,10 +51,10 @@ import {
   type ParsedUpdateChallengeTemplateMinimumTradingDaysInstruction,
   type ParsedUpdateChallengeTemplateProfitTargetInstruction,
   type ParsedValidateInstruction,
-} from '../instructions';
+} from "../instructions";
 
 export const POLICY_CHALLENGES_PROGRAM_ADDRESS =
-  'HyrowgoRRXfq1vwN5CTynd6keUAkm1kn2adRNqjTScwM' as Address<'HyrowgoRRXfq1vwN5CTynd6keUAkm1kn2adRNqjTScwM'>;
+  "9GbrovAKnWfbXuq5dXYiZgZob75qTBz9HFcZGFRjftcH" as Address<"9GbrovAKnWfbXuq5dXYiZgZob75qTBz9HFcZGFRjftcH">;
 
 export enum PolicyChallengesAccount {
   Challenge,
@@ -42,16 +62,16 @@ export enum PolicyChallengesAccount {
 }
 
 export function identifyPolicyChallengesAccount(
-  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): PolicyChallengesAccount {
-  const data = 'data' in account ? account.data : account;
+  const data = "data" in account ? account.data : account;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([119, 250, 161, 121, 119, 81, 22, 208])
+        new Uint8Array([119, 250, 161, 121, 119, 81, 22, 208]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyChallengesAccount.Challenge;
@@ -60,15 +80,15 @@ export function identifyPolicyChallengesAccount(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([83, 2, 108, 68, 110, 219, 175, 21])
+        new Uint8Array([83, 2, 108, 68, 110, 219, 175, 21]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyChallengesAccount.ChallengeTemplate;
   }
   throw new Error(
-    'The provided account could not be identified as a policyChallenges account.'
+    "The provided account could not be identified as a policyChallenges account.",
   );
 }
 
@@ -93,16 +113,16 @@ export enum PolicyChallengesInstruction {
 }
 
 export function identifyPolicyChallengesInstruction(
-  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): PolicyChallengesInstruction {
-  const data = 'data' in instruction ? instruction.data : instruction;
+  const data = "data" in instruction ? instruction.data : instruction;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([127, 240, 132, 62, 227, 198, 146, 133])
+        new Uint8Array([127, 240, 132, 62, 227, 198, 146, 133]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyChallengesInstruction.ClaimPayout;
@@ -111,9 +131,9 @@ export function identifyPolicyChallengesInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([143, 77, 148, 223, 18, 207, 212, 41])
+        new Uint8Array([143, 77, 148, 223, 18, 207, 212, 41]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyChallengesInstruction.CreateChallengeTemplate;
@@ -122,9 +142,9 @@ export function identifyPolicyChallengesInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([41, 104, 214, 73, 32, 168, 76, 79])
+        new Uint8Array([41, 104, 214, 73, 32, 168, 76, 79]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyChallengesInstruction.JoinChallenge;
@@ -133,9 +153,9 @@ export function identifyPolicyChallengesInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([160, 221, 250, 59, 178, 9, 237, 102])
+        new Uint8Array([160, 221, 250, 59, 178, 9, 237, 102]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyChallengesInstruction.OracleCreateChallenge;
@@ -144,9 +164,9 @@ export function identifyPolicyChallengesInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([31, 218, 143, 189, 30, 97, 201, 49])
+        new Uint8Array([31, 218, 143, 189, 30, 97, 201, 49]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyChallengesInstruction.OracleCreateOrUpdateChallenge;
@@ -155,9 +175,9 @@ export function identifyPolicyChallengesInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([189, 212, 76, 181, 2, 202, 238, 16])
+        new Uint8Array([189, 212, 76, 181, 2, 202, 238, 16]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyChallengesInstruction.UpdateChallenge;
@@ -166,9 +186,9 @@ export function identifyPolicyChallengesInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([114, 162, 103, 83, 47, 148, 138, 174])
+        new Uint8Array([114, 162, 103, 83, 47, 148, 138, 174]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyChallengesInstruction.UpdateChallengeTemplate;
@@ -177,9 +197,9 @@ export function identifyPolicyChallengesInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([81, 198, 17, 48, 33, 251, 104, 80])
+        new Uint8Array([81, 198, 17, 48, 33, 251, 104, 80]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyChallengesInstruction.UpdateChallengeTemplateAdmin;
@@ -188,9 +208,9 @@ export function identifyPolicyChallengesInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([100, 174, 225, 136, 76, 206, 146, 63])
+        new Uint8Array([100, 174, 225, 136, 76, 206, 146, 63]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyChallengesInstruction.UpdateChallengeTemplateDailyDrawdown;
@@ -199,9 +219,9 @@ export function identifyPolicyChallengesInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([7, 181, 39, 15, 22, 133, 159, 130])
+        new Uint8Array([7, 181, 39, 15, 22, 133, 159, 130]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyChallengesInstruction.UpdateChallengeTemplateEntranceCost;
@@ -210,9 +230,9 @@ export function identifyPolicyChallengesInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([94, 23, 238, 69, 73, 130, 153, 89])
+        new Uint8Array([94, 23, 238, 69, 73, 130, 153, 89]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyChallengesInstruction.UpdateChallengeTemplateEntranceTokenMint;
@@ -221,9 +241,9 @@ export function identifyPolicyChallengesInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([57, 176, 93, 106, 136, 216, 189, 142])
+        new Uint8Array([57, 176, 93, 106, 136, 216, 189, 142]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyChallengesInstruction.UpdateChallengeTemplateIsActive;
@@ -232,9 +252,9 @@ export function identifyPolicyChallengesInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([86, 71, 53, 242, 216, 57, 184, 109])
+        new Uint8Array([86, 71, 53, 242, 216, 57, 184, 109]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyChallengesInstruction.UpdateChallengeTemplateMaxParticipants;
@@ -243,9 +263,9 @@ export function identifyPolicyChallengesInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([111, 239, 61, 167, 113, 215, 92, 38])
+        new Uint8Array([111, 239, 61, 167, 113, 215, 92, 38]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyChallengesInstruction.UpdateChallengeTemplateMaximumLoss;
@@ -254,9 +274,9 @@ export function identifyPolicyChallengesInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([67, 107, 22, 76, 9, 91, 83, 8])
+        new Uint8Array([67, 107, 22, 76, 9, 91, 83, 8]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyChallengesInstruction.UpdateChallengeTemplateMinimumTradingDays;
@@ -265,9 +285,9 @@ export function identifyPolicyChallengesInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([64, 12, 173, 109, 35, 183, 191, 114])
+        new Uint8Array([64, 12, 173, 109, 35, 183, 191, 114]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyChallengesInstruction.UpdateChallengeTemplateProfitTarget;
@@ -276,20 +296,20 @@ export function identifyPolicyChallengesInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([60, 252, 90, 66, 246, 253, 232, 139])
+        new Uint8Array([60, 252, 90, 66, 246, 253, 232, 139]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyChallengesInstruction.Validate;
   }
   throw new Error(
-    'The provided instruction could not be identified as a policyChallenges instruction.'
+    "The provided instruction could not be identified as a policyChallenges instruction.",
   );
 }
 
 export type ParsedPolicyChallengesInstruction<
-  TProgram extends string = 'HyrowgoRRXfq1vwN5CTynd6keUAkm1kn2adRNqjTScwM',
+  TProgram extends string = "9GbrovAKnWfbXuq5dXYiZgZob75qTBz9HFcZGFRjftcH",
 > =
   | ({
       instructionType: PolicyChallengesInstruction.ClaimPayout;
@@ -342,3 +362,148 @@ export type ParsedPolicyChallengesInstruction<
   | ({
       instructionType: PolicyChallengesInstruction.Validate;
     } & ParsedValidateInstruction<TProgram>);
+
+export function parsePolicyChallengesInstruction<TProgram extends string>(
+  instruction: Instruction<TProgram> & InstructionWithData<ReadonlyUint8Array>,
+): ParsedPolicyChallengesInstruction<TProgram> {
+  const instructionType = identifyPolicyChallengesInstruction(instruction);
+  switch (instructionType) {
+    case PolicyChallengesInstruction.ClaimPayout: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: PolicyChallengesInstruction.ClaimPayout,
+        ...parseClaimPayoutInstruction(instruction),
+      };
+    }
+    case PolicyChallengesInstruction.CreateChallengeTemplate: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: PolicyChallengesInstruction.CreateChallengeTemplate,
+        ...parseCreateChallengeTemplateInstruction(instruction),
+      };
+    }
+    case PolicyChallengesInstruction.JoinChallenge: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: PolicyChallengesInstruction.JoinChallenge,
+        ...parseJoinChallengeInstruction(instruction),
+      };
+    }
+    case PolicyChallengesInstruction.OracleCreateChallenge: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: PolicyChallengesInstruction.OracleCreateChallenge,
+        ...parseOracleCreateChallengeInstruction(instruction),
+      };
+    }
+    case PolicyChallengesInstruction.OracleCreateOrUpdateChallenge: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType:
+          PolicyChallengesInstruction.OracleCreateOrUpdateChallenge,
+        ...parseOracleCreateOrUpdateChallengeInstruction(instruction),
+      };
+    }
+    case PolicyChallengesInstruction.UpdateChallenge: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: PolicyChallengesInstruction.UpdateChallenge,
+        ...parseUpdateChallengeInstruction(instruction),
+      };
+    }
+    case PolicyChallengesInstruction.UpdateChallengeTemplate: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: PolicyChallengesInstruction.UpdateChallengeTemplate,
+        ...parseUpdateChallengeTemplateInstruction(instruction),
+      };
+    }
+    case PolicyChallengesInstruction.UpdateChallengeTemplateAdmin: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType:
+          PolicyChallengesInstruction.UpdateChallengeTemplateAdmin,
+        ...parseUpdateChallengeTemplateAdminInstruction(instruction),
+      };
+    }
+    case PolicyChallengesInstruction.UpdateChallengeTemplateDailyDrawdown: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType:
+          PolicyChallengesInstruction.UpdateChallengeTemplateDailyDrawdown,
+        ...parseUpdateChallengeTemplateDailyDrawdownInstruction(instruction),
+      };
+    }
+    case PolicyChallengesInstruction.UpdateChallengeTemplateEntranceCost: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType:
+          PolicyChallengesInstruction.UpdateChallengeTemplateEntranceCost,
+        ...parseUpdateChallengeTemplateEntranceCostInstruction(instruction),
+      };
+    }
+    case PolicyChallengesInstruction.UpdateChallengeTemplateEntranceTokenMint: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType:
+          PolicyChallengesInstruction.UpdateChallengeTemplateEntranceTokenMint,
+        ...parseUpdateChallengeTemplateEntranceTokenMintInstruction(
+          instruction,
+        ),
+      };
+    }
+    case PolicyChallengesInstruction.UpdateChallengeTemplateIsActive: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType:
+          PolicyChallengesInstruction.UpdateChallengeTemplateIsActive,
+        ...parseUpdateChallengeTemplateIsActiveInstruction(instruction),
+      };
+    }
+    case PolicyChallengesInstruction.UpdateChallengeTemplateMaxParticipants: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType:
+          PolicyChallengesInstruction.UpdateChallengeTemplateMaxParticipants,
+        ...parseUpdateChallengeTemplateMaxParticipantsInstruction(instruction),
+      };
+    }
+    case PolicyChallengesInstruction.UpdateChallengeTemplateMaximumLoss: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType:
+          PolicyChallengesInstruction.UpdateChallengeTemplateMaximumLoss,
+        ...parseUpdateChallengeTemplateMaximumLossInstruction(instruction),
+      };
+    }
+    case PolicyChallengesInstruction.UpdateChallengeTemplateMinimumTradingDays: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType:
+          PolicyChallengesInstruction.UpdateChallengeTemplateMinimumTradingDays,
+        ...parseUpdateChallengeTemplateMinimumTradingDaysInstruction(
+          instruction,
+        ),
+      };
+    }
+    case PolicyChallengesInstruction.UpdateChallengeTemplateProfitTarget: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType:
+          PolicyChallengesInstruction.UpdateChallengeTemplateProfitTarget,
+        ...parseUpdateChallengeTemplateProfitTargetInstruction(instruction),
+      };
+    }
+    case PolicyChallengesInstruction.Validate: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: PolicyChallengesInstruction.Validate,
+        ...parseValidateInstruction(instruction),
+      };
+    }
+    default:
+      throw new Error(
+        `Unrecognized instruction type: ${instructionType as string}`,
+      );
+  }
+}

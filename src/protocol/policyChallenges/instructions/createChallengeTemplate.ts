@@ -32,19 +32,19 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from "../programs";
 import {
   expectSome,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 import {
   getChallengeTemplateUpdateInsertDtoDecoder,
   getChallengeTemplateUpdateInsertDtoEncoder,
   type ChallengeTemplateUpdateInsertDto,
   type ChallengeTemplateUpdateInsertDtoArgs,
-} from '../types';
+} from "../types";
 
 export const CREATE_CHALLENGE_TEMPLATE_DISCRIMINATOR = new Uint8Array([
   143, 77, 148, 223, 18, 207, 212, 41,
@@ -52,19 +52,17 @@ export const CREATE_CHALLENGE_TEMPLATE_DISCRIMINATOR = new Uint8Array([
 
 export function getCreateChallengeTemplateDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    CREATE_CHALLENGE_TEMPLATE_DISCRIMINATOR
+    CREATE_CHALLENGE_TEMPLATE_DISCRIMINATOR,
   );
 }
 
 export type CreateChallengeTemplateInstruction<
   TProgram extends string = typeof POLICY_CHALLENGES_PROGRAM_ADDRESS,
-  TAccountChallengeTemplateAccount extends
-    | string
-    | AccountMeta<string> = string,
+  TAccountChallengeTemplateAccount extends string | AccountMeta<string> =
+    string,
   TAccountSigner extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -98,22 +96,22 @@ export type CreateChallengeTemplateInstructionDataArgs = {
 export function getCreateChallengeTemplateInstructionDataEncoder(): FixedSizeEncoder<CreateChallengeTemplateInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['stageId', getU64Encoder()],
-      ['dto', getChallengeTemplateUpdateInsertDtoEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["stageId", getU64Encoder()],
+      ["dto", getChallengeTemplateUpdateInsertDtoEncoder()],
     ]),
     (value) => ({
       ...value,
       discriminator: CREATE_CHALLENGE_TEMPLATE_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getCreateChallengeTemplateInstructionDataDecoder(): FixedSizeDecoder<CreateChallengeTemplateInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['stageId', getU64Decoder()],
-    ['dto', getChallengeTemplateUpdateInsertDtoDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["stageId", getU64Decoder()],
+    ["dto", getChallengeTemplateUpdateInsertDtoDecoder()],
   ]);
 }
 
@@ -123,7 +121,7 @@ export function getCreateChallengeTemplateInstructionDataCodec(): FixedSizeCodec
 > {
   return combineCodec(
     getCreateChallengeTemplateInstructionDataEncoder(),
-    getCreateChallengeTemplateInstructionDataDecoder()
+    getCreateChallengeTemplateInstructionDataDecoder(),
   );
 }
 
@@ -135,8 +133,8 @@ export type CreateChallengeTemplateAsyncInput<
   challengeTemplateAccount?: Address<TAccountChallengeTemplateAccount>;
   signer: TransactionSigner<TAccountSigner>;
   systemProgram?: Address<TAccountSystemProgram>;
-  stageId: CreateChallengeTemplateInstructionDataArgs['stageId'];
-  dto: CreateChallengeTemplateInstructionDataArgs['dto'];
+  stageId: CreateChallengeTemplateInstructionDataArgs["stageId"];
+  dto: CreateChallengeTemplateInstructionDataArgs["dto"];
 };
 
 export async function getCreateChallengeTemplateInstructionAsync<
@@ -150,7 +148,7 @@ export async function getCreateChallengeTemplateInstructionAsync<
     TAccountSigner,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   CreateChallengeTemplateInstruction<
     TProgramAddress,
@@ -189,10 +187,10 @@ export async function getCreateChallengeTemplateInstructionAsync<
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.challengeTemplateAccount),
@@ -200,7 +198,7 @@ export async function getCreateChallengeTemplateInstructionAsync<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getCreateChallengeTemplateInstructionDataEncoder().encode(
-      args as CreateChallengeTemplateInstructionDataArgs
+      args as CreateChallengeTemplateInstructionDataArgs,
     ),
     programAddress,
   } as CreateChallengeTemplateInstruction<
@@ -219,8 +217,8 @@ export type CreateChallengeTemplateInput<
   challengeTemplateAccount: Address<TAccountChallengeTemplateAccount>;
   signer: TransactionSigner<TAccountSigner>;
   systemProgram?: Address<TAccountSystemProgram>;
-  stageId: CreateChallengeTemplateInstructionDataArgs['stageId'];
-  dto: CreateChallengeTemplateInstructionDataArgs['dto'];
+  stageId: CreateChallengeTemplateInstructionDataArgs["stageId"];
+  dto: CreateChallengeTemplateInstructionDataArgs["dto"];
 };
 
 export function getCreateChallengeTemplateInstruction<
@@ -234,7 +232,7 @@ export function getCreateChallengeTemplateInstruction<
     TAccountSigner,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): CreateChallengeTemplateInstruction<
   TProgramAddress,
   TAccountChallengeTemplateAccount,
@@ -265,10 +263,10 @@ export function getCreateChallengeTemplateInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.challengeTemplateAccount),
@@ -276,7 +274,7 @@ export function getCreateChallengeTemplateInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getCreateChallengeTemplateInstructionDataEncoder().encode(
-      args as CreateChallengeTemplateInstructionDataArgs
+      args as CreateChallengeTemplateInstructionDataArgs,
     ),
     programAddress,
   } as CreateChallengeTemplateInstruction<
@@ -306,11 +304,11 @@ export function parseCreateChallengeTemplateInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedCreateChallengeTemplateInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 3) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -326,7 +324,7 @@ export function parseCreateChallengeTemplateInstruction<
       systemProgram: getNextAccount(),
     },
     data: getCreateChallengeTemplateInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

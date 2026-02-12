@@ -43,7 +43,7 @@ import {
   type Option,
   type OptionOrNullable,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 
 export const MULTI_SIG_DISCRIMINATOR = new Uint8Array([
   185, 236, 37, 72, 176, 174, 250, 169,
@@ -72,24 +72,24 @@ export type MultiSigArgs = {
 export function getMultiSigEncoder(): Encoder<MultiSigArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['owners', getArrayEncoder(getAddressEncoder())],
-      ['threshold', getU64Encoder()],
-      ['pendingTransaction', getOptionEncoder(getAddressEncoder())],
-      ['pendingSignatures', getArrayEncoder(getBooleanEncoder())],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["owners", getArrayEncoder(getAddressEncoder())],
+      ["threshold", getU64Encoder()],
+      ["pendingTransaction", getOptionEncoder(getAddressEncoder())],
+      ["pendingSignatures", getArrayEncoder(getBooleanEncoder())],
     ]),
-    (value) => ({ ...value, discriminator: MULTI_SIG_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: MULTI_SIG_DISCRIMINATOR }),
   );
 }
 
 /** Gets the decoder for {@link MultiSig} account data. */
 export function getMultiSigDecoder(): Decoder<MultiSig> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['owners', getArrayDecoder(getAddressDecoder())],
-    ['threshold', getU64Decoder()],
-    ['pendingTransaction', getOptionDecoder(getAddressDecoder())],
-    ['pendingSignatures', getArrayDecoder(getBooleanDecoder())],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["owners", getArrayDecoder(getAddressDecoder())],
+    ["threshold", getU64Decoder()],
+    ["pendingTransaction", getOptionDecoder(getAddressDecoder())],
+    ["pendingSignatures", getArrayDecoder(getBooleanDecoder())],
   ]);
 }
 
@@ -99,24 +99,24 @@ export function getMultiSigCodec(): Codec<MultiSigArgs, MultiSig> {
 }
 
 export function decodeMultiSig<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress>,
 ): Account<MultiSig, TAddress>;
 export function decodeMultiSig<TAddress extends string = string>(
-  encodedAccount: MaybeEncodedAccount<TAddress>
+  encodedAccount: MaybeEncodedAccount<TAddress>,
 ): MaybeAccount<MultiSig, TAddress>;
 export function decodeMultiSig<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>,
 ): Account<MultiSig, TAddress> | MaybeAccount<MultiSig, TAddress> {
   return decodeAccount(
     encodedAccount as MaybeEncodedAccount<TAddress>,
-    getMultiSigDecoder()
+    getMultiSigDecoder(),
   );
 }
 
 export async function fetchMultiSig<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<Account<MultiSig, TAddress>> {
   const maybeAccount = await fetchMaybeMultiSig(rpc, address, config);
   assertAccountExists(maybeAccount);
@@ -126,7 +126,7 @@ export async function fetchMultiSig<TAddress extends string = string>(
 export async function fetchMaybeMultiSig<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<MaybeAccount<MultiSig, TAddress>> {
   const maybeAccount = await fetchEncodedAccount(rpc, address, config);
   return decodeMultiSig(maybeAccount);
@@ -135,7 +135,7 @@ export async function fetchMaybeMultiSig<TAddress extends string = string>(
 export async function fetchAllMultiSig(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<Account<MultiSig>[]> {
   const maybeAccounts = await fetchAllMaybeMultiSig(rpc, addresses, config);
   assertAccountsExist(maybeAccounts);
@@ -145,7 +145,7 @@ export async function fetchAllMultiSig(
 export async function fetchAllMaybeMultiSig(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<MaybeAccount<MultiSig>[]> {
   const maybeAccounts = await fetchEncodedAccounts(rpc, addresses, config);
   return maybeAccounts.map((maybeAccount) => decodeMultiSig(maybeAccount));

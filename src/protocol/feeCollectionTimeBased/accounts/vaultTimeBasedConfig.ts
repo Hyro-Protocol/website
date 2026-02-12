@@ -37,13 +37,13 @@ import {
   type MaybeAccount,
   type MaybeEncodedAccount,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
   getTimeBasedFeeConfigDecoder,
   getTimeBasedFeeConfigEncoder,
   type TimeBasedFeeConfig,
   type TimeBasedFeeConfigArgs,
-} from '../types';
+} from "../types";
 
 export const VAULT_TIME_BASED_CONFIG_DISCRIMINATOR = new Uint8Array([
   37, 247, 4, 179, 149, 79, 143, 246,
@@ -51,7 +51,7 @@ export const VAULT_TIME_BASED_CONFIG_DISCRIMINATOR = new Uint8Array([
 
 export function getVaultTimeBasedConfigDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    VAULT_TIME_BASED_CONFIG_DISCRIMINATOR
+    VAULT_TIME_BASED_CONFIG_DISCRIMINATOR,
   );
 }
 
@@ -88,33 +88,33 @@ export type VaultTimeBasedConfigArgs = {
 export function getVaultTimeBasedConfigEncoder(): FixedSizeEncoder<VaultTimeBasedConfigArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['vault', getAddressEncoder()],
-      ['config', getTimeBasedFeeConfigEncoder()],
-      ['lastLpCalc', getI64Encoder()],
-      ['lastManagerCalc', getI64Encoder()],
-      ['lastProtocolCalc', getI64Encoder()],
-      ['lastPerformanceCalc', getI64Encoder()],
-      ['bump', getU8Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["vault", getAddressEncoder()],
+      ["config", getTimeBasedFeeConfigEncoder()],
+      ["lastLpCalc", getI64Encoder()],
+      ["lastManagerCalc", getI64Encoder()],
+      ["lastProtocolCalc", getI64Encoder()],
+      ["lastPerformanceCalc", getI64Encoder()],
+      ["bump", getU8Encoder()],
     ]),
     (value) => ({
       ...value,
       discriminator: VAULT_TIME_BASED_CONFIG_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 /** Gets the decoder for {@link VaultTimeBasedConfig} account data. */
 export function getVaultTimeBasedConfigDecoder(): FixedSizeDecoder<VaultTimeBasedConfig> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['vault', getAddressDecoder()],
-    ['config', getTimeBasedFeeConfigDecoder()],
-    ['lastLpCalc', getI64Decoder()],
-    ['lastManagerCalc', getI64Decoder()],
-    ['lastProtocolCalc', getI64Decoder()],
-    ['lastPerformanceCalc', getI64Decoder()],
-    ['bump', getU8Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["vault", getAddressDecoder()],
+    ["config", getTimeBasedFeeConfigDecoder()],
+    ["lastLpCalc", getI64Decoder()],
+    ["lastManagerCalc", getI64Decoder()],
+    ["lastProtocolCalc", getI64Decoder()],
+    ["lastPerformanceCalc", getI64Decoder()],
+    ["bump", getU8Decoder()],
   ]);
 }
 
@@ -125,24 +125,24 @@ export function getVaultTimeBasedConfigCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getVaultTimeBasedConfigEncoder(),
-    getVaultTimeBasedConfigDecoder()
+    getVaultTimeBasedConfigDecoder(),
   );
 }
 
 export function decodeVaultTimeBasedConfig<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress>,
 ): Account<VaultTimeBasedConfig, TAddress>;
 export function decodeVaultTimeBasedConfig<TAddress extends string = string>(
-  encodedAccount: MaybeEncodedAccount<TAddress>
+  encodedAccount: MaybeEncodedAccount<TAddress>,
 ): MaybeAccount<VaultTimeBasedConfig, TAddress>;
 export function decodeVaultTimeBasedConfig<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>,
 ):
   | Account<VaultTimeBasedConfig, TAddress>
   | MaybeAccount<VaultTimeBasedConfig, TAddress> {
   return decodeAccount(
     encodedAccount as MaybeEncodedAccount<TAddress>,
-    getVaultTimeBasedConfigDecoder()
+    getVaultTimeBasedConfigDecoder(),
   );
 }
 
@@ -151,12 +151,12 @@ export async function fetchVaultTimeBasedConfig<
 >(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<Account<VaultTimeBasedConfig, TAddress>> {
   const maybeAccount = await fetchMaybeVaultTimeBasedConfig(
     rpc,
     address,
-    config
+    config,
   );
   assertAccountExists(maybeAccount);
   return maybeAccount;
@@ -167,7 +167,7 @@ export async function fetchMaybeVaultTimeBasedConfig<
 >(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<MaybeAccount<VaultTimeBasedConfig, TAddress>> {
   const maybeAccount = await fetchEncodedAccount(rpc, address, config);
   return decodeVaultTimeBasedConfig(maybeAccount);
@@ -176,12 +176,12 @@ export async function fetchMaybeVaultTimeBasedConfig<
 export async function fetchAllVaultTimeBasedConfig(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<Account<VaultTimeBasedConfig>[]> {
   const maybeAccounts = await fetchAllMaybeVaultTimeBasedConfig(
     rpc,
     addresses,
-    config
+    config,
   );
   assertAccountsExist(maybeAccounts);
   return maybeAccounts;
@@ -190,11 +190,11 @@ export async function fetchAllVaultTimeBasedConfig(
 export async function fetchAllMaybeVaultTimeBasedConfig(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<MaybeAccount<VaultTimeBasedConfig>[]> {
   const maybeAccounts = await fetchEncodedAccounts(rpc, addresses, config);
   return maybeAccounts.map((maybeAccount) =>
-    decodeVaultTimeBasedConfig(maybeAccount)
+    decodeVaultTimeBasedConfig(maybeAccount),
   );
 }
 

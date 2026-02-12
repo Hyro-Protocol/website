@@ -15,7 +15,7 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 
 /** Fee configuration - basis points for each fee type */
 export type FractionFeeConfig = {
@@ -33,19 +33,19 @@ export type FractionFeeConfigArgs = FractionFeeConfig;
 
 export function getFractionFeeConfigEncoder(): FixedSizeEncoder<FractionFeeConfigArgs> {
   return getStructEncoder([
-    ['lpFeeBps', getU16Encoder()],
-    ['managerFeeBps', getU16Encoder()],
-    ['protocolFeeBps', getU16Encoder()],
-    ['performanceFeeBps', getU16Encoder()],
+    ["lpFeeBps", getU16Encoder()],
+    ["managerFeeBps", getU16Encoder()],
+    ["protocolFeeBps", getU16Encoder()],
+    ["performanceFeeBps", getU16Encoder()],
   ]);
 }
 
 export function getFractionFeeConfigDecoder(): FixedSizeDecoder<FractionFeeConfig> {
   return getStructDecoder([
-    ['lpFeeBps', getU16Decoder()],
-    ['managerFeeBps', getU16Decoder()],
-    ['protocolFeeBps', getU16Decoder()],
-    ['performanceFeeBps', getU16Decoder()],
+    ["lpFeeBps", getU16Decoder()],
+    ["managerFeeBps", getU16Decoder()],
+    ["protocolFeeBps", getU16Decoder()],
+    ["performanceFeeBps", getU16Decoder()],
   ]);
 }
 
@@ -55,6 +55,6 @@ export function getFractionFeeConfigCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getFractionFeeConfigEncoder(),
-    getFractionFeeConfigDecoder()
+    getFractionFeeConfigDecoder(),
   );
 }

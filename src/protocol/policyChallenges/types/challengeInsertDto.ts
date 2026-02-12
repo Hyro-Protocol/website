@@ -19,7 +19,7 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
   getChallengeStatusDecoder,
   getChallengeStatusEncoder,
@@ -41,7 +41,7 @@ import {
   type ProfitTargetArgs,
   type TradingDays,
   type TradingDaysArgs,
-} from '.';
+} from ".";
 
 export type ChallengeInsertDto = {
   stageId: number;
@@ -69,29 +69,29 @@ export type ChallengeInsertDtoArgs = {
 
 export function getChallengeInsertDtoEncoder(): FixedSizeEncoder<ChallengeInsertDtoArgs> {
   return getStructEncoder([
-    ['stageId', getU16Encoder()],
-    ['stageSequence', getU8Encoder()],
-    ['profitTarget', getProfitTargetEncoder()],
-    ['tradingDays', getTradingDaysEncoder()],
-    ['maximumLoss', getMaximumLossEncoder()],
-    ['dailyDrawdown', getDailyDrawdownEncoder()],
-    ['status', getChallengeStatusEncoder()],
-    ['payout', getU64Encoder()],
-    ['createdAt', getU64Encoder()],
+    ["stageId", getU16Encoder()],
+    ["stageSequence", getU8Encoder()],
+    ["profitTarget", getProfitTargetEncoder()],
+    ["tradingDays", getTradingDaysEncoder()],
+    ["maximumLoss", getMaximumLossEncoder()],
+    ["dailyDrawdown", getDailyDrawdownEncoder()],
+    ["status", getChallengeStatusEncoder()],
+    ["payout", getU64Encoder()],
+    ["createdAt", getU64Encoder()],
   ]);
 }
 
 export function getChallengeInsertDtoDecoder(): FixedSizeDecoder<ChallengeInsertDto> {
   return getStructDecoder([
-    ['stageId', getU16Decoder()],
-    ['stageSequence', getU8Decoder()],
-    ['profitTarget', getProfitTargetDecoder()],
-    ['tradingDays', getTradingDaysDecoder()],
-    ['maximumLoss', getMaximumLossDecoder()],
-    ['dailyDrawdown', getDailyDrawdownDecoder()],
-    ['status', getChallengeStatusDecoder()],
-    ['payout', getU64Decoder()],
-    ['createdAt', getU64Decoder()],
+    ["stageId", getU16Decoder()],
+    ["stageSequence", getU8Decoder()],
+    ["profitTarget", getProfitTargetDecoder()],
+    ["tradingDays", getTradingDaysDecoder()],
+    ["maximumLoss", getMaximumLossDecoder()],
+    ["dailyDrawdown", getDailyDrawdownDecoder()],
+    ["status", getChallengeStatusDecoder()],
+    ["payout", getU64Decoder()],
+    ["createdAt", getU64Decoder()],
   ]);
 }
 
@@ -101,6 +101,6 @@ export function getChallengeInsertDtoCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getChallengeInsertDtoEncoder(),
-    getChallengeInsertDtoDecoder()
+    getChallengeInsertDtoDecoder(),
   );
 }

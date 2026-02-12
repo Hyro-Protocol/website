@@ -7,42 +7,48 @@
  */
 
 import {
+  assertIsInstructionWithAccounts,
   containsBytes,
   fixEncoderSize,
   getBytesEncoder,
   type Address,
+  type Instruction,
+  type InstructionWithData,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
+  parseApproveInstruction,
+  parseInitializeMultisigInstruction,
+  parseValidateInstruction,
   type ParsedApproveInstruction,
   type ParsedInitializeMultisigInstruction,
   type ParsedValidateInstruction,
-} from '../instructions';
+} from "../instructions";
 
 export const POLICY_MULTISIG_PROGRAM_ADDRESS =
-  'HyroCMyEsfFnfygJGiMxF3YdCWV8RWQyrezq63htDpKC' as Address<'HyroCMyEsfFnfygJGiMxF3YdCWV8RWQyrezq63htDpKC'>;
+  "Fd4edmmmH2fQu23n1vbRXeyaZih1jiXiQoCMNiFe4now" as Address<"Fd4edmmmH2fQu23n1vbRXeyaZih1jiXiQoCMNiFe4now">;
 
 export enum PolicyMultisigAccount {
   MultiSig,
 }
 
 export function identifyPolicyMultisigAccount(
-  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): PolicyMultisigAccount {
-  const data = 'data' in account ? account.data : account;
+  const data = "data" in account ? account.data : account;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([185, 236, 37, 72, 176, 174, 250, 169])
+        new Uint8Array([185, 236, 37, 72, 176, 174, 250, 169]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyMultisigAccount.MultiSig;
   }
   throw new Error(
-    'The provided account could not be identified as a policyMultisig account.'
+    "The provided account could not be identified as a policyMultisig account.",
   );
 }
 
@@ -53,16 +59,16 @@ export enum PolicyMultisigInstruction {
 }
 
 export function identifyPolicyMultisigInstruction(
-  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): PolicyMultisigInstruction {
-  const data = 'data' in instruction ? instruction.data : instruction;
+  const data = "data" in instruction ? instruction.data : instruction;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([69, 74, 217, 36, 115, 117, 97, 76])
+        new Uint8Array([69, 74, 217, 36, 115, 117, 97, 76]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyMultisigInstruction.Approve;
@@ -71,9 +77,9 @@ export function identifyPolicyMultisigInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([220, 130, 117, 21, 27, 227, 78, 213])
+        new Uint8Array([220, 130, 117, 21, 27, 227, 78, 213]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyMultisigInstruction.InitializeMultisig;
@@ -82,20 +88,20 @@ export function identifyPolicyMultisigInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([60, 252, 90, 66, 246, 253, 232, 139])
+        new Uint8Array([60, 252, 90, 66, 246, 253, 232, 139]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyMultisigInstruction.Validate;
   }
   throw new Error(
-    'The provided instruction could not be identified as a policyMultisig instruction.'
+    "The provided instruction could not be identified as a policyMultisig instruction.",
   );
 }
 
 export type ParsedPolicyMultisigInstruction<
-  TProgram extends string = 'HyroCMyEsfFnfygJGiMxF3YdCWV8RWQyrezq63htDpKC',
+  TProgram extends string = "Fd4edmmmH2fQu23n1vbRXeyaZih1jiXiQoCMNiFe4now",
 > =
   | ({
       instructionType: PolicyMultisigInstruction.Approve;
@@ -106,3 +112,36 @@ export type ParsedPolicyMultisigInstruction<
   | ({
       instructionType: PolicyMultisigInstruction.Validate;
     } & ParsedValidateInstruction<TProgram>);
+
+export function parsePolicyMultisigInstruction<TProgram extends string>(
+  instruction: Instruction<TProgram> & InstructionWithData<ReadonlyUint8Array>,
+): ParsedPolicyMultisigInstruction<TProgram> {
+  const instructionType = identifyPolicyMultisigInstruction(instruction);
+  switch (instructionType) {
+    case PolicyMultisigInstruction.Approve: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: PolicyMultisigInstruction.Approve,
+        ...parseApproveInstruction(instruction),
+      };
+    }
+    case PolicyMultisigInstruction.InitializeMultisig: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: PolicyMultisigInstruction.InitializeMultisig,
+        ...parseInitializeMultisigInstruction(instruction),
+      };
+    }
+    case PolicyMultisigInstruction.Validate: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: PolicyMultisigInstruction.Validate,
+        ...parseValidateInstruction(instruction),
+      };
+    }
+    default:
+      throw new Error(
+        `Unrecognized instruction type: ${instructionType as string}`,
+      );
+  }
+}

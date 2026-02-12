@@ -28,15 +28,15 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 import {
   getChallengeTemplateUpdateInsertDtoDecoder,
   getChallengeTemplateUpdateInsertDtoEncoder,
   type ChallengeTemplateUpdateInsertDto,
   type ChallengeTemplateUpdateInsertDtoArgs,
-} from '../types';
+} from "../types";
 
 export const UPDATE_CHALLENGE_TEMPLATE_DISCRIMINATOR = new Uint8Array([
   114, 162, 103, 83, 47, 148, 138, 174,
@@ -44,15 +44,14 @@ export const UPDATE_CHALLENGE_TEMPLATE_DISCRIMINATOR = new Uint8Array([
 
 export function getUpdateChallengeTemplateDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    UPDATE_CHALLENGE_TEMPLATE_DISCRIMINATOR
+    UPDATE_CHALLENGE_TEMPLATE_DISCRIMINATOR,
   );
 }
 
 export type UpdateChallengeTemplateInstruction<
   TProgram extends string = typeof POLICY_CHALLENGES_PROGRAM_ADDRESS,
-  TAccountChallengeTemplateAccount extends
-    | string
-    | AccountMeta<string> = string,
+  TAccountChallengeTemplateAccount extends string | AccountMeta<string> =
+    string,
   TAccountSigner extends string | AccountMeta<string> = string,
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
@@ -82,20 +81,20 @@ export type UpdateChallengeTemplateInstructionDataArgs = {
 export function getUpdateChallengeTemplateInstructionDataEncoder(): FixedSizeEncoder<UpdateChallengeTemplateInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['dto', getChallengeTemplateUpdateInsertDtoEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["dto", getChallengeTemplateUpdateInsertDtoEncoder()],
     ]),
     (value) => ({
       ...value,
       discriminator: UPDATE_CHALLENGE_TEMPLATE_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getUpdateChallengeTemplateInstructionDataDecoder(): FixedSizeDecoder<UpdateChallengeTemplateInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['dto', getChallengeTemplateUpdateInsertDtoDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["dto", getChallengeTemplateUpdateInsertDtoDecoder()],
   ]);
 }
 
@@ -105,7 +104,7 @@ export function getUpdateChallengeTemplateInstructionDataCodec(): FixedSizeCodec
 > {
   return combineCodec(
     getUpdateChallengeTemplateInstructionDataEncoder(),
-    getUpdateChallengeTemplateInstructionDataDecoder()
+    getUpdateChallengeTemplateInstructionDataDecoder(),
   );
 }
 
@@ -115,7 +114,7 @@ export type UpdateChallengeTemplateInput<
 > = {
   challengeTemplateAccount: Address<TAccountChallengeTemplateAccount>;
   signer: TransactionSigner<TAccountSigner>;
-  dto: UpdateChallengeTemplateInstructionDataArgs['dto'];
+  dto: UpdateChallengeTemplateInstructionDataArgs["dto"];
 };
 
 export function getUpdateChallengeTemplateInstruction<
@@ -127,7 +126,7 @@ export function getUpdateChallengeTemplateInstruction<
     TAccountChallengeTemplateAccount,
     TAccountSigner
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): UpdateChallengeTemplateInstruction<
   TProgramAddress,
   TAccountChallengeTemplateAccount,
@@ -153,14 +152,14 @@ export function getUpdateChallengeTemplateInstruction<
   // Original args.
   const args = { ...input };
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.challengeTemplateAccount),
       getAccountMeta(accounts.signer),
     ],
     data: getUpdateChallengeTemplateInstructionDataEncoder().encode(
-      args as UpdateChallengeTemplateInstructionDataArgs
+      args as UpdateChallengeTemplateInstructionDataArgs,
     ),
     programAddress,
   } as UpdateChallengeTemplateInstruction<
@@ -188,11 +187,11 @@ export function parseUpdateChallengeTemplateInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedUpdateChallengeTemplateInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 2) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -207,7 +206,7 @@ export function parseUpdateChallengeTemplateInstruction<
       signer: getNextAccount(),
     },
     data: getUpdateChallengeTemplateInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

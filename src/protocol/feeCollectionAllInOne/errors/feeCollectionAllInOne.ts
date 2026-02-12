@@ -11,8 +11,8 @@ import {
   type Address,
   type SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM,
   type SolanaError,
-} from '@solana/kit';
-import { FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS } from "../programs";
 
 /** InvalidConfig: Invalid fee configuration */
 export const FEE_COLLECTION_ALL_IN_ONE_ERROR__INVALID_CONFIG = 0x1770; // 6000
@@ -29,7 +29,7 @@ export type FeeCollectionAllInOneError =
 let feeCollectionAllInOneErrorMessages:
   | Record<FeeCollectionAllInOneError, string>
   | undefined;
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   feeCollectionAllInOneErrorMessages = {
     [FEE_COLLECTION_ALL_IN_ONE_ERROR__INVALID_CONFIG]: `Invalid fee configuration`,
     [FEE_COLLECTION_ALL_IN_ONE_ERROR__INVALID_MODE]: `Invalid fee mode`,
@@ -38,9 +38,9 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export function getFeeCollectionAllInOneErrorMessage(
-  code: FeeCollectionAllInOneError
+  code: FeeCollectionAllInOneError,
 ): string {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     return (
       feeCollectionAllInOneErrorMessages as Record<
         FeeCollectionAllInOneError,
@@ -49,7 +49,7 @@ export function getFeeCollectionAllInOneErrorMessage(
     )[code];
   }
 
-  return 'Error message not available in production bundles.';
+  return "Error message not available in production bundles.";
 }
 
 export function isFeeCollectionAllInOneError<
@@ -59,13 +59,13 @@ export function isFeeCollectionAllInOneError<
   transactionMessage: {
     instructions: Record<number, { programAddress: Address }>;
   },
-  code?: TProgramErrorCode
+  code?: TProgramErrorCode,
 ): error is SolanaError<typeof SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM> &
   Readonly<{ context: Readonly<{ code: TProgramErrorCode }> }> {
   return isProgramError<TProgramErrorCode>(
     error,
     transactionMessage,
     FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS,
-    code
+    code,
   );
 }

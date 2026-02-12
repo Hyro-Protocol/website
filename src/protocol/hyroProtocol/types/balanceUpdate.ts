@@ -23,25 +23,25 @@ import {
   type FixedSizeEncoder,
   type GetDiscriminatedUnionVariant,
   type GetDiscriminatedUnionVariantContent,
-} from '@solana/kit';
+} from "@solana/kit";
 
 export type BalanceUpdate =
-  | { __kind: 'NewValue'; fields: readonly [bigint] }
-  | { __kind: 'Delta'; fields: readonly [bigint] };
+  | { __kind: "NewValue"; fields: readonly [bigint] }
+  | { __kind: "Delta"; fields: readonly [bigint] };
 
 export type BalanceUpdateArgs =
-  | { __kind: 'NewValue'; fields: readonly [number | bigint] }
-  | { __kind: 'Delta'; fields: readonly [number | bigint] };
+  | { __kind: "NewValue"; fields: readonly [number | bigint] }
+  | { __kind: "Delta"; fields: readonly [number | bigint] };
 
 export function getBalanceUpdateEncoder(): FixedSizeEncoder<BalanceUpdateArgs> {
   return getDiscriminatedUnionEncoder([
     [
-      'NewValue',
-      getStructEncoder([['fields', getTupleEncoder([getU64Encoder()])]]),
+      "NewValue",
+      getStructEncoder([["fields", getTupleEncoder([getU64Encoder()])]]),
     ],
     [
-      'Delta',
-      getStructEncoder([['fields', getTupleEncoder([getI64Encoder()])]]),
+      "Delta",
+      getStructEncoder([["fields", getTupleEncoder([getI64Encoder()])]]),
     ],
   ]) as FixedSizeEncoder<BalanceUpdateArgs>;
 }
@@ -49,12 +49,12 @@ export function getBalanceUpdateEncoder(): FixedSizeEncoder<BalanceUpdateArgs> {
 export function getBalanceUpdateDecoder(): FixedSizeDecoder<BalanceUpdate> {
   return getDiscriminatedUnionDecoder([
     [
-      'NewValue',
-      getStructDecoder([['fields', getTupleDecoder([getU64Decoder()])]]),
+      "NewValue",
+      getStructDecoder([["fields", getTupleDecoder([getU64Decoder()])]]),
     ],
     [
-      'Delta',
-      getStructDecoder([['fields', getTupleDecoder([getI64Decoder()])]]),
+      "Delta",
+      getStructDecoder([["fields", getTupleDecoder([getI64Decoder()])]]),
     ],
   ]) as FixedSizeDecoder<BalanceUpdate>;
 }
@@ -68,33 +68,33 @@ export function getBalanceUpdateCodec(): FixedSizeCodec<
 
 // Data Enum Helpers.
 export function balanceUpdate(
-  kind: 'NewValue',
+  kind: "NewValue",
   data: GetDiscriminatedUnionVariantContent<
     BalanceUpdateArgs,
-    '__kind',
-    'NewValue'
-  >['fields']
-): GetDiscriminatedUnionVariant<BalanceUpdateArgs, '__kind', 'NewValue'>;
+    "__kind",
+    "NewValue"
+  >["fields"],
+): GetDiscriminatedUnionVariant<BalanceUpdateArgs, "__kind", "NewValue">;
 export function balanceUpdate(
-  kind: 'Delta',
+  kind: "Delta",
   data: GetDiscriminatedUnionVariantContent<
     BalanceUpdateArgs,
-    '__kind',
-    'Delta'
-  >['fields']
-): GetDiscriminatedUnionVariant<BalanceUpdateArgs, '__kind', 'Delta'>;
-export function balanceUpdate<K extends BalanceUpdateArgs['__kind'], Data>(
+    "__kind",
+    "Delta"
+  >["fields"],
+): GetDiscriminatedUnionVariant<BalanceUpdateArgs, "__kind", "Delta">;
+export function balanceUpdate<K extends BalanceUpdateArgs["__kind"], Data>(
   kind: K,
-  data?: Data
+  data?: Data,
 ) {
   return Array.isArray(data)
     ? { __kind: kind, fields: data }
     : { __kind: kind, ...(data ?? {}) };
 }
 
-export function isBalanceUpdate<K extends BalanceUpdate['__kind']>(
+export function isBalanceUpdate<K extends BalanceUpdate["__kind"]>(
   kind: K,
-  value: BalanceUpdate
+  value: BalanceUpdate,
 ): value is BalanceUpdate & { __kind: K } {
   return value.__kind === kind;
 }

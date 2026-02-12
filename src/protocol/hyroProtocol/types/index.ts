@@ -6,10 +6,10 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './balanceUpdate';
-export * from './feeCollectionFrequency';
-export * from './feeType';
-export * from './managerFeeStructure';
-export * from './riskRating';
-export * from './transactionAccount';
-export * from './verificationStatus';
+export * from "./balanceUpdate";
+export * from "./feeCollectionFrequency";
+export * from "./feeType";
+export * from "./managerFeeStructure";
+export * from "./riskRating";
+export * from "./transactionAccount";
+export * from "./verificationStatus";

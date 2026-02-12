@@ -34,13 +34,13 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { POLICY_OWNERS_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { POLICY_OWNERS_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 
 export const INITIALIZE_OWNERS_DISCRIMINATOR = new Uint8Array([
   145, 41, 103, 101, 229, 205, 135, 157,
@@ -48,7 +48,7 @@ export const INITIALIZE_OWNERS_DISCRIMINATOR = new Uint8Array([
 
 export function getInitializeOwnersDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    INITIALIZE_OWNERS_DISCRIMINATOR
+    INITIALIZE_OWNERS_DISCRIMINATOR,
   );
 }
 
@@ -57,9 +57,8 @@ export type InitializeOwnersInstruction<
   TAccountVault extends string | AccountMeta<string> = string,
   TAccountPolicyAccount extends string | AccountMeta<string> = string,
   TAccountSigner extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -92,17 +91,17 @@ export type InitializeOwnersInstructionDataArgs = { owners: Array<Address> };
 export function getInitializeOwnersInstructionDataEncoder(): Encoder<InitializeOwnersInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['owners', getArrayEncoder(getAddressEncoder())],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["owners", getArrayEncoder(getAddressEncoder())],
     ]),
-    (value) => ({ ...value, discriminator: INITIALIZE_OWNERS_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: INITIALIZE_OWNERS_DISCRIMINATOR }),
   );
 }
 
 export function getInitializeOwnersInstructionDataDecoder(): Decoder<InitializeOwnersInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['owners', getArrayDecoder(getAddressDecoder())],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["owners", getArrayDecoder(getAddressDecoder())],
   ]);
 }
 
@@ -112,7 +111,7 @@ export function getInitializeOwnersInstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getInitializeOwnersInstructionDataEncoder(),
-    getInitializeOwnersInstructionDataDecoder()
+    getInitializeOwnersInstructionDataDecoder(),
   );
 }
 
@@ -126,7 +125,7 @@ export type InitializeOwnersAsyncInput<
   policyAccount?: Address<TAccountPolicyAccount>;
   signer: TransactionSigner<TAccountSigner>;
   systemProgram?: Address<TAccountSystemProgram>;
-  owners: InitializeOwnersInstructionDataArgs['owners'];
+  owners: InitializeOwnersInstructionDataArgs["owners"];
 };
 
 export async function getInitializeOwnersInstructionAsync<
@@ -142,7 +141,7 @@ export async function getInitializeOwnersInstructionAsync<
     TAccountSigner,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   InitializeOwnersInstruction<
     TProgramAddress,
@@ -180,10 +179,10 @@ export async function getInitializeOwnersInstructionAsync<
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -192,7 +191,7 @@ export async function getInitializeOwnersInstructionAsync<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getInitializeOwnersInstructionDataEncoder().encode(
-      args as InitializeOwnersInstructionDataArgs
+      args as InitializeOwnersInstructionDataArgs,
     ),
     programAddress,
   } as InitializeOwnersInstruction<
@@ -214,7 +213,7 @@ export type InitializeOwnersInput<
   policyAccount: Address<TAccountPolicyAccount>;
   signer: TransactionSigner<TAccountSigner>;
   systemProgram?: Address<TAccountSystemProgram>;
-  owners: InitializeOwnersInstructionDataArgs['owners'];
+  owners: InitializeOwnersInstructionDataArgs["owners"];
 };
 
 export function getInitializeOwnersInstruction<
@@ -230,7 +229,7 @@ export function getInitializeOwnersInstruction<
     TAccountSigner,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): InitializeOwnersInstruction<
   TProgramAddress,
   TAccountVault,
@@ -260,10 +259,10 @@ export function getInitializeOwnersInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -272,7 +271,7 @@ export function getInitializeOwnersInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getInitializeOwnersInstructionDataEncoder().encode(
-      args as InitializeOwnersInstructionDataArgs
+      args as InitializeOwnersInstructionDataArgs,
     ),
     programAddress,
   } as InitializeOwnersInstruction<
@@ -304,11 +303,11 @@ export function parseInitializeOwnersInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedInitializeOwnersInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 4) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

@@ -19,7 +19,7 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 
 /** Time-based fee entry for a specific fee type */
 export type TimeBasedEntry = {
@@ -52,19 +52,19 @@ export type TimeBasedEntryArgs = {
 
 export function getTimeBasedEntryEncoder(): FixedSizeEncoder<TimeBasedEntryArgs> {
   return getStructEncoder([
-    ['enabled', getBooleanEncoder()],
-    ['mode', getU8Encoder()],
-    ['value', getU64Encoder()],
-    ['period', getU8Encoder()],
+    ["enabled", getBooleanEncoder()],
+    ["mode", getU8Encoder()],
+    ["value", getU64Encoder()],
+    ["period", getU8Encoder()],
   ]);
 }
 
 export function getTimeBasedEntryDecoder(): FixedSizeDecoder<TimeBasedEntry> {
   return getStructDecoder([
-    ['enabled', getBooleanDecoder()],
-    ['mode', getU8Decoder()],
-    ['value', getU64Decoder()],
-    ['period', getU8Decoder()],
+    ["enabled", getBooleanDecoder()],
+    ["mode", getU8Decoder()],
+    ["value", getU64Decoder()],
+    ["period", getU8Decoder()],
   ]);
 }
 

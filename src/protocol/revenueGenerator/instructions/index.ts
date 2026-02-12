@@ -6,5 +6,5 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './generateRevenue';
-export * from './initialize';
+export * from "./generateRevenue";
+export * from "./initialize";

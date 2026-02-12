@@ -11,8 +11,8 @@ import {
   type Address,
   type SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM,
   type SolanaError,
-} from '@solana/kit';
-import { FEE_COLLECTION_FRACTIONS_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { FEE_COLLECTION_FRACTIONS_PROGRAM_ADDRESS } from "../programs";
 
 /** InvalidConfig: Invalid fee configuration */
 export const FEE_COLLECTION_FRACTIONS_ERROR__INVALID_CONFIG = 0x1770; // 6000
@@ -23,16 +23,16 @@ export type FeeCollectionFractionsError =
 let feeCollectionFractionsErrorMessages:
   | Record<FeeCollectionFractionsError, string>
   | undefined;
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   feeCollectionFractionsErrorMessages = {
     [FEE_COLLECTION_FRACTIONS_ERROR__INVALID_CONFIG]: `Invalid fee configuration`,
   };
 }
 
 export function getFeeCollectionFractionsErrorMessage(
-  code: FeeCollectionFractionsError
+  code: FeeCollectionFractionsError,
 ): string {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     return (
       feeCollectionFractionsErrorMessages as Record<
         FeeCollectionFractionsError,
@@ -41,7 +41,7 @@ export function getFeeCollectionFractionsErrorMessage(
     )[code];
   }
 
-  return 'Error message not available in production bundles.';
+  return "Error message not available in production bundles.";
 }
 
 export function isFeeCollectionFractionsError<
@@ -51,13 +51,13 @@ export function isFeeCollectionFractionsError<
   transactionMessage: {
     instructions: Record<number, { programAddress: Address }>;
   },
-  code?: TProgramErrorCode
+  code?: TProgramErrorCode,
 ): error is SolanaError<typeof SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM> &
   Readonly<{ context: Readonly<{ code: TProgramErrorCode }> }> {
   return isProgramError<TProgramErrorCode>(
     error,
     transactionMessage,
     FEE_COLLECTION_FRACTIONS_PROGRAM_ADDRESS,
-    code
+    code,
   );
 }

@@ -31,19 +31,19 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 import {
   getFractionConfigDecoder,
   getFractionConfigEncoder,
   type FractionConfig,
   type FractionConfigArgs,
-} from '../types';
+} from "../types";
 
 export const UPDATE_FRACTION_CONFIG_DISCRIMINATOR = new Uint8Array([
   251, 44, 246, 37, 62, 95, 147, 171,
@@ -51,7 +51,7 @@ export const UPDATE_FRACTION_CONFIG_DISCRIMINATOR = new Uint8Array([
 
 export function getUpdateFractionConfigDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    UPDATE_FRACTION_CONFIG_DISCRIMINATOR
+    UPDATE_FRACTION_CONFIG_DISCRIMINATOR,
   );
 }
 
@@ -91,20 +91,20 @@ export type UpdateFractionConfigInstructionDataArgs = {
 export function getUpdateFractionConfigInstructionDataEncoder(): FixedSizeEncoder<UpdateFractionConfigInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['fraction', getFractionConfigEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["fraction", getFractionConfigEncoder()],
     ]),
     (value) => ({
       ...value,
       discriminator: UPDATE_FRACTION_CONFIG_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getUpdateFractionConfigInstructionDataDecoder(): FixedSizeDecoder<UpdateFractionConfigInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['fraction', getFractionConfigDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["fraction", getFractionConfigDecoder()],
   ]);
 }
 
@@ -114,7 +114,7 @@ export function getUpdateFractionConfigInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getUpdateFractionConfigInstructionDataEncoder(),
-    getUpdateFractionConfigInstructionDataDecoder()
+    getUpdateFractionConfigInstructionDataDecoder(),
   );
 }
 
@@ -127,22 +127,22 @@ export type UpdateFractionConfigAsyncInput<
   configAccount?: Address<TAccountConfigAccount>;
   /** Authority that can update config (typically vault admin) */
   authority: TransactionSigner<TAccountAuthority>;
-  fraction: UpdateFractionConfigInstructionDataArgs['fraction'];
+  fraction: UpdateFractionConfigInstructionDataArgs["fraction"];
 };
 
 export async function getUpdateFractionConfigInstructionAsync<
   TAccountVault extends string,
   TAccountConfigAccount extends string,
   TAccountAuthority extends string,
-  TProgramAddress extends
-    Address = typeof FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS,
 >(
   input: UpdateFractionConfigAsyncInput<
     TAccountVault,
     TAccountConfigAccount,
     TAccountAuthority
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   UpdateFractionConfigInstruction<
     TProgramAddress,
@@ -178,14 +178,14 @@ export async function getUpdateFractionConfigInstructionAsync<
           new Uint8Array([
             97, 108, 108, 95, 105, 110, 95, 111, 110, 101, 95, 99, 111, 110,
             102, 105, 103,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
       ],
     });
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -193,7 +193,7 @@ export async function getUpdateFractionConfigInstructionAsync<
       getAccountMeta(accounts.authority),
     ],
     data: getUpdateFractionConfigInstructionDataEncoder().encode(
-      args as UpdateFractionConfigInstructionDataArgs
+      args as UpdateFractionConfigInstructionDataArgs,
     ),
     programAddress,
   } as UpdateFractionConfigInstruction<
@@ -213,22 +213,22 @@ export type UpdateFractionConfigInput<
   configAccount: Address<TAccountConfigAccount>;
   /** Authority that can update config (typically vault admin) */
   authority: TransactionSigner<TAccountAuthority>;
-  fraction: UpdateFractionConfigInstructionDataArgs['fraction'];
+  fraction: UpdateFractionConfigInstructionDataArgs["fraction"];
 };
 
 export function getUpdateFractionConfigInstruction<
   TAccountVault extends string,
   TAccountConfigAccount extends string,
   TAccountAuthority extends string,
-  TProgramAddress extends
-    Address = typeof FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS,
 >(
   input: UpdateFractionConfigInput<
     TAccountVault,
     TAccountConfigAccount,
     TAccountAuthority
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): UpdateFractionConfigInstruction<
   TProgramAddress,
   TAccountVault,
@@ -253,7 +253,7 @@ export function getUpdateFractionConfigInstruction<
   // Original args.
   const args = { ...input };
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -261,7 +261,7 @@ export function getUpdateFractionConfigInstruction<
       getAccountMeta(accounts.authority),
     ],
     data: getUpdateFractionConfigInstructionDataEncoder().encode(
-      args as UpdateFractionConfigInstructionDataArgs
+      args as UpdateFractionConfigInstructionDataArgs,
     ),
     programAddress,
   } as UpdateFractionConfigInstruction<
@@ -292,11 +292,11 @@ export function parseUpdateFractionConfigInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedUpdateFractionConfigInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 3) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -312,7 +312,7 @@ export function parseUpdateFractionConfigInstruction<
       authority: getNextAccount(),
     },
     data: getUpdateFractionConfigInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

@@ -31,9 +31,9 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { DROPPER_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { DROPPER_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const TRANSFER_LAMPORTS_DISCRIMINATOR = new Uint8Array([
   62, 53, 201, 68, 102, 134, 83, 103,
@@ -41,7 +41,7 @@ export const TRANSFER_LAMPORTS_DISCRIMINATOR = new Uint8Array([
 
 export function getTransferLamportsDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    TRANSFER_LAMPORTS_DISCRIMINATOR
+    TRANSFER_LAMPORTS_DISCRIMINATOR,
   );
 }
 
@@ -49,9 +49,8 @@ export type TransferLamportsInstruction<
   TProgram extends string = typeof DROPPER_PROGRAM_ADDRESS,
   TAccountFrom extends string | AccountMeta<string> = string,
   TAccountTo extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -78,17 +77,17 @@ export type TransferLamportsInstructionDataArgs = { amount: number | bigint };
 export function getTransferLamportsInstructionDataEncoder(): FixedSizeEncoder<TransferLamportsInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['amount', getU64Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["amount", getU64Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: TRANSFER_LAMPORTS_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: TRANSFER_LAMPORTS_DISCRIMINATOR }),
   );
 }
 
 export function getTransferLamportsInstructionDataDecoder(): FixedSizeDecoder<TransferLamportsInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['amount', getU64Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["amount", getU64Decoder()],
   ]);
 }
 
@@ -98,7 +97,7 @@ export function getTransferLamportsInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getTransferLamportsInstructionDataEncoder(),
-    getTransferLamportsInstructionDataDecoder()
+    getTransferLamportsInstructionDataDecoder(),
   );
 }
 
@@ -110,7 +109,7 @@ export type TransferLamportsInput<
   from: TransactionSigner<TAccountFrom>;
   to: Address<TAccountTo>;
   systemProgram?: Address<TAccountSystemProgram>;
-  amount: TransferLamportsInstructionDataArgs['amount'];
+  amount: TransferLamportsInstructionDataArgs["amount"];
 };
 
 export function getTransferLamportsInstruction<
@@ -120,7 +119,7 @@ export function getTransferLamportsInstruction<
   TProgramAddress extends Address = typeof DROPPER_PROGRAM_ADDRESS,
 >(
   input: TransferLamportsInput<TAccountFrom, TAccountTo, TAccountSystemProgram>,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): TransferLamportsInstruction<
   TProgramAddress,
   TAccountFrom,
@@ -147,10 +146,10 @@ export function getTransferLamportsInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.from),
@@ -158,7 +157,7 @@ export function getTransferLamportsInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getTransferLamportsInstructionDataEncoder().encode(
-      args as TransferLamportsInstructionDataArgs
+      args as TransferLamportsInstructionDataArgs,
     ),
     programAddress,
   } as TransferLamportsInstruction<
@@ -188,11 +187,11 @@ export function parseTransferLamportsInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedTransferLamportsInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 3) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

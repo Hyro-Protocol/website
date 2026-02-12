@@ -11,8 +11,8 @@ import {
   type Address,
   type SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM,
   type SolanaError,
-} from '@solana/kit';
-import { POLICY_MULTISIG_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { POLICY_MULTISIG_PROGRAM_ADDRESS } from "../programs";
 
 /** InvalidThreshold: Invalid threshold. */
 export const POLICY_MULTISIG_ERROR__INVALID_THRESHOLD = 0x1770; // 6000
@@ -50,7 +50,7 @@ export type PolicyMultisigError =
 let policyMultisigErrorMessages:
   | Record<PolicyMultisigError, string>
   | undefined;
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   policyMultisigErrorMessages = {
     [POLICY_MULTISIG_ERROR__ALREADY_EXECUTED]: `The given transaction has already been executed.`,
     [POLICY_MULTISIG_ERROR__INVALID_OWNER]: `Invalid owner.`,
@@ -66,15 +66,15 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export function getPolicyMultisigErrorMessage(
-  code: PolicyMultisigError
+  code: PolicyMultisigError,
 ): string {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     return (policyMultisigErrorMessages as Record<PolicyMultisigError, string>)[
       code
     ];
   }
 
-  return 'Error message not available in production bundles.';
+  return "Error message not available in production bundles.";
 }
 
 export function isPolicyMultisigError<
@@ -84,13 +84,13 @@ export function isPolicyMultisigError<
   transactionMessage: {
     instructions: Record<number, { programAddress: Address }>;
   },
-  code?: TProgramErrorCode
+  code?: TProgramErrorCode,
 ): error is SolanaError<typeof SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM> &
   Readonly<{ context: Readonly<{ code: TProgramErrorCode }> }> {
   return isProgramError<TProgramErrorCode>(
     error,
     transactionMessage,
     POLICY_MULTISIG_PROGRAM_ADDRESS,
-    code
+    code,
   );
 }

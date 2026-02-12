@@ -37,7 +37,7 @@ import {
   type MaybeAccount,
   type MaybeEncodedAccount,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
   getRiskRatingDecoder,
   getRiskRatingEncoder,
@@ -47,7 +47,7 @@ import {
   type RiskRatingArgs,
   type VerificationStatus,
   type VerificationStatusArgs,
-} from '../types';
+} from "../types";
 
 export const MANAGER_PROFILE_DISCRIMINATOR = new Uint8Array([
   135, 12, 238, 243, 236, 32, 123, 52,
@@ -55,7 +55,7 @@ export const MANAGER_PROFILE_DISCRIMINATOR = new Uint8Array([
 
 export function getManagerProfileDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    MANAGER_PROFILE_DISCRIMINATOR
+    MANAGER_PROFILE_DISCRIMINATOR,
   );
 }
 
@@ -86,32 +86,32 @@ export type ManagerProfileArgs = {
 export function getManagerProfileEncoder(): FixedSizeEncoder<ManagerProfileArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['managerPubkey', getAddressEncoder()],
-      ['verificationStatus', getVerificationStatusEncoder()],
-      ['riskRating', getRiskRatingEncoder()],
-      ['totalAum', getU64Encoder()],
-      ['activeVaults', getU32Encoder()],
-      ['totalFeesEarned', getU64Encoder()],
-      ['createdAt', getU64Encoder()],
-      ['lastActivity', getU64Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["managerPubkey", getAddressEncoder()],
+      ["verificationStatus", getVerificationStatusEncoder()],
+      ["riskRating", getRiskRatingEncoder()],
+      ["totalAum", getU64Encoder()],
+      ["activeVaults", getU32Encoder()],
+      ["totalFeesEarned", getU64Encoder()],
+      ["createdAt", getU64Encoder()],
+      ["lastActivity", getU64Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: MANAGER_PROFILE_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: MANAGER_PROFILE_DISCRIMINATOR }),
   );
 }
 
 /** Gets the decoder for {@link ManagerProfile} account data. */
 export function getManagerProfileDecoder(): FixedSizeDecoder<ManagerProfile> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['managerPubkey', getAddressDecoder()],
-    ['verificationStatus', getVerificationStatusDecoder()],
-    ['riskRating', getRiskRatingDecoder()],
-    ['totalAum', getU64Decoder()],
-    ['activeVaults', getU32Decoder()],
-    ['totalFeesEarned', getU64Decoder()],
-    ['createdAt', getU64Decoder()],
-    ['lastActivity', getU64Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["managerPubkey", getAddressDecoder()],
+    ["verificationStatus", getVerificationStatusDecoder()],
+    ["riskRating", getRiskRatingDecoder()],
+    ["totalAum", getU64Decoder()],
+    ["activeVaults", getU32Decoder()],
+    ["totalFeesEarned", getU64Decoder()],
+    ["createdAt", getU64Decoder()],
+    ["lastActivity", getU64Decoder()],
   ]);
 }
 
@@ -124,24 +124,24 @@ export function getManagerProfileCodec(): FixedSizeCodec<
 }
 
 export function decodeManagerProfile<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress>,
 ): Account<ManagerProfile, TAddress>;
 export function decodeManagerProfile<TAddress extends string = string>(
-  encodedAccount: MaybeEncodedAccount<TAddress>
+  encodedAccount: MaybeEncodedAccount<TAddress>,
 ): MaybeAccount<ManagerProfile, TAddress>;
 export function decodeManagerProfile<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>,
 ): Account<ManagerProfile, TAddress> | MaybeAccount<ManagerProfile, TAddress> {
   return decodeAccount(
     encodedAccount as MaybeEncodedAccount<TAddress>,
-    getManagerProfileDecoder()
+    getManagerProfileDecoder(),
   );
 }
 
 export async function fetchManagerProfile<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<Account<ManagerProfile, TAddress>> {
   const maybeAccount = await fetchMaybeManagerProfile(rpc, address, config);
   assertAccountExists(maybeAccount);
@@ -153,7 +153,7 @@ export async function fetchMaybeManagerProfile<
 >(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<MaybeAccount<ManagerProfile, TAddress>> {
   const maybeAccount = await fetchEncodedAccount(rpc, address, config);
   return decodeManagerProfile(maybeAccount);
@@ -162,12 +162,12 @@ export async function fetchMaybeManagerProfile<
 export async function fetchAllManagerProfile(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<Account<ManagerProfile>[]> {
   const maybeAccounts = await fetchAllMaybeManagerProfile(
     rpc,
     addresses,
-    config
+    config,
   );
   assertAccountsExist(maybeAccounts);
   return maybeAccounts;
@@ -176,11 +176,11 @@ export async function fetchAllManagerProfile(
 export async function fetchAllMaybeManagerProfile(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<MaybeAccount<ManagerProfile>[]> {
   const maybeAccounts = await fetchEncodedAccounts(rpc, addresses, config);
   return maybeAccounts.map((maybeAccount) =>
-    decodeManagerProfile(maybeAccount)
+    decodeManagerProfile(maybeAccount),
   );
 }
 

@@ -6,5 +6,5 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './initializeManagers';
-export * from './validate';
+export * from "./initializeManagers";
+export * from "./validate";

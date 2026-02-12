@@ -7,41 +7,46 @@
  */
 
 import {
+  assertIsInstructionWithAccounts,
   containsBytes,
   fixEncoderSize,
   getBytesEncoder,
   type Address,
+  type Instruction,
+  type InstructionWithData,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
+  parseInitializeLimitTransferInstruction,
+  parseValidateInstruction,
   type ParsedInitializeLimitTransferInstruction,
   type ParsedValidateInstruction,
-} from '../instructions';
+} from "../instructions";
 
 export const POLICY_LIMIT_TRANSFER_PROGRAM_ADDRESS =
-  '9umquhVCZ266WMHmkMw6krn2AHaSFqvGEciSHMpZVDTS' as Address<'9umquhVCZ266WMHmkMw6krn2AHaSFqvGEciSHMpZVDTS'>;
+  "9umquhVCZ266WMHmkMw6krn2AHaSFqvGEciSHMpZVDTS" as Address<"9umquhVCZ266WMHmkMw6krn2AHaSFqvGEciSHMpZVDTS">;
 
 export enum PolicyLimitTransferAccount {
   LimitTransfer,
 }
 
 export function identifyPolicyLimitTransferAccount(
-  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): PolicyLimitTransferAccount {
-  const data = 'data' in account ? account.data : account;
+  const data = "data" in account ? account.data : account;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([247, 207, 59, 55, 224, 191, 85, 213])
+        new Uint8Array([247, 207, 59, 55, 224, 191, 85, 213]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyLimitTransferAccount.LimitTransfer;
   }
   throw new Error(
-    'The provided account could not be identified as a policyLimitTransfer account.'
+    "The provided account could not be identified as a policyLimitTransfer account.",
   );
 }
 
@@ -51,16 +56,16 @@ export enum PolicyLimitTransferInstruction {
 }
 
 export function identifyPolicyLimitTransferInstruction(
-  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): PolicyLimitTransferInstruction {
-  const data = 'data' in instruction ? instruction.data : instruction;
+  const data = "data" in instruction ? instruction.data : instruction;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([231, 140, 57, 76, 17, 243, 161, 149])
+        new Uint8Array([231, 140, 57, 76, 17, 243, 161, 149]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyLimitTransferInstruction.InitializeLimitTransfer;
@@ -69,20 +74,20 @@ export function identifyPolicyLimitTransferInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([60, 252, 90, 66, 246, 253, 232, 139])
+        new Uint8Array([60, 252, 90, 66, 246, 253, 232, 139]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyLimitTransferInstruction.Validate;
   }
   throw new Error(
-    'The provided instruction could not be identified as a policyLimitTransfer instruction.'
+    "The provided instruction could not be identified as a policyLimitTransfer instruction.",
   );
 }
 
 export type ParsedPolicyLimitTransferInstruction<
-  TProgram extends string = '9umquhVCZ266WMHmkMw6krn2AHaSFqvGEciSHMpZVDTS',
+  TProgram extends string = "9umquhVCZ266WMHmkMw6krn2AHaSFqvGEciSHMpZVDTS",
 > =
   | ({
       instructionType: PolicyLimitTransferInstruction.InitializeLimitTransfer;
@@ -90,3 +95,29 @@ export type ParsedPolicyLimitTransferInstruction<
   | ({
       instructionType: PolicyLimitTransferInstruction.Validate;
     } & ParsedValidateInstruction<TProgram>);
+
+export function parsePolicyLimitTransferInstruction<TProgram extends string>(
+  instruction: Instruction<TProgram> & InstructionWithData<ReadonlyUint8Array>,
+): ParsedPolicyLimitTransferInstruction<TProgram> {
+  const instructionType = identifyPolicyLimitTransferInstruction(instruction);
+  switch (instructionType) {
+    case PolicyLimitTransferInstruction.InitializeLimitTransfer: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: PolicyLimitTransferInstruction.InitializeLimitTransfer,
+        ...parseInitializeLimitTransferInstruction(instruction),
+      };
+    }
+    case PolicyLimitTransferInstruction.Validate: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: PolicyLimitTransferInstruction.Validate,
+        ...parseValidateInstruction(instruction),
+      };
+    }
+    default:
+      throw new Error(
+        `Unrecognized instruction type: ${instructionType as string}`,
+      );
+  }
+}

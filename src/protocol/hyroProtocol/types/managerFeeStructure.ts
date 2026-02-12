@@ -20,13 +20,13 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
   getFeeCollectionFrequencyDecoder,
   getFeeCollectionFrequencyEncoder,
   type FeeCollectionFrequency,
   type FeeCollectionFrequencyArgs,
-} from '.';
+} from ".";
 
 export type ManagerFeeStructure = {
   performanceFeeRate: number;
@@ -46,21 +46,21 @@ export type ManagerFeeStructureArgs = {
 
 export function getManagerFeeStructureEncoder(): FixedSizeEncoder<ManagerFeeStructureArgs> {
   return getStructEncoder([
-    ['performanceFeeRate', getU16Encoder()],
-    ['managementFeeRate', getU16Encoder()],
-    ['collectionFrequency', getFeeCollectionFrequencyEncoder()],
-    ['highWaterMark', getU64Encoder()],
-    ['feeRecipient', getAddressEncoder()],
+    ["performanceFeeRate", getU16Encoder()],
+    ["managementFeeRate", getU16Encoder()],
+    ["collectionFrequency", getFeeCollectionFrequencyEncoder()],
+    ["highWaterMark", getU64Encoder()],
+    ["feeRecipient", getAddressEncoder()],
   ]);
 }
 
 export function getManagerFeeStructureDecoder(): FixedSizeDecoder<ManagerFeeStructure> {
   return getStructDecoder([
-    ['performanceFeeRate', getU16Decoder()],
-    ['managementFeeRate', getU16Decoder()],
-    ['collectionFrequency', getFeeCollectionFrequencyDecoder()],
-    ['highWaterMark', getU64Decoder()],
-    ['feeRecipient', getAddressDecoder()],
+    ["performanceFeeRate", getU16Decoder()],
+    ["managementFeeRate", getU16Decoder()],
+    ["collectionFrequency", getFeeCollectionFrequencyDecoder()],
+    ["highWaterMark", getU64Decoder()],
+    ["feeRecipient", getAddressDecoder()],
   ]);
 }
 
@@ -70,6 +70,6 @@ export function getManagerFeeStructureCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getManagerFeeStructureEncoder(),
-    getManagerFeeStructureDecoder()
+    getManagerFeeStructureDecoder(),
   );
 }

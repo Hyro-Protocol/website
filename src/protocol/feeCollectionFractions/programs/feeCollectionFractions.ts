@@ -7,42 +7,48 @@
  */
 
 import {
+  assertIsInstructionWithAccounts,
   containsBytes,
   fixEncoderSize,
   getBytesEncoder,
   type Address,
+  type Instruction,
+  type InstructionWithData,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
+  parseCalculateFeesInstruction,
+  parseInitializeInstruction,
+  parseUpdateConfigInstruction,
   type ParsedCalculateFeesInstruction,
   type ParsedInitializeInstruction,
   type ParsedUpdateConfigInstruction,
-} from '../instructions';
+} from "../instructions";
 
 export const FEE_COLLECTION_FRACTIONS_PROGRAM_ADDRESS =
-  'HyroAP1zvrcjMxrJrTKbnVVVaZqqEN3stbUQJZNmT7Ec' as Address<'HyroAP1zvrcjMxrJrTKbnVVVaZqqEN3stbUQJZNmT7Ec'>;
+  "7PJS2Y58KUvcNBooHJ1RdRPwnH31rKDxSFMBhNPsDurA" as Address<"7PJS2Y58KUvcNBooHJ1RdRPwnH31rKDxSFMBhNPsDurA">;
 
 export enum FeeCollectionFractionsAccount {
   VaultFractionConfig,
 }
 
 export function identifyFeeCollectionFractionsAccount(
-  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): FeeCollectionFractionsAccount {
-  const data = 'data' in account ? account.data : account;
+  const data = "data" in account ? account.data : account;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([77, 158, 134, 33, 32, 150, 55, 95])
+        new Uint8Array([77, 158, 134, 33, 32, 150, 55, 95]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionFractionsAccount.VaultFractionConfig;
   }
   throw new Error(
-    'The provided account could not be identified as a feeCollectionFractions account.'
+    "The provided account could not be identified as a feeCollectionFractions account.",
   );
 }
 
@@ -53,16 +59,16 @@ export enum FeeCollectionFractionsInstruction {
 }
 
 export function identifyFeeCollectionFractionsInstruction(
-  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): FeeCollectionFractionsInstruction {
-  const data = 'data' in instruction ? instruction.data : instruction;
+  const data = "data" in instruction ? instruction.data : instruction;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([140, 235, 78, 9, 249, 8, 129, 101])
+        new Uint8Array([140, 235, 78, 9, 249, 8, 129, 101]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionFractionsInstruction.CalculateFees;
@@ -71,9 +77,9 @@ export function identifyFeeCollectionFractionsInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([175, 175, 109, 31, 13, 152, 155, 237])
+        new Uint8Array([175, 175, 109, 31, 13, 152, 155, 237]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionFractionsInstruction.Initialize;
@@ -82,20 +88,20 @@ export function identifyFeeCollectionFractionsInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([29, 158, 252, 191, 10, 83, 219, 99])
+        new Uint8Array([29, 158, 252, 191, 10, 83, 219, 99]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionFractionsInstruction.UpdateConfig;
   }
   throw new Error(
-    'The provided instruction could not be identified as a feeCollectionFractions instruction.'
+    "The provided instruction could not be identified as a feeCollectionFractions instruction.",
   );
 }
 
 export type ParsedFeeCollectionFractionsInstruction<
-  TProgram extends string = 'HyroAP1zvrcjMxrJrTKbnVVVaZqqEN3stbUQJZNmT7Ec',
+  TProgram extends string = "7PJS2Y58KUvcNBooHJ1RdRPwnH31rKDxSFMBhNPsDurA",
 > =
   | ({
       instructionType: FeeCollectionFractionsInstruction.CalculateFees;
@@ -106,3 +112,37 @@ export type ParsedFeeCollectionFractionsInstruction<
   | ({
       instructionType: FeeCollectionFractionsInstruction.UpdateConfig;
     } & ParsedUpdateConfigInstruction<TProgram>);
+
+export function parseFeeCollectionFractionsInstruction<TProgram extends string>(
+  instruction: Instruction<TProgram> & InstructionWithData<ReadonlyUint8Array>,
+): ParsedFeeCollectionFractionsInstruction<TProgram> {
+  const instructionType =
+    identifyFeeCollectionFractionsInstruction(instruction);
+  switch (instructionType) {
+    case FeeCollectionFractionsInstruction.CalculateFees: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionFractionsInstruction.CalculateFees,
+        ...parseCalculateFeesInstruction(instruction),
+      };
+    }
+    case FeeCollectionFractionsInstruction.Initialize: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionFractionsInstruction.Initialize,
+        ...parseInitializeInstruction(instruction),
+      };
+    }
+    case FeeCollectionFractionsInstruction.UpdateConfig: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionFractionsInstruction.UpdateConfig,
+        ...parseUpdateConfigInstruction(instruction),
+      };
+    }
+    default:
+      throw new Error(
+        `Unrecognized instruction type: ${instructionType as string}`,
+      );
+  }
+}

@@ -11,8 +11,8 @@ import {
   type Address,
   type SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM,
   type SolanaError,
-} from '@solana/kit';
-import { FEE_COLLECTION_TIME_BASED_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { FEE_COLLECTION_TIME_BASED_PROGRAM_ADDRESS } from "../programs";
 
 /** InvalidConfig: Invalid fee configuration */
 export const FEE_COLLECTION_TIME_BASED_ERROR__INVALID_CONFIG = 0x1770; // 6000
@@ -26,7 +26,7 @@ export type FeeCollectionTimeBasedError =
 let feeCollectionTimeBasedErrorMessages:
   | Record<FeeCollectionTimeBasedError, string>
   | undefined;
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   feeCollectionTimeBasedErrorMessages = {
     [FEE_COLLECTION_TIME_BASED_ERROR__INVALID_CONFIG]: `Invalid fee configuration`,
     [FEE_COLLECTION_TIME_BASED_ERROR__INVALID_PERIOD]: `Invalid time period`,
@@ -34,9 +34,9 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export function getFeeCollectionTimeBasedErrorMessage(
-  code: FeeCollectionTimeBasedError
+  code: FeeCollectionTimeBasedError,
 ): string {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     return (
       feeCollectionTimeBasedErrorMessages as Record<
         FeeCollectionTimeBasedError,
@@ -45,7 +45,7 @@ export function getFeeCollectionTimeBasedErrorMessage(
     )[code];
   }
 
-  return 'Error message not available in production bundles.';
+  return "Error message not available in production bundles.";
 }
 
 export function isFeeCollectionTimeBasedError<
@@ -55,13 +55,13 @@ export function isFeeCollectionTimeBasedError<
   transactionMessage: {
     instructions: Record<number, { programAddress: Address }>;
   },
-  code?: TProgramErrorCode
+  code?: TProgramErrorCode,
 ): error is SolanaError<typeof SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM> &
   Readonly<{ context: Readonly<{ code: TProgramErrorCode }> }> {
   return isProgramError<TProgramErrorCode>(
     error,
     transactionMessage,
     FEE_COLLECTION_TIME_BASED_PROGRAM_ADDRESS,
-    code
+    code,
   );
 }

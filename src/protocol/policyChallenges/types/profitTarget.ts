@@ -13,7 +13,7 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
   getAmountDecoder,
   getAmountEncoder,
@@ -23,7 +23,7 @@ import {
   type AmountArgs,
   type Percent,
   type PercentArgs,
-} from '.';
+} from ".";
 
 export type ProfitTarget = {
   target: Percent;
@@ -41,19 +41,19 @@ export type ProfitTargetArgs = {
 
 export function getProfitTargetEncoder(): FixedSizeEncoder<ProfitTargetArgs> {
   return getStructEncoder([
-    ['target', getPercentEncoder()],
-    ['targetAmount', getAmountEncoder()],
-    ['achieved', getPercentEncoder()],
-    ['achievedAmount', getAmountEncoder()],
+    ["target", getPercentEncoder()],
+    ["targetAmount", getAmountEncoder()],
+    ["achieved", getPercentEncoder()],
+    ["achievedAmount", getAmountEncoder()],
   ]);
 }
 
 export function getProfitTargetDecoder(): FixedSizeDecoder<ProfitTarget> {
   return getStructDecoder([
-    ['target', getPercentDecoder()],
-    ['targetAmount', getAmountDecoder()],
-    ['achieved', getPercentDecoder()],
-    ['achievedAmount', getAmountDecoder()],
+    ["target", getPercentDecoder()],
+    ["targetAmount", getAmountDecoder()],
+    ["achieved", getPercentDecoder()],
+    ["achievedAmount", getAmountDecoder()],
   ]);
 }
 

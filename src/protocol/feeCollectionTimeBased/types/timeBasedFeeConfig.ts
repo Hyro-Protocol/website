@@ -13,13 +13,13 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
   getTimeBasedFeeEntryDecoder,
   getTimeBasedFeeEntryEncoder,
   type TimeBasedFeeEntry,
   type TimeBasedFeeEntryArgs,
-} from '.';
+} from ".";
 
 /** Time-based fee configuration */
 export type TimeBasedFeeConfig = {
@@ -46,19 +46,19 @@ export type TimeBasedFeeConfigArgs = {
 
 export function getTimeBasedFeeConfigEncoder(): FixedSizeEncoder<TimeBasedFeeConfigArgs> {
   return getStructEncoder([
-    ['lp', getTimeBasedFeeEntryEncoder()],
-    ['manager', getTimeBasedFeeEntryEncoder()],
-    ['protocol', getTimeBasedFeeEntryEncoder()],
-    ['performance', getTimeBasedFeeEntryEncoder()],
+    ["lp", getTimeBasedFeeEntryEncoder()],
+    ["manager", getTimeBasedFeeEntryEncoder()],
+    ["protocol", getTimeBasedFeeEntryEncoder()],
+    ["performance", getTimeBasedFeeEntryEncoder()],
   ]);
 }
 
 export function getTimeBasedFeeConfigDecoder(): FixedSizeDecoder<TimeBasedFeeConfig> {
   return getStructDecoder([
-    ['lp', getTimeBasedFeeEntryDecoder()],
-    ['manager', getTimeBasedFeeEntryDecoder()],
-    ['protocol', getTimeBasedFeeEntryDecoder()],
-    ['performance', getTimeBasedFeeEntryDecoder()],
+    ["lp", getTimeBasedFeeEntryDecoder()],
+    ["manager", getTimeBasedFeeEntryDecoder()],
+    ["protocol", getTimeBasedFeeEntryDecoder()],
+    ["performance", getTimeBasedFeeEntryDecoder()],
   ]);
 }
 
@@ -68,6 +68,6 @@ export function getTimeBasedFeeConfigCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getTimeBasedFeeConfigEncoder(),
-    getTimeBasedFeeConfigDecoder()
+    getTimeBasedFeeConfigDecoder(),
   );
 }

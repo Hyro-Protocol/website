@@ -22,7 +22,7 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
   getPercentDecoder,
   getPercentEncoder,
@@ -36,7 +36,7 @@ import {
   type SmallScalarArgs,
   type StageType,
   type StageTypeArgs,
-} from '.';
+} from ".";
 
 export type ChallengeTemplateUpdateInsertDto = {
   stageSequence: number;
@@ -70,35 +70,35 @@ export type ChallengeTemplateUpdateInsertDtoArgs = {
 
 export function getChallengeTemplateUpdateInsertDtoEncoder(): FixedSizeEncoder<ChallengeTemplateUpdateInsertDtoArgs> {
   return getStructEncoder([
-    ['stageSequence', getU8Encoder()],
-    ['stageType', getStageTypeEncoder()],
-    ['startingDeposit', getU64Encoder()],
-    ['admin', getAddressEncoder()],
-    ['entranceCost', getU64Encoder()],
-    ['entranceTokenMint', getAddressEncoder()],
-    ['minimumTradingDays', getSmallScalarEncoder()],
-    ['dailyDrawdown', getPercentEncoder()],
-    ['maximumLoss', getPercentEncoder()],
-    ['profitTarget', getPercentEncoder()],
-    ['maxParticipants', getSmallScalarEncoder()],
-    ['isActive', getBooleanEncoder()],
+    ["stageSequence", getU8Encoder()],
+    ["stageType", getStageTypeEncoder()],
+    ["startingDeposit", getU64Encoder()],
+    ["admin", getAddressEncoder()],
+    ["entranceCost", getU64Encoder()],
+    ["entranceTokenMint", getAddressEncoder()],
+    ["minimumTradingDays", getSmallScalarEncoder()],
+    ["dailyDrawdown", getPercentEncoder()],
+    ["maximumLoss", getPercentEncoder()],
+    ["profitTarget", getPercentEncoder()],
+    ["maxParticipants", getSmallScalarEncoder()],
+    ["isActive", getBooleanEncoder()],
   ]);
 }
 
 export function getChallengeTemplateUpdateInsertDtoDecoder(): FixedSizeDecoder<ChallengeTemplateUpdateInsertDto> {
   return getStructDecoder([
-    ['stageSequence', getU8Decoder()],
-    ['stageType', getStageTypeDecoder()],
-    ['startingDeposit', getU64Decoder()],
-    ['admin', getAddressDecoder()],
-    ['entranceCost', getU64Decoder()],
-    ['entranceTokenMint', getAddressDecoder()],
-    ['minimumTradingDays', getSmallScalarDecoder()],
-    ['dailyDrawdown', getPercentDecoder()],
-    ['maximumLoss', getPercentDecoder()],
-    ['profitTarget', getPercentDecoder()],
-    ['maxParticipants', getSmallScalarDecoder()],
-    ['isActive', getBooleanDecoder()],
+    ["stageSequence", getU8Decoder()],
+    ["stageType", getStageTypeDecoder()],
+    ["startingDeposit", getU64Decoder()],
+    ["admin", getAddressDecoder()],
+    ["entranceCost", getU64Decoder()],
+    ["entranceTokenMint", getAddressDecoder()],
+    ["minimumTradingDays", getSmallScalarDecoder()],
+    ["dailyDrawdown", getPercentDecoder()],
+    ["maximumLoss", getPercentDecoder()],
+    ["profitTarget", getPercentDecoder()],
+    ["maxParticipants", getSmallScalarDecoder()],
+    ["isActive", getBooleanDecoder()],
   ]);
 }
 
@@ -108,6 +108,6 @@ export function getChallengeTemplateUpdateInsertDtoCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getChallengeTemplateUpdateInsertDtoEncoder(),
-    getChallengeTemplateUpdateInsertDtoDecoder()
+    getChallengeTemplateUpdateInsertDtoDecoder(),
   );
 }

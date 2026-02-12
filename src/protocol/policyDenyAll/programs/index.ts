@@ -6,4 +6,4 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './policyDenyAll';
+export * from "./policyDenyAll";

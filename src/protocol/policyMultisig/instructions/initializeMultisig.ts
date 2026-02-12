@@ -36,13 +36,13 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { POLICY_MULTISIG_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { POLICY_MULTISIG_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 
 export const INITIALIZE_MULTISIG_DISCRIMINATOR = new Uint8Array([
   220, 130, 117, 21, 27, 227, 78, 213,
@@ -50,7 +50,7 @@ export const INITIALIZE_MULTISIG_DISCRIMINATOR = new Uint8Array([
 
 export function getInitializeMultisigDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    INITIALIZE_MULTISIG_DISCRIMINATOR
+    INITIALIZE_MULTISIG_DISCRIMINATOR,
   );
 }
 
@@ -59,9 +59,8 @@ export type InitializeMultisigInstruction<
   TAccountVault extends string | AccountMeta<string> = string,
   TAccountPolicyAccount extends string | AccountMeta<string> = string,
   TAccountSigner extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -98,19 +97,19 @@ export type InitializeMultisigInstructionDataArgs = {
 export function getInitializeMultisigInstructionDataEncoder(): Encoder<InitializeMultisigInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['owners', getArrayEncoder(getAddressEncoder())],
-      ['threshold', getU64Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["owners", getArrayEncoder(getAddressEncoder())],
+      ["threshold", getU64Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: INITIALIZE_MULTISIG_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: INITIALIZE_MULTISIG_DISCRIMINATOR }),
   );
 }
 
 export function getInitializeMultisigInstructionDataDecoder(): Decoder<InitializeMultisigInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['owners', getArrayDecoder(getAddressDecoder())],
-    ['threshold', getU64Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["owners", getArrayDecoder(getAddressDecoder())],
+    ["threshold", getU64Decoder()],
   ]);
 }
 
@@ -120,7 +119,7 @@ export function getInitializeMultisigInstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getInitializeMultisigInstructionDataEncoder(),
-    getInitializeMultisigInstructionDataDecoder()
+    getInitializeMultisigInstructionDataDecoder(),
   );
 }
 
@@ -134,8 +133,8 @@ export type InitializeMultisigAsyncInput<
   policyAccount?: Address<TAccountPolicyAccount>;
   signer: TransactionSigner<TAccountSigner>;
   systemProgram?: Address<TAccountSystemProgram>;
-  owners: InitializeMultisigInstructionDataArgs['owners'];
-  threshold: InitializeMultisigInstructionDataArgs['threshold'];
+  owners: InitializeMultisigInstructionDataArgs["owners"];
+  threshold: InitializeMultisigInstructionDataArgs["threshold"];
 };
 
 export async function getInitializeMultisigInstructionAsync<
@@ -151,7 +150,7 @@ export async function getInitializeMultisigInstructionAsync<
     TAccountSigner,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   InitializeMultisigInstruction<
     TProgramAddress,
@@ -189,10 +188,10 @@ export async function getInitializeMultisigInstructionAsync<
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -201,7 +200,7 @@ export async function getInitializeMultisigInstructionAsync<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getInitializeMultisigInstructionDataEncoder().encode(
-      args as InitializeMultisigInstructionDataArgs
+      args as InitializeMultisigInstructionDataArgs,
     ),
     programAddress,
   } as InitializeMultisigInstruction<
@@ -223,8 +222,8 @@ export type InitializeMultisigInput<
   policyAccount: Address<TAccountPolicyAccount>;
   signer: TransactionSigner<TAccountSigner>;
   systemProgram?: Address<TAccountSystemProgram>;
-  owners: InitializeMultisigInstructionDataArgs['owners'];
-  threshold: InitializeMultisigInstructionDataArgs['threshold'];
+  owners: InitializeMultisigInstructionDataArgs["owners"];
+  threshold: InitializeMultisigInstructionDataArgs["threshold"];
 };
 
 export function getInitializeMultisigInstruction<
@@ -240,7 +239,7 @@ export function getInitializeMultisigInstruction<
     TAccountSigner,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): InitializeMultisigInstruction<
   TProgramAddress,
   TAccountVault,
@@ -270,10 +269,10 @@ export function getInitializeMultisigInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -282,7 +281,7 @@ export function getInitializeMultisigInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getInitializeMultisigInstructionDataEncoder().encode(
-      args as InitializeMultisigInstructionDataArgs
+      args as InitializeMultisigInstructionDataArgs,
     ),
     programAddress,
   } as InitializeMultisigInstruction<
@@ -314,11 +313,11 @@ export function parseInitializeMultisigInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedInitializeMultisigInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 4) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -335,7 +334,7 @@ export function parseInitializeMultisigInstruction<
       systemProgram: getNextAccount(),
     },
     data: getInitializeMultisigInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

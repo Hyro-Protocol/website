@@ -6,11 +6,11 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './chargeFeesCpi';
-export * from './claimFees';
-export * from './getTotalUnclaimedFees';
-export * from './getUnclaimedFees';
-export * from './initialize';
-export * from './setFeeCalcProgram';
-export * from './updateHighWaterMark';
-export * from './updateRecipients';
+export * from "./chargeFeesCpi";
+export * from "./claimFees";
+export * from "./getTotalUnclaimedFees";
+export * from "./getUnclaimedFees";
+export * from "./initialize";
+export * from "./setFeeCalcProgram";
+export * from "./updateHighWaterMark";
+export * from "./updateRecipients";

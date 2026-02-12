@@ -28,9 +28,9 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const CLAIM_PAYOUT_DISCRIMINATOR = new Uint8Array([
   127, 240, 132, 62, 227, 198, 146, 133,
@@ -38,7 +38,7 @@ export const CLAIM_PAYOUT_DISCRIMINATOR = new Uint8Array([
 
 export function getClaimPayoutDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    CLAIM_PAYOUT_DISCRIMINATOR
+    CLAIM_PAYOUT_DISCRIMINATOR,
   );
 }
 
@@ -68,14 +68,14 @@ export type ClaimPayoutInstructionDataArgs = {};
 
 export function getClaimPayoutInstructionDataEncoder(): FixedSizeEncoder<ClaimPayoutInstructionDataArgs> {
   return transformEncoder(
-    getStructEncoder([['discriminator', fixEncoderSize(getBytesEncoder(), 8)]]),
-    (value) => ({ ...value, discriminator: CLAIM_PAYOUT_DISCRIMINATOR })
+    getStructEncoder([["discriminator", fixEncoderSize(getBytesEncoder(), 8)]]),
+    (value) => ({ ...value, discriminator: CLAIM_PAYOUT_DISCRIMINATOR }),
   );
 }
 
 export function getClaimPayoutInstructionDataDecoder(): FixedSizeDecoder<ClaimPayoutInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
   ]);
 }
 
@@ -85,7 +85,7 @@ export function getClaimPayoutInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getClaimPayoutInstructionDataEncoder(),
-    getClaimPayoutInstructionDataDecoder()
+    getClaimPayoutInstructionDataDecoder(),
   );
 }
 
@@ -103,7 +103,7 @@ export function getClaimPayoutInstruction<
   TProgramAddress extends Address = typeof POLICY_CHALLENGES_PROGRAM_ADDRESS,
 >(
   input: ClaimPayoutInput<TAccountChallengeAccount, TAccountParticipant>,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): ClaimPayoutInstruction<
   TProgramAddress,
   TAccountChallengeAccount,
@@ -126,7 +126,7 @@ export function getClaimPayoutInstruction<
     ResolvedAccount
   >;
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.challengeAccount),
@@ -159,11 +159,11 @@ export function parseClaimPayoutInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedClaimPayoutInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 2) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

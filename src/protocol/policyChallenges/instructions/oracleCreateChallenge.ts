@@ -38,19 +38,19 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from "../programs";
 import {
   expectSome,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 import {
   getChallengeInsertDtoDecoder,
   getChallengeInsertDtoEncoder,
   type ChallengeInsertDto,
   type ChallengeInsertDtoArgs,
-} from '../types';
+} from "../types";
 
 export const ORACLE_CREATE_CHALLENGE_DISCRIMINATOR = new Uint8Array([
   160, 221, 250, 59, 178, 9, 237, 102,
@@ -58,20 +58,18 @@ export const ORACLE_CREATE_CHALLENGE_DISCRIMINATOR = new Uint8Array([
 
 export function getOracleCreateChallengeDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    ORACLE_CREATE_CHALLENGE_DISCRIMINATOR
+    ORACLE_CREATE_CHALLENGE_DISCRIMINATOR,
   );
 }
 
 export type OracleCreateChallengeInstruction<
   TProgram extends string = typeof POLICY_CHALLENGES_PROGRAM_ADDRESS,
-  TAccountChallengeTemplateAccount extends
-    | string
-    | AccountMeta<string> = string,
+  TAccountChallengeTemplateAccount extends string | AccountMeta<string> =
+    string,
   TAccountChallengeAccount extends string | AccountMeta<string> = string,
   TAccountOracle extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -110,24 +108,24 @@ export type OracleCreateChallengeInstructionDataArgs = {
 export function getOracleCreateChallengeInstructionDataEncoder(): Encoder<OracleCreateChallengeInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['challengeId', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
-      ['user', getAddressEncoder()],
-      ['dto', getChallengeInsertDtoEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["challengeId", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+      ["user", getAddressEncoder()],
+      ["dto", getChallengeInsertDtoEncoder()],
     ]),
     (value) => ({
       ...value,
       discriminator: ORACLE_CREATE_CHALLENGE_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getOracleCreateChallengeInstructionDataDecoder(): Decoder<OracleCreateChallengeInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['challengeId', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
-    ['user', getAddressDecoder()],
-    ['dto', getChallengeInsertDtoDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["challengeId", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+    ["user", getAddressDecoder()],
+    ["dto", getChallengeInsertDtoDecoder()],
   ]);
 }
 
@@ -137,7 +135,7 @@ export function getOracleCreateChallengeInstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getOracleCreateChallengeInstructionDataEncoder(),
-    getOracleCreateChallengeInstructionDataDecoder()
+    getOracleCreateChallengeInstructionDataDecoder(),
   );
 }
 
@@ -151,9 +149,9 @@ export type OracleCreateChallengeAsyncInput<
   challengeAccount?: Address<TAccountChallengeAccount>;
   oracle: TransactionSigner<TAccountOracle>;
   systemProgram?: Address<TAccountSystemProgram>;
-  challengeId: OracleCreateChallengeInstructionDataArgs['challengeId'];
-  user: OracleCreateChallengeInstructionDataArgs['user'];
-  dto: OracleCreateChallengeInstructionDataArgs['dto'];
+  challengeId: OracleCreateChallengeInstructionDataArgs["challengeId"];
+  user: OracleCreateChallengeInstructionDataArgs["user"];
+  dto: OracleCreateChallengeInstructionDataArgs["dto"];
 };
 
 export async function getOracleCreateChallengeInstructionAsync<
@@ -169,7 +167,7 @@ export async function getOracleCreateChallengeInstructionAsync<
     TAccountOracle,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   OracleCreateChallengeInstruction<
     TProgramAddress,
@@ -216,10 +214,10 @@ export async function getOracleCreateChallengeInstructionAsync<
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.challengeTemplateAccount),
@@ -228,7 +226,7 @@ export async function getOracleCreateChallengeInstructionAsync<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getOracleCreateChallengeInstructionDataEncoder().encode(
-      args as OracleCreateChallengeInstructionDataArgs
+      args as OracleCreateChallengeInstructionDataArgs,
     ),
     programAddress,
   } as OracleCreateChallengeInstruction<
@@ -250,9 +248,9 @@ export type OracleCreateChallengeInput<
   challengeAccount: Address<TAccountChallengeAccount>;
   oracle: TransactionSigner<TAccountOracle>;
   systemProgram?: Address<TAccountSystemProgram>;
-  challengeId: OracleCreateChallengeInstructionDataArgs['challengeId'];
-  user: OracleCreateChallengeInstructionDataArgs['user'];
-  dto: OracleCreateChallengeInstructionDataArgs['dto'];
+  challengeId: OracleCreateChallengeInstructionDataArgs["challengeId"];
+  user: OracleCreateChallengeInstructionDataArgs["user"];
+  dto: OracleCreateChallengeInstructionDataArgs["dto"];
 };
 
 export function getOracleCreateChallengeInstruction<
@@ -268,7 +266,7 @@ export function getOracleCreateChallengeInstruction<
     TAccountOracle,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): OracleCreateChallengeInstruction<
   TProgramAddress,
   TAccountChallengeTemplateAccount,
@@ -304,10 +302,10 @@ export function getOracleCreateChallengeInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.challengeTemplateAccount),
@@ -316,7 +314,7 @@ export function getOracleCreateChallengeInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getOracleCreateChallengeInstructionDataEncoder().encode(
-      args as OracleCreateChallengeInstructionDataArgs
+      args as OracleCreateChallengeInstructionDataArgs,
     ),
     programAddress,
   } as OracleCreateChallengeInstruction<
@@ -348,11 +346,11 @@ export function parseOracleCreateChallengeInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedOracleCreateChallengeInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 4) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -369,7 +367,7 @@ export function parseOracleCreateChallengeInstruction<
       systemProgram: getNextAccount(),
     },
     data: getOracleCreateChallengeInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

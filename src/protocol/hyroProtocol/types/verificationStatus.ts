@@ -13,7 +13,7 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 
 export enum VerificationStatus {
   Pending,
@@ -38,6 +38,6 @@ export function getVerificationStatusCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getVerificationStatusEncoder(),
-    getVerificationStatusDecoder()
+    getVerificationStatusDecoder(),
   );
 }

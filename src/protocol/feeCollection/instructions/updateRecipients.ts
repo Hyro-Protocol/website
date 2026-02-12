@@ -31,19 +31,19 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { FEE_COLLECTION_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { FEE_COLLECTION_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 import {
   getFeeRecipientsDecoder,
   getFeeRecipientsEncoder,
   type FeeRecipients,
   type FeeRecipientsArgs,
-} from '../types';
+} from "../types";
 
 export const UPDATE_RECIPIENTS_DISCRIMINATOR = new Uint8Array([
   92, 134, 20, 47, 48, 34, 175, 112,
@@ -51,7 +51,7 @@ export const UPDATE_RECIPIENTS_DISCRIMINATOR = new Uint8Array([
 
 export function getUpdateRecipientsDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    UPDATE_RECIPIENTS_DISCRIMINATOR
+    UPDATE_RECIPIENTS_DISCRIMINATOR,
   );
 }
 
@@ -91,17 +91,17 @@ export type UpdateRecipientsInstructionDataArgs = {
 export function getUpdateRecipientsInstructionDataEncoder(): FixedSizeEncoder<UpdateRecipientsInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['recipients', getFeeRecipientsEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["recipients", getFeeRecipientsEncoder()],
     ]),
-    (value) => ({ ...value, discriminator: UPDATE_RECIPIENTS_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: UPDATE_RECIPIENTS_DISCRIMINATOR }),
   );
 }
 
 export function getUpdateRecipientsInstructionDataDecoder(): FixedSizeDecoder<UpdateRecipientsInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['recipients', getFeeRecipientsDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["recipients", getFeeRecipientsDecoder()],
   ]);
 }
 
@@ -111,7 +111,7 @@ export function getUpdateRecipientsInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getUpdateRecipientsInstructionDataEncoder(),
-    getUpdateRecipientsInstructionDataDecoder()
+    getUpdateRecipientsInstructionDataDecoder(),
   );
 }
 
@@ -124,7 +124,7 @@ export type UpdateRecipientsAsyncInput<
   vaultFees?: Address<TAccountVaultFees>;
   /** The authority that can update recipients (typically vault owner/admin) */
   authority: TransactionSigner<TAccountAuthority>;
-  recipients: UpdateRecipientsInstructionDataArgs['recipients'];
+  recipients: UpdateRecipientsInstructionDataArgs["recipients"];
 };
 
 export async function getUpdateRecipientsInstructionAsync<
@@ -138,7 +138,7 @@ export async function getUpdateRecipientsInstructionAsync<
     TAccountVaultFees,
     TAccountAuthority
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   UpdateRecipientsInstruction<
     TProgramAddress,
@@ -171,14 +171,14 @@ export async function getUpdateRecipientsInstructionAsync<
       programAddress,
       seeds: [
         getBytesEncoder().encode(
-          new Uint8Array([118, 97, 117, 108, 116, 95, 102, 101, 101, 115])
+          new Uint8Array([118, 97, 117, 108, 116, 95, 102, 101, 101, 115]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
       ],
     });
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -186,7 +186,7 @@ export async function getUpdateRecipientsInstructionAsync<
       getAccountMeta(accounts.authority),
     ],
     data: getUpdateRecipientsInstructionDataEncoder().encode(
-      args as UpdateRecipientsInstructionDataArgs
+      args as UpdateRecipientsInstructionDataArgs,
     ),
     programAddress,
   } as UpdateRecipientsInstruction<
@@ -206,7 +206,7 @@ export type UpdateRecipientsInput<
   vaultFees: Address<TAccountVaultFees>;
   /** The authority that can update recipients (typically vault owner/admin) */
   authority: TransactionSigner<TAccountAuthority>;
-  recipients: UpdateRecipientsInstructionDataArgs['recipients'];
+  recipients: UpdateRecipientsInstructionDataArgs["recipients"];
 };
 
 export function getUpdateRecipientsInstruction<
@@ -220,7 +220,7 @@ export function getUpdateRecipientsInstruction<
     TAccountVaultFees,
     TAccountAuthority
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): UpdateRecipientsInstruction<
   TProgramAddress,
   TAccountVault,
@@ -245,7 +245,7 @@ export function getUpdateRecipientsInstruction<
   // Original args.
   const args = { ...input };
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -253,7 +253,7 @@ export function getUpdateRecipientsInstruction<
       getAccountMeta(accounts.authority),
     ],
     data: getUpdateRecipientsInstructionDataEncoder().encode(
-      args as UpdateRecipientsInstructionDataArgs
+      args as UpdateRecipientsInstructionDataArgs,
     ),
     programAddress,
   } as UpdateRecipientsInstruction<
@@ -284,11 +284,11 @@ export function parseUpdateRecipientsInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedUpdateRecipientsInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 3) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

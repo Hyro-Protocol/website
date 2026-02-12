@@ -13,7 +13,7 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 
 export enum FeeCollectionFrequency {
   Monthly,
@@ -38,6 +38,6 @@ export function getFeeCollectionFrequencyCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getFeeCollectionFrequencyEncoder(),
-    getFeeCollectionFrequencyDecoder()
+    getFeeCollectionFrequencyDecoder(),
   );
 }

@@ -11,8 +11,8 @@ import {
   type Address,
   type SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM,
   type SolanaError,
-} from '@solana/kit';
-import { POLICY_LIMIT_TRANSFER_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { POLICY_LIMIT_TRANSFER_PROGRAM_ADDRESS } from "../programs";
 
 /** InvalidData: Invalid data. */
 export const POLICY_LIMIT_TRANSFER_ERROR__INVALID_DATA = 0x1770; // 6000
@@ -35,7 +35,7 @@ export type PolicyLimitTransferError =
 let policyLimitTransferErrorMessages:
   | Record<PolicyLimitTransferError, string>
   | undefined;
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   policyLimitTransferErrorMessages = {
     [POLICY_LIMIT_TRANSFER_ERROR__AMOUNT_TOO_HIGH]: `Amount too high.`,
     [POLICY_LIMIT_TRANSFER_ERROR__AMOUNT_TOO_LOW]: `Amount too low.`,
@@ -46,9 +46,9 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export function getPolicyLimitTransferErrorMessage(
-  code: PolicyLimitTransferError
+  code: PolicyLimitTransferError,
 ): string {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     return (
       policyLimitTransferErrorMessages as Record<
         PolicyLimitTransferError,
@@ -57,7 +57,7 @@ export function getPolicyLimitTransferErrorMessage(
     )[code];
   }
 
-  return 'Error message not available in production bundles.';
+  return "Error message not available in production bundles.";
 }
 
 export function isPolicyLimitTransferError<
@@ -67,13 +67,13 @@ export function isPolicyLimitTransferError<
   transactionMessage: {
     instructions: Record<number, { programAddress: Address }>;
   },
-  code?: TProgramErrorCode
+  code?: TProgramErrorCode,
 ): error is SolanaError<typeof SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM> &
   Readonly<{ context: Readonly<{ code: TProgramErrorCode }> }> {
   return isProgramError<TProgramErrorCode>(
     error,
     transactionMessage,
     POLICY_LIMIT_TRANSFER_PROGRAM_ADDRESS,
-    code
+    code,
   );
 }

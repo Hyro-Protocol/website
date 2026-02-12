@@ -6,8 +6,8 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './allInOneConfig';
-export * from './feeOperation';
-export * from './fractionConfig';
-export * from './timeBasedConfig';
-export * from './timeBasedEntry';
+export * from "./allInOneConfig";
+export * from "./feeOperation";
+export * from "./fractionConfig";
+export * from "./timeBasedConfig";
+export * from "./timeBasedEntry";

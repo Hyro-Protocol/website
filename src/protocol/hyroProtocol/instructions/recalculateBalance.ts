@@ -30,13 +30,13 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 
 export const RECALCULATE_BALANCE_DISCRIMINATOR = new Uint8Array([
   119, 21, 228, 154, 19, 193, 246, 8,
@@ -44,7 +44,7 @@ export const RECALCULATE_BALANCE_DISCRIMINATOR = new Uint8Array([
 
 export function getRecalculateBalanceDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    RECALCULATE_BALANCE_DISCRIMINATOR
+    RECALCULATE_BALANCE_DISCRIMINATOR,
   );
 }
 
@@ -84,14 +84,14 @@ export type RecalculateBalanceInstructionDataArgs = {};
 
 export function getRecalculateBalanceInstructionDataEncoder(): FixedSizeEncoder<RecalculateBalanceInstructionDataArgs> {
   return transformEncoder(
-    getStructEncoder([['discriminator', fixEncoderSize(getBytesEncoder(), 8)]]),
-    (value) => ({ ...value, discriminator: RECALCULATE_BALANCE_DISCRIMINATOR })
+    getStructEncoder([["discriminator", fixEncoderSize(getBytesEncoder(), 8)]]),
+    (value) => ({ ...value, discriminator: RECALCULATE_BALANCE_DISCRIMINATOR }),
   );
 }
 
 export function getRecalculateBalanceInstructionDataDecoder(): FixedSizeDecoder<RecalculateBalanceInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
   ]);
 }
 
@@ -101,7 +101,7 @@ export function getRecalculateBalanceInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getRecalculateBalanceInstructionDataEncoder(),
-    getRecalculateBalanceInstructionDataDecoder()
+    getRecalculateBalanceInstructionDataDecoder(),
   );
 }
 
@@ -130,7 +130,7 @@ export async function getRecalculateBalanceInstructionAsync<
     TAccountVault,
     TAccountSigner
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   RecalculateBalanceInstruction<
     TProgramAddress,
@@ -168,17 +168,17 @@ export async function getRecalculateBalanceInstructionAsync<
           new Uint8Array([
             118, 97, 117, 108, 116, 95, 116, 111, 107, 101, 110, 95, 97, 99, 99,
             111, 117, 110, 116,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
         getAddressEncoder().encode(
-          expectAddress(accounts.underlyingMint.value)
+          expectAddress(accounts.underlyingMint.value),
         ),
       ],
     });
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vaultTokenAccount),
@@ -222,7 +222,7 @@ export function getRecalculateBalanceInstruction<
     TAccountVault,
     TAccountSigner
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): RecalculateBalanceInstruction<
   TProgramAddress,
   TAccountVaultTokenAccount,
@@ -249,7 +249,7 @@ export function getRecalculateBalanceInstruction<
     ResolvedAccount
   >;
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vaultTokenAccount),
@@ -288,11 +288,11 @@ export function parseRecalculateBalanceInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedRecalculateBalanceInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 4) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -309,7 +309,7 @@ export function parseRecalculateBalanceInstruction<
       signer: getNextAccount(),
     },
     data: getRecalculateBalanceInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

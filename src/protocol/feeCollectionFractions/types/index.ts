@@ -6,5 +6,5 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './feeOperation';
-export * from './fractionFeeConfig';
+export * from "./feeOperation";
+export * from "./fractionFeeConfig";

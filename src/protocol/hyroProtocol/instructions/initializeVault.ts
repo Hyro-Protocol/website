@@ -38,14 +38,14 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   expectSome,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 
 export const INITIALIZE_VAULT_DISCRIMINATOR = new Uint8Array([
   48, 191, 163, 44, 71, 129, 63, 164,
@@ -53,7 +53,7 @@ export const INITIALIZE_VAULT_DISCRIMINATOR = new Uint8Array([
 
 export function getInitializeVaultDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    INITIALIZE_VAULT_DISCRIMINATOR
+    INITIALIZE_VAULT_DISCRIMINATOR,
   );
 }
 
@@ -62,20 +62,17 @@ export type InitializeVaultInstruction<
   TAccountVault extends string | AccountMeta<string> = string,
   TAccountAuthority extends string | AccountMeta<string> = string,
   TAccountSigner extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TAccountShareSignerPda extends string | AccountMeta<string> = string,
   TAccountShareMint extends string | AccountMeta<string> = string,
   TAccountVaultTokenAccount extends string | AccountMeta<string> = string,
   TAccountAuthorityTokenAccount extends string | AccountMeta<string> = string,
   TAccountUnderlyingMint extends string | AccountMeta<string> = string,
-  TAccountTokenProgram extends
-    | string
-    | AccountMeta<string> = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-  TAccountRent extends
-    | string
-    | AccountMeta<string> = 'SysvarRent111111111111111111111111111111111',
+  TAccountTokenProgram extends string | AccountMeta<string> =
+    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+  TAccountRent extends string | AccountMeta<string> =
+    "SysvarRent111111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -139,25 +136,25 @@ export type InitializeVaultInstructionDataArgs = {
 export function getInitializeVaultInstructionDataEncoder(): Encoder<InitializeVaultInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['seed', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
-      ['policyProgram', getAddressEncoder()],
-      ['name', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
-      ['description', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
-      ['feeCollectionProgram', getAddressEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["seed", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+      ["policyProgram", getAddressEncoder()],
+      ["name", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+      ["description", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+      ["feeCollectionProgram", getAddressEncoder()],
     ]),
-    (value) => ({ ...value, discriminator: INITIALIZE_VAULT_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: INITIALIZE_VAULT_DISCRIMINATOR }),
   );
 }
 
 export function getInitializeVaultInstructionDataDecoder(): Decoder<InitializeVaultInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['seed', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
-    ['policyProgram', getAddressDecoder()],
-    ['name', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
-    ['description', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
-    ['feeCollectionProgram', getAddressDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["seed", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+    ["policyProgram", getAddressDecoder()],
+    ["name", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+    ["description", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+    ["feeCollectionProgram", getAddressDecoder()],
   ]);
 }
 
@@ -167,7 +164,7 @@ export function getInitializeVaultInstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getInitializeVaultInstructionDataEncoder(),
-    getInitializeVaultInstructionDataDecoder()
+    getInitializeVaultInstructionDataDecoder(),
   );
 }
 
@@ -195,11 +192,11 @@ export type InitializeVaultAsyncInput<
   underlyingMint: Address<TAccountUnderlyingMint>;
   tokenProgram?: Address<TAccountTokenProgram>;
   rent?: Address<TAccountRent>;
-  seed: InitializeVaultInstructionDataArgs['seed'];
-  policyProgram: InitializeVaultInstructionDataArgs['policyProgram'];
-  name: InitializeVaultInstructionDataArgs['name'];
-  description: InitializeVaultInstructionDataArgs['description'];
-  feeCollectionProgram: InitializeVaultInstructionDataArgs['feeCollectionProgram'];
+  seed: InitializeVaultInstructionDataArgs["seed"];
+  policyProgram: InitializeVaultInstructionDataArgs["policyProgram"];
+  name: InitializeVaultInstructionDataArgs["name"];
+  description: InitializeVaultInstructionDataArgs["description"];
+  feeCollectionProgram: InitializeVaultInstructionDataArgs["feeCollectionProgram"];
 };
 
 export async function getInitializeVaultInstructionAsync<
@@ -229,7 +226,7 @@ export async function getInitializeVaultInstructionAsync<
     TAccountTokenProgram,
     TAccountRent
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   InitializeVaultInstruction<
     TProgramAddress,
@@ -293,7 +290,7 @@ export async function getInitializeVaultInstructionAsync<
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
   if (!accounts.shareSignerPda.value) {
     accounts.shareSignerPda.value = await getProgramDerivedAddress({
@@ -303,7 +300,7 @@ export async function getInitializeVaultInstructionAsync<
           new Uint8Array([
             118, 97, 117, 108, 116, 95, 115, 104, 97, 114, 101, 95, 115, 105,
             103, 110, 101, 114,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
       ],
@@ -317,7 +314,7 @@ export async function getInitializeVaultInstructionAsync<
           new Uint8Array([
             118, 97, 117, 108, 116, 95, 115, 104, 97, 114, 101, 95, 109, 105,
             110, 116,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
       ],
@@ -331,11 +328,11 @@ export async function getInitializeVaultInstructionAsync<
           new Uint8Array([
             118, 97, 117, 108, 116, 95, 116, 111, 107, 101, 110, 95, 97, 99, 99,
             111, 117, 110, 116,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
         getAddressEncoder().encode(
-          expectAddress(accounts.underlyingMint.value)
+          expectAddress(accounts.underlyingMint.value),
         ),
       ],
     });
@@ -348,25 +345,25 @@ export async function getInitializeVaultInstructionAsync<
           new Uint8Array([
             97, 117, 116, 104, 111, 114, 105, 116, 121, 95, 116, 111, 107, 101,
             110, 95, 97, 99, 99, 111, 117, 110, 116,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.authority.value)),
         getAddressEncoder().encode(
-          expectAddress(accounts.underlyingMint.value)
+          expectAddress(accounts.underlyingMint.value),
         ),
       ],
     });
   }
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
   }
   if (!accounts.rent.value) {
     accounts.rent.value =
-      'SysvarRent111111111111111111111111111111111' as Address<'SysvarRent111111111111111111111111111111111'>;
+      "SysvarRent111111111111111111111111111111111" as Address<"SysvarRent111111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -382,7 +379,7 @@ export async function getInitializeVaultInstructionAsync<
       getAccountMeta(accounts.rent),
     ],
     data: getInitializeVaultInstructionDataEncoder().encode(
-      args as InitializeVaultInstructionDataArgs
+      args as InitializeVaultInstructionDataArgs,
     ),
     programAddress,
   } as InitializeVaultInstruction<
@@ -425,11 +422,11 @@ export type InitializeVaultInput<
   underlyingMint: Address<TAccountUnderlyingMint>;
   tokenProgram?: Address<TAccountTokenProgram>;
   rent?: Address<TAccountRent>;
-  seed: InitializeVaultInstructionDataArgs['seed'];
-  policyProgram: InitializeVaultInstructionDataArgs['policyProgram'];
-  name: InitializeVaultInstructionDataArgs['name'];
-  description: InitializeVaultInstructionDataArgs['description'];
-  feeCollectionProgram: InitializeVaultInstructionDataArgs['feeCollectionProgram'];
+  seed: InitializeVaultInstructionDataArgs["seed"];
+  policyProgram: InitializeVaultInstructionDataArgs["policyProgram"];
+  name: InitializeVaultInstructionDataArgs["name"];
+  description: InitializeVaultInstructionDataArgs["description"];
+  feeCollectionProgram: InitializeVaultInstructionDataArgs["feeCollectionProgram"];
 };
 
 export function getInitializeVaultInstruction<
@@ -459,7 +456,7 @@ export function getInitializeVaultInstruction<
     TAccountTokenProgram,
     TAccountRent
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): InitializeVaultInstruction<
   TProgramAddress,
   TAccountVault,
@@ -509,18 +506,18 @@ export function getInitializeVaultInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
   }
   if (!accounts.rent.value) {
     accounts.rent.value =
-      'SysvarRent111111111111111111111111111111111' as Address<'SysvarRent111111111111111111111111111111111'>;
+      "SysvarRent111111111111111111111111111111111" as Address<"SysvarRent111111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -536,7 +533,7 @@ export function getInitializeVaultInstruction<
       getAccountMeta(accounts.rent),
     ],
     data: getInitializeVaultInstructionDataEncoder().encode(
-      args as InitializeVaultInstructionDataArgs
+      args as InitializeVaultInstructionDataArgs,
     ),
     programAddress,
   } as InitializeVaultInstruction<
@@ -582,11 +579,11 @@ export function parseInitializeVaultInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedInitializeVaultInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 11) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

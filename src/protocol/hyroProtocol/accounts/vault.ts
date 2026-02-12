@@ -47,13 +47,13 @@ import {
   type Option,
   type OptionOrNullable,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
   getManagerFeeStructureDecoder,
   getManagerFeeStructureEncoder,
   type ManagerFeeStructure,
   type ManagerFeeStructureArgs,
-} from '../types';
+} from "../types";
 
 export const VAULT_DISCRIMINATOR = new Uint8Array([
   211, 8, 232, 43, 2, 152, 117, 119,
@@ -112,54 +112,54 @@ export type VaultArgs = {
 export function getVaultEncoder(): Encoder<VaultArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['policyProgram', getAddressEncoder()],
-      ['feeCollectionProgram', getAddressEncoder()],
-      ['seed', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
-      ['authority', getAddressEncoder()],
-      ['shareMint', getAddressEncoder()],
-      ['underlyingMint', getAddressEncoder()],
-      ['manager', getOptionEncoder(getAddressEncoder())],
-      ['parentVault', getOptionEncoder(getAddressEncoder())],
-      ['allocation', getU64Encoder()],
-      ['onchainBalance', getU64Encoder()],
-      ['offchainBalance', getU64Encoder()],
-      ['totalBalance', getI64Encoder()],
-      ['obtainedFees', getU64Encoder()],
-      ['lastBalanceUpdate', getU64Encoder()],
-      ['highWaterMark', getU64Encoder()],
-      ['totalFeesPaid', getU64Encoder()],
-      ['managerFees', getOptionEncoder(getManagerFeeStructureEncoder())],
-      ['createdAt', getU64Encoder()],
-      ['lastFeeCollection', getU64Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["policyProgram", getAddressEncoder()],
+      ["feeCollectionProgram", getAddressEncoder()],
+      ["seed", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+      ["authority", getAddressEncoder()],
+      ["shareMint", getAddressEncoder()],
+      ["underlyingMint", getAddressEncoder()],
+      ["manager", getOptionEncoder(getAddressEncoder())],
+      ["parentVault", getOptionEncoder(getAddressEncoder())],
+      ["allocation", getU64Encoder()],
+      ["onchainBalance", getU64Encoder()],
+      ["offchainBalance", getU64Encoder()],
+      ["totalBalance", getI64Encoder()],
+      ["obtainedFees", getU64Encoder()],
+      ["lastBalanceUpdate", getU64Encoder()],
+      ["highWaterMark", getU64Encoder()],
+      ["totalFeesPaid", getU64Encoder()],
+      ["managerFees", getOptionEncoder(getManagerFeeStructureEncoder())],
+      ["createdAt", getU64Encoder()],
+      ["lastFeeCollection", getU64Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: VAULT_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: VAULT_DISCRIMINATOR }),
   );
 }
 
 /** Gets the decoder for {@link Vault} account data. */
 export function getVaultDecoder(): Decoder<Vault> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['policyProgram', getAddressDecoder()],
-    ['feeCollectionProgram', getAddressDecoder()],
-    ['seed', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
-    ['authority', getAddressDecoder()],
-    ['shareMint', getAddressDecoder()],
-    ['underlyingMint', getAddressDecoder()],
-    ['manager', getOptionDecoder(getAddressDecoder())],
-    ['parentVault', getOptionDecoder(getAddressDecoder())],
-    ['allocation', getU64Decoder()],
-    ['onchainBalance', getU64Decoder()],
-    ['offchainBalance', getU64Decoder()],
-    ['totalBalance', getI64Decoder()],
-    ['obtainedFees', getU64Decoder()],
-    ['lastBalanceUpdate', getU64Decoder()],
-    ['highWaterMark', getU64Decoder()],
-    ['totalFeesPaid', getU64Decoder()],
-    ['managerFees', getOptionDecoder(getManagerFeeStructureDecoder())],
-    ['createdAt', getU64Decoder()],
-    ['lastFeeCollection', getU64Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["policyProgram", getAddressDecoder()],
+    ["feeCollectionProgram", getAddressDecoder()],
+    ["seed", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+    ["authority", getAddressDecoder()],
+    ["shareMint", getAddressDecoder()],
+    ["underlyingMint", getAddressDecoder()],
+    ["manager", getOptionDecoder(getAddressDecoder())],
+    ["parentVault", getOptionDecoder(getAddressDecoder())],
+    ["allocation", getU64Decoder()],
+    ["onchainBalance", getU64Decoder()],
+    ["offchainBalance", getU64Decoder()],
+    ["totalBalance", getI64Decoder()],
+    ["obtainedFees", getU64Decoder()],
+    ["lastBalanceUpdate", getU64Decoder()],
+    ["highWaterMark", getU64Decoder()],
+    ["totalFeesPaid", getU64Decoder()],
+    ["managerFees", getOptionDecoder(getManagerFeeStructureDecoder())],
+    ["createdAt", getU64Decoder()],
+    ["lastFeeCollection", getU64Decoder()],
   ]);
 }
 
@@ -169,24 +169,24 @@ export function getVaultCodec(): Codec<VaultArgs, Vault> {
 }
 
 export function decodeVault<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress>,
 ): Account<Vault, TAddress>;
 export function decodeVault<TAddress extends string = string>(
-  encodedAccount: MaybeEncodedAccount<TAddress>
+  encodedAccount: MaybeEncodedAccount<TAddress>,
 ): MaybeAccount<Vault, TAddress>;
 export function decodeVault<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>,
 ): Account<Vault, TAddress> | MaybeAccount<Vault, TAddress> {
   return decodeAccount(
     encodedAccount as MaybeEncodedAccount<TAddress>,
-    getVaultDecoder()
+    getVaultDecoder(),
   );
 }
 
 export async function fetchVault<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<Account<Vault, TAddress>> {
   const maybeAccount = await fetchMaybeVault(rpc, address, config);
   assertAccountExists(maybeAccount);
@@ -196,7 +196,7 @@ export async function fetchVault<TAddress extends string = string>(
 export async function fetchMaybeVault<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<MaybeAccount<Vault, TAddress>> {
   const maybeAccount = await fetchEncodedAccount(rpc, address, config);
   return decodeVault(maybeAccount);
@@ -205,7 +205,7 @@ export async function fetchMaybeVault<TAddress extends string = string>(
 export async function fetchAllVault(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<Account<Vault>[]> {
   const maybeAccounts = await fetchAllMaybeVault(rpc, addresses, config);
   assertAccountsExist(maybeAccounts);
@@ -215,7 +215,7 @@ export async function fetchAllVault(
 export async function fetchAllMaybeVault(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<MaybeAccount<Vault>[]> {
   const maybeAccounts = await fetchEncodedAccounts(rpc, addresses, config);
   return maybeAccounts.map((maybeAccount) => decodeVault(maybeAccount));

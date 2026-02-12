@@ -28,30 +28,29 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 import {
   getSmallScalarDecoder,
   getSmallScalarEncoder,
   type SmallScalar,
   type SmallScalarArgs,
-} from '../types';
+} from "../types";
 
 export const UPDATE_CHALLENGE_TEMPLATE_MINIMUM_TRADING_DAYS_DISCRIMINATOR =
   new Uint8Array([67, 107, 22, 76, 9, 91, 83, 8]);
 
 export function getUpdateChallengeTemplateMinimumTradingDaysDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    UPDATE_CHALLENGE_TEMPLATE_MINIMUM_TRADING_DAYS_DISCRIMINATOR
+    UPDATE_CHALLENGE_TEMPLATE_MINIMUM_TRADING_DAYS_DISCRIMINATOR,
   );
 }
 
 export type UpdateChallengeTemplateMinimumTradingDaysInstruction<
   TProgram extends string = typeof POLICY_CHALLENGES_PROGRAM_ADDRESS,
-  TAccountChallengeTemplateAccount extends
-    | string
-    | AccountMeta<string> = string,
+  TAccountChallengeTemplateAccount extends string | AccountMeta<string> =
+    string,
   TAccountSigner extends string | AccountMeta<string> = string,
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
@@ -81,21 +80,21 @@ export type UpdateChallengeTemplateMinimumTradingDaysInstructionDataArgs = {
 export function getUpdateChallengeTemplateMinimumTradingDaysInstructionDataEncoder(): FixedSizeEncoder<UpdateChallengeTemplateMinimumTradingDaysInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['minimumTradingDays', getSmallScalarEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["minimumTradingDays", getSmallScalarEncoder()],
     ]),
     (value) => ({
       ...value,
       discriminator:
         UPDATE_CHALLENGE_TEMPLATE_MINIMUM_TRADING_DAYS_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getUpdateChallengeTemplateMinimumTradingDaysInstructionDataDecoder(): FixedSizeDecoder<UpdateChallengeTemplateMinimumTradingDaysInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['minimumTradingDays', getSmallScalarDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["minimumTradingDays", getSmallScalarDecoder()],
   ]);
 }
 
@@ -105,7 +104,7 @@ export function getUpdateChallengeTemplateMinimumTradingDaysInstructionDataCodec
 > {
   return combineCodec(
     getUpdateChallengeTemplateMinimumTradingDaysInstructionDataEncoder(),
-    getUpdateChallengeTemplateMinimumTradingDaysInstructionDataDecoder()
+    getUpdateChallengeTemplateMinimumTradingDaysInstructionDataDecoder(),
   );
 }
 
@@ -115,7 +114,7 @@ export type UpdateChallengeTemplateMinimumTradingDaysInput<
 > = {
   challengeTemplateAccount: Address<TAccountChallengeTemplateAccount>;
   signer: TransactionSigner<TAccountSigner>;
-  minimumTradingDays: UpdateChallengeTemplateMinimumTradingDaysInstructionDataArgs['minimumTradingDays'];
+  minimumTradingDays: UpdateChallengeTemplateMinimumTradingDaysInstructionDataArgs["minimumTradingDays"];
 };
 
 export function getUpdateChallengeTemplateMinimumTradingDaysInstruction<
@@ -127,7 +126,7 @@ export function getUpdateChallengeTemplateMinimumTradingDaysInstruction<
     TAccountChallengeTemplateAccount,
     TAccountSigner
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): UpdateChallengeTemplateMinimumTradingDaysInstruction<
   TProgramAddress,
   TAccountChallengeTemplateAccount,
@@ -153,14 +152,14 @@ export function getUpdateChallengeTemplateMinimumTradingDaysInstruction<
   // Original args.
   const args = { ...input };
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.challengeTemplateAccount),
       getAccountMeta(accounts.signer),
     ],
     data: getUpdateChallengeTemplateMinimumTradingDaysInstructionDataEncoder().encode(
-      args as UpdateChallengeTemplateMinimumTradingDaysInstructionDataArgs
+      args as UpdateChallengeTemplateMinimumTradingDaysInstructionDataArgs,
     ),
     programAddress,
   } as UpdateChallengeTemplateMinimumTradingDaysInstruction<
@@ -188,14 +187,14 @@ export function parseUpdateChallengeTemplateMinimumTradingDaysInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedUpdateChallengeTemplateMinimumTradingDaysInstruction<
   TProgram,
   TAccountMetas
 > {
   if (instruction.accounts.length < 2) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -210,7 +209,7 @@ export function parseUpdateChallengeTemplateMinimumTradingDaysInstruction<
       signer: getNextAccount(),
     },
     data: getUpdateChallengeTemplateMinimumTradingDaysInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

@@ -7,41 +7,46 @@
  */
 
 import {
+  assertIsInstructionWithAccounts,
   containsBytes,
   fixEncoderSize,
   getBytesEncoder,
   type Address,
+  type Instruction,
+  type InstructionWithData,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
+  parseInitializeManagersInstruction,
+  parseValidateInstruction,
   type ParsedInitializeManagersInstruction,
   type ParsedValidateInstruction,
-} from '../instructions';
+} from "../instructions";
 
 export const POLICY_MANAGER_ACCESS_PROGRAM_ADDRESS =
-  'HyroXELvGkzBwgKz2Fsz2XEMDM6TYupZZ1A7qAtEM9Qs' as Address<'HyroXELvGkzBwgKz2Fsz2XEMDM6TYupZZ1A7qAtEM9Qs'>;
+  "DUAA8dxpqHkAeUK1qUgyU8ERnbq7UTAEBSe83c7RWQtc" as Address<"DUAA8dxpqHkAeUK1qUgyU8ERnbq7UTAEBSe83c7RWQtc">;
 
 export enum PolicyManagerAccessAccount {
   Managers,
 }
 
 export function identifyPolicyManagerAccessAccount(
-  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): PolicyManagerAccessAccount {
-  const data = 'data' in account ? account.data : account;
+  const data = "data" in account ? account.data : account;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([50, 116, 200, 15, 255, 219, 93, 254])
+        new Uint8Array([50, 116, 200, 15, 255, 219, 93, 254]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyManagerAccessAccount.Managers;
   }
   throw new Error(
-    'The provided account could not be identified as a policyManagerAccess account.'
+    "The provided account could not be identified as a policyManagerAccess account.",
   );
 }
 
@@ -51,16 +56,16 @@ export enum PolicyManagerAccessInstruction {
 }
 
 export function identifyPolicyManagerAccessInstruction(
-  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): PolicyManagerAccessInstruction {
-  const data = 'data' in instruction ? instruction.data : instruction;
+  const data = "data" in instruction ? instruction.data : instruction;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([184, 12, 75, 43, 10, 73, 29, 155])
+        new Uint8Array([184, 12, 75, 43, 10, 73, 29, 155]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyManagerAccessInstruction.InitializeManagers;
@@ -69,20 +74,20 @@ export function identifyPolicyManagerAccessInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([60, 252, 90, 66, 246, 253, 232, 139])
+        new Uint8Array([60, 252, 90, 66, 246, 253, 232, 139]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyManagerAccessInstruction.Validate;
   }
   throw new Error(
-    'The provided instruction could not be identified as a policyManagerAccess instruction.'
+    "The provided instruction could not be identified as a policyManagerAccess instruction.",
   );
 }
 
 export type ParsedPolicyManagerAccessInstruction<
-  TProgram extends string = 'HyroXELvGkzBwgKz2Fsz2XEMDM6TYupZZ1A7qAtEM9Qs',
+  TProgram extends string = "DUAA8dxpqHkAeUK1qUgyU8ERnbq7UTAEBSe83c7RWQtc",
 > =
   | ({
       instructionType: PolicyManagerAccessInstruction.InitializeManagers;
@@ -90,3 +95,29 @@ export type ParsedPolicyManagerAccessInstruction<
   | ({
       instructionType: PolicyManagerAccessInstruction.Validate;
     } & ParsedValidateInstruction<TProgram>);
+
+export function parsePolicyManagerAccessInstruction<TProgram extends string>(
+  instruction: Instruction<TProgram> & InstructionWithData<ReadonlyUint8Array>,
+): ParsedPolicyManagerAccessInstruction<TProgram> {
+  const instructionType = identifyPolicyManagerAccessInstruction(instruction);
+  switch (instructionType) {
+    case PolicyManagerAccessInstruction.InitializeManagers: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: PolicyManagerAccessInstruction.InitializeManagers,
+        ...parseInitializeManagersInstruction(instruction),
+      };
+    }
+    case PolicyManagerAccessInstruction.Validate: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: PolicyManagerAccessInstruction.Validate,
+        ...parseValidateInstruction(instruction),
+      };
+    }
+    default:
+      throw new Error(
+        `Unrecognized instruction type: ${instructionType as string}`,
+      );
+  }
+}

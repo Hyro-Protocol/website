@@ -7,43 +7,68 @@
  */
 
 import {
+  assertIsInstructionWithAccounts,
   containsBytes,
   fixEncoderSize,
   getBytesEncoder,
   type Address,
+  type Instruction,
+  type InstructionWithData,
   type ReadonlyUint8Array,
-} from '@solana/kit';
-import { type ParsedValidateInstruction } from '../instructions';
+} from "@solana/kit";
+import {
+  parseValidateInstruction,
+  type ParsedValidateInstruction,
+} from "../instructions";
 
 export const POLICY_DENY_ALL_PROGRAM_ADDRESS =
-  '2QPMdHH58BK9yFH5AdDmL4UXUb5hRBW51ga2p3KuUZ2t' as Address<'2QPMdHH58BK9yFH5AdDmL4UXUb5hRBW51ga2p3KuUZ2t'>;
+  "2QPMdHH58BK9yFH5AdDmL4UXUb5hRBW51ga2p3KuUZ2t" as Address<"2QPMdHH58BK9yFH5AdDmL4UXUb5hRBW51ga2p3KuUZ2t">;
 
 export enum PolicyDenyAllInstruction {
   Validate,
 }
 
 export function identifyPolicyDenyAllInstruction(
-  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): PolicyDenyAllInstruction {
-  const data = 'data' in instruction ? instruction.data : instruction;
+  const data = "data" in instruction ? instruction.data : instruction;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([60, 252, 90, 66, 246, 253, 232, 139])
+        new Uint8Array([60, 252, 90, 66, 246, 253, 232, 139]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyDenyAllInstruction.Validate;
   }
   throw new Error(
-    'The provided instruction could not be identified as a policyDenyAll instruction.'
+    "The provided instruction could not be identified as a policyDenyAll instruction.",
   );
 }
 
 export type ParsedPolicyDenyAllInstruction<
-  TProgram extends string = '2QPMdHH58BK9yFH5AdDmL4UXUb5hRBW51ga2p3KuUZ2t',
+  TProgram extends string = "2QPMdHH58BK9yFH5AdDmL4UXUb5hRBW51ga2p3KuUZ2t",
 > = {
   instructionType: PolicyDenyAllInstruction.Validate;
 } & ParsedValidateInstruction<TProgram>;
+
+export function parsePolicyDenyAllInstruction<TProgram extends string>(
+  instruction: Instruction<TProgram> & InstructionWithData<ReadonlyUint8Array>,
+): ParsedPolicyDenyAllInstruction<TProgram> {
+  const instructionType = identifyPolicyDenyAllInstruction(instruction);
+  switch (instructionType) {
+    case PolicyDenyAllInstruction.Validate: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: PolicyDenyAllInstruction.Validate,
+        ...parseValidateInstruction(instruction),
+      };
+    }
+    default:
+      throw new Error(
+        `Unrecognized instruction type: ${instructionType as string}`,
+      );
+  }
+}

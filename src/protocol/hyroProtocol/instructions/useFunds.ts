@@ -33,13 +33,13 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 
 export const USE_FUNDS_DISCRIMINATOR = new Uint8Array([
   225, 89, 79, 83, 153, 141, 236, 230,
@@ -60,9 +60,8 @@ export type UseFundsInstruction<
   TAccountPolicyProgram extends string | AccountMeta<string> = string,
   TAccountFeeCollectionProgram extends string | AccountMeta<string> = string,
   TAccountSigner extends string | AccountMeta<string> = string,
-  TAccountTokenProgram extends
-    | string
-    | AccountMeta<string> = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+  TAccountTokenProgram extends string | AccountMeta<string> =
+    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -113,17 +112,17 @@ export type UseFundsInstructionDataArgs = { assets: number | bigint };
 export function getUseFundsInstructionDataEncoder(): FixedSizeEncoder<UseFundsInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['assets', getU64Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["assets", getU64Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: USE_FUNDS_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: USE_FUNDS_DISCRIMINATOR }),
   );
 }
 
 export function getUseFundsInstructionDataDecoder(): FixedSizeDecoder<UseFundsInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['assets', getU64Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["assets", getU64Decoder()],
   ]);
 }
 
@@ -133,7 +132,7 @@ export function getUseFundsInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getUseFundsInstructionDataEncoder(),
-    getUseFundsInstructionDataDecoder()
+    getUseFundsInstructionDataDecoder(),
   );
 }
 
@@ -159,7 +158,7 @@ export type UseFundsAsyncInput<
   feeCollectionProgram: Address<TAccountFeeCollectionProgram>;
   signer: TransactionSigner<TAccountSigner>;
   tokenProgram?: Address<TAccountTokenProgram>;
-  assets: UseFundsInstructionDataArgs['assets'];
+  assets: UseFundsInstructionDataArgs["assets"];
 };
 
 export async function getUseFundsInstructionAsync<
@@ -187,7 +186,7 @@ export async function getUseFundsInstructionAsync<
     TAccountSigner,
     TAccountTokenProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   UseFundsInstruction<
     TProgramAddress,
@@ -246,7 +245,7 @@ export async function getUseFundsInstructionAsync<
           new Uint8Array([
             118, 97, 117, 108, 116, 95, 115, 104, 97, 114, 101, 95, 115, 105,
             103, 110, 101, 114,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
       ],
@@ -260,11 +259,11 @@ export async function getUseFundsInstructionAsync<
           new Uint8Array([
             118, 97, 117, 108, 116, 95, 116, 111, 107, 101, 110, 95, 97, 99, 99,
             111, 117, 110, 116,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
         getAddressEncoder().encode(
-          expectAddress(accounts.underlyingMint.value)
+          expectAddress(accounts.underlyingMint.value),
         ),
       ],
     });
@@ -283,21 +282,21 @@ export async function getUseFundsInstructionAsync<
           new Uint8Array([
             97, 117, 116, 104, 111, 114, 105, 116, 121, 95, 116, 111, 107, 101,
             110, 95, 97, 99, 99, 111, 117, 110, 116,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.authority.value)),
         getAddressEncoder().encode(
-          expectAddress(accounts.underlyingMint.value)
+          expectAddress(accounts.underlyingMint.value),
         ),
       ],
     });
   }
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.shareSignerPda),
@@ -312,7 +311,7 @@ export async function getUseFundsInstructionAsync<
       getAccountMeta(accounts.tokenProgram),
     ],
     data: getUseFundsInstructionDataEncoder().encode(
-      args as UseFundsInstructionDataArgs
+      args as UseFundsInstructionDataArgs,
     ),
     programAddress,
   } as UseFundsInstruction<
@@ -352,7 +351,7 @@ export type UseFundsInput<
   feeCollectionProgram: Address<TAccountFeeCollectionProgram>;
   signer: TransactionSigner<TAccountSigner>;
   tokenProgram?: Address<TAccountTokenProgram>;
-  assets: UseFundsInstructionDataArgs['assets'];
+  assets: UseFundsInstructionDataArgs["assets"];
 };
 
 export function getUseFundsInstruction<
@@ -380,7 +379,7 @@ export function getUseFundsInstruction<
     TAccountSigner,
     TAccountTokenProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): UseFundsInstruction<
   TProgramAddress,
   TAccountShareSignerPda,
@@ -431,10 +430,10 @@ export function getUseFundsInstruction<
   // Resolve default values.
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.shareSignerPda),
@@ -449,7 +448,7 @@ export function getUseFundsInstruction<
       getAccountMeta(accounts.tokenProgram),
     ],
     data: getUseFundsInstructionDataEncoder().encode(
-      args as UseFundsInstructionDataArgs
+      args as UseFundsInstructionDataArgs,
     ),
     programAddress,
   } as UseFundsInstruction<
@@ -493,11 +492,11 @@ export function parseUseFundsInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedUseFundsInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 10) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

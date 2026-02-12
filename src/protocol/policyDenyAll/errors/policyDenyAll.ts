@@ -11,8 +11,8 @@ import {
   type Address,
   type SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM,
   type SolanaError,
-} from '@solana/kit';
-import { POLICY_DENY_ALL_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { POLICY_DENY_ALL_PROGRAM_ADDRESS } from "../programs";
 
 /** Denied: Action denied by policy. */
 export const POLICY_DENY_ALL_ERROR__DENIED = 0x1770; // 6000
@@ -20,20 +20,20 @@ export const POLICY_DENY_ALL_ERROR__DENIED = 0x1770; // 6000
 export type PolicyDenyAllError = typeof POLICY_DENY_ALL_ERROR__DENIED;
 
 let policyDenyAllErrorMessages: Record<PolicyDenyAllError, string> | undefined;
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   policyDenyAllErrorMessages = {
     [POLICY_DENY_ALL_ERROR__DENIED]: `Action denied by policy.`,
   };
 }
 
 export function getPolicyDenyAllErrorMessage(code: PolicyDenyAllError): string {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     return (policyDenyAllErrorMessages as Record<PolicyDenyAllError, string>)[
       code
     ];
   }
 
-  return 'Error message not available in production bundles.';
+  return "Error message not available in production bundles.";
 }
 
 export function isPolicyDenyAllError<
@@ -43,13 +43,13 @@ export function isPolicyDenyAllError<
   transactionMessage: {
     instructions: Record<number, { programAddress: Address }>;
   },
-  code?: TProgramErrorCode
+  code?: TProgramErrorCode,
 ): error is SolanaError<typeof SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM> &
   Readonly<{ context: Readonly<{ code: TProgramErrorCode }> }> {
   return isProgramError<TProgramErrorCode>(
     error,
     transactionMessage,
     POLICY_DENY_ALL_PROGRAM_ADDRESS,
-    code
+    code,
   );
 }

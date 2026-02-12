@@ -31,19 +31,19 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 import {
   getTimeBasedConfigDecoder,
   getTimeBasedConfigEncoder,
   type TimeBasedConfig,
   type TimeBasedConfigArgs,
-} from '../types';
+} from "../types";
 
 export const UPDATE_TIME_BASED_CONFIG_DISCRIMINATOR = new Uint8Array([
   1, 170, 161, 15, 4, 42, 89, 118,
@@ -51,7 +51,7 @@ export const UPDATE_TIME_BASED_CONFIG_DISCRIMINATOR = new Uint8Array([
 
 export function getUpdateTimeBasedConfigDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    UPDATE_TIME_BASED_CONFIG_DISCRIMINATOR
+    UPDATE_TIME_BASED_CONFIG_DISCRIMINATOR,
   );
 }
 
@@ -91,20 +91,20 @@ export type UpdateTimeBasedConfigInstructionDataArgs = {
 export function getUpdateTimeBasedConfigInstructionDataEncoder(): FixedSizeEncoder<UpdateTimeBasedConfigInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['timeBased', getTimeBasedConfigEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["timeBased", getTimeBasedConfigEncoder()],
     ]),
     (value) => ({
       ...value,
       discriminator: UPDATE_TIME_BASED_CONFIG_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getUpdateTimeBasedConfigInstructionDataDecoder(): FixedSizeDecoder<UpdateTimeBasedConfigInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['timeBased', getTimeBasedConfigDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["timeBased", getTimeBasedConfigDecoder()],
   ]);
 }
 
@@ -114,7 +114,7 @@ export function getUpdateTimeBasedConfigInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getUpdateTimeBasedConfigInstructionDataEncoder(),
-    getUpdateTimeBasedConfigInstructionDataDecoder()
+    getUpdateTimeBasedConfigInstructionDataDecoder(),
   );
 }
 
@@ -127,22 +127,22 @@ export type UpdateTimeBasedConfigAsyncInput<
   configAccount?: Address<TAccountConfigAccount>;
   /** Authority that can update config (typically vault admin) */
   authority: TransactionSigner<TAccountAuthority>;
-  timeBased: UpdateTimeBasedConfigInstructionDataArgs['timeBased'];
+  timeBased: UpdateTimeBasedConfigInstructionDataArgs["timeBased"];
 };
 
 export async function getUpdateTimeBasedConfigInstructionAsync<
   TAccountVault extends string,
   TAccountConfigAccount extends string,
   TAccountAuthority extends string,
-  TProgramAddress extends
-    Address = typeof FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS,
 >(
   input: UpdateTimeBasedConfigAsyncInput<
     TAccountVault,
     TAccountConfigAccount,
     TAccountAuthority
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   UpdateTimeBasedConfigInstruction<
     TProgramAddress,
@@ -178,14 +178,14 @@ export async function getUpdateTimeBasedConfigInstructionAsync<
           new Uint8Array([
             97, 108, 108, 95, 105, 110, 95, 111, 110, 101, 95, 99, 111, 110,
             102, 105, 103,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
       ],
     });
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -193,7 +193,7 @@ export async function getUpdateTimeBasedConfigInstructionAsync<
       getAccountMeta(accounts.authority),
     ],
     data: getUpdateTimeBasedConfigInstructionDataEncoder().encode(
-      args as UpdateTimeBasedConfigInstructionDataArgs
+      args as UpdateTimeBasedConfigInstructionDataArgs,
     ),
     programAddress,
   } as UpdateTimeBasedConfigInstruction<
@@ -213,22 +213,22 @@ export type UpdateTimeBasedConfigInput<
   configAccount: Address<TAccountConfigAccount>;
   /** Authority that can update config (typically vault admin) */
   authority: TransactionSigner<TAccountAuthority>;
-  timeBased: UpdateTimeBasedConfigInstructionDataArgs['timeBased'];
+  timeBased: UpdateTimeBasedConfigInstructionDataArgs["timeBased"];
 };
 
 export function getUpdateTimeBasedConfigInstruction<
   TAccountVault extends string,
   TAccountConfigAccount extends string,
   TAccountAuthority extends string,
-  TProgramAddress extends
-    Address = typeof FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS,
 >(
   input: UpdateTimeBasedConfigInput<
     TAccountVault,
     TAccountConfigAccount,
     TAccountAuthority
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): UpdateTimeBasedConfigInstruction<
   TProgramAddress,
   TAccountVault,
@@ -253,7 +253,7 @@ export function getUpdateTimeBasedConfigInstruction<
   // Original args.
   const args = { ...input };
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -261,7 +261,7 @@ export function getUpdateTimeBasedConfigInstruction<
       getAccountMeta(accounts.authority),
     ],
     data: getUpdateTimeBasedConfigInstructionDataEncoder().encode(
-      args as UpdateTimeBasedConfigInstructionDataArgs
+      args as UpdateTimeBasedConfigInstructionDataArgs,
     ),
     programAddress,
   } as UpdateTimeBasedConfigInstruction<
@@ -292,11 +292,11 @@ export function parseUpdateTimeBasedConfigInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedUpdateTimeBasedConfigInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 3) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -312,7 +312,7 @@ export function parseUpdateTimeBasedConfigInstruction<
       authority: getNextAccount(),
     },
     data: getUpdateTimeBasedConfigInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

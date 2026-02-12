@@ -6,10 +6,10 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './calculateFees';
-export * from './initialize';
-export * from './resetTimestamps';
-export * from './updateConfig';
-export * from './updateFractionConfig';
-export * from './updateHighWaterMark';
-export * from './updateTimeBasedConfig';
+export * from "./calculateFees";
+export * from "./initialize";
+export * from "./resetTimestamps";
+export * from "./updateConfig";
+export * from "./updateFractionConfig";
+export * from "./updateHighWaterMark";
+export * from "./updateTimeBasedConfig";

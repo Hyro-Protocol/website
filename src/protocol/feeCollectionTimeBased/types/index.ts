@@ -6,6 +6,6 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './feeOperation';
-export * from './timeBasedFeeConfig';
-export * from './timeBasedFeeEntry';
+export * from "./feeOperation";
+export * from "./timeBasedFeeConfig";
+export * from "./timeBasedFeeEntry";

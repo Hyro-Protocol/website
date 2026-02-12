@@ -32,13 +32,13 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { FEE_COLLECTION_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { FEE_COLLECTION_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 
 export const SET_FEE_CALC_PROGRAM_DISCRIMINATOR = new Uint8Array([
   147, 88, 46, 194, 190, 141, 216, 84,
@@ -46,7 +46,7 @@ export const SET_FEE_CALC_PROGRAM_DISCRIMINATOR = new Uint8Array([
 
 export function getSetFeeCalcProgramDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    SET_FEE_CALC_PROGRAM_DISCRIMINATOR
+    SET_FEE_CALC_PROGRAM_DISCRIMINATOR,
   );
 }
 
@@ -84,17 +84,20 @@ export type SetFeeCalcProgramInstructionDataArgs = { program: Address };
 export function getSetFeeCalcProgramInstructionDataEncoder(): FixedSizeEncoder<SetFeeCalcProgramInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['program', getAddressEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["program", getAddressEncoder()],
     ]),
-    (value) => ({ ...value, discriminator: SET_FEE_CALC_PROGRAM_DISCRIMINATOR })
+    (value) => ({
+      ...value,
+      discriminator: SET_FEE_CALC_PROGRAM_DISCRIMINATOR,
+    }),
   );
 }
 
 export function getSetFeeCalcProgramInstructionDataDecoder(): FixedSizeDecoder<SetFeeCalcProgramInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['program', getAddressDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["program", getAddressDecoder()],
   ]);
 }
 
@@ -104,7 +107,7 @@ export function getSetFeeCalcProgramInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getSetFeeCalcProgramInstructionDataEncoder(),
-    getSetFeeCalcProgramInstructionDataDecoder()
+    getSetFeeCalcProgramInstructionDataDecoder(),
   );
 }
 
@@ -117,7 +120,7 @@ export type SetFeeCalcProgramAsyncInput<
   vaultFees?: Address<TAccountVaultFees>;
   /** Authority that can set fee calc program */
   authority: TransactionSigner<TAccountAuthority>;
-  program: SetFeeCalcProgramInstructionDataArgs['program'];
+  program: SetFeeCalcProgramInstructionDataArgs["program"];
 };
 
 export async function getSetFeeCalcProgramInstructionAsync<
@@ -131,7 +134,7 @@ export async function getSetFeeCalcProgramInstructionAsync<
     TAccountVaultFees,
     TAccountAuthority
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   SetFeeCalcProgramInstruction<
     TProgramAddress,
@@ -164,14 +167,14 @@ export async function getSetFeeCalcProgramInstructionAsync<
       programAddress,
       seeds: [
         getBytesEncoder().encode(
-          new Uint8Array([118, 97, 117, 108, 116, 95, 102, 101, 101, 115])
+          new Uint8Array([118, 97, 117, 108, 116, 95, 102, 101, 101, 115]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
       ],
     });
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -179,7 +182,7 @@ export async function getSetFeeCalcProgramInstructionAsync<
       getAccountMeta(accounts.authority),
     ],
     data: getSetFeeCalcProgramInstructionDataEncoder().encode(
-      args as SetFeeCalcProgramInstructionDataArgs
+      args as SetFeeCalcProgramInstructionDataArgs,
     ),
     programAddress,
   } as SetFeeCalcProgramInstruction<
@@ -199,7 +202,7 @@ export type SetFeeCalcProgramInput<
   vaultFees: Address<TAccountVaultFees>;
   /** Authority that can set fee calc program */
   authority: TransactionSigner<TAccountAuthority>;
-  program: SetFeeCalcProgramInstructionDataArgs['program'];
+  program: SetFeeCalcProgramInstructionDataArgs["program"];
 };
 
 export function getSetFeeCalcProgramInstruction<
@@ -213,7 +216,7 @@ export function getSetFeeCalcProgramInstruction<
     TAccountVaultFees,
     TAccountAuthority
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): SetFeeCalcProgramInstruction<
   TProgramAddress,
   TAccountVault,
@@ -238,7 +241,7 @@ export function getSetFeeCalcProgramInstruction<
   // Original args.
   const args = { ...input };
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -246,7 +249,7 @@ export function getSetFeeCalcProgramInstruction<
       getAccountMeta(accounts.authority),
     ],
     data: getSetFeeCalcProgramInstructionDataEncoder().encode(
-      args as SetFeeCalcProgramInstructionDataArgs
+      args as SetFeeCalcProgramInstructionDataArgs,
     ),
     programAddress,
   } as SetFeeCalcProgramInstruction<
@@ -277,11 +280,11 @@ export function parseSetFeeCalcProgramInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedSetFeeCalcProgramInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 3) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

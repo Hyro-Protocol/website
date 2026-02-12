@@ -6,5 +6,5 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './initializeLimitTransfer';
-export * from './validate';
+export * from "./initializeLimitTransfer";
+export * from "./validate";

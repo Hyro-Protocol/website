@@ -6,6 +6,6 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './approve';
-export * from './initializeMultisig';
-export * from './validate';
+export * from "./approve";
+export * from "./initializeMultisig";
+export * from "./validate";

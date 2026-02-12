@@ -20,6 +20,8 @@
     "generate:client": "anchor build -- --features mainnet && bun create-codama-client.ts"
   },
   "dependencies": {
+    "@hyr0-xyz/program": "file:../../sdk-program",
+    "@hyr0-xyz/react": "file:../../sdk-react",
     "@payloadcms/db-sqlite": "^3.64.0",
     "@payloadcms/next": "^3.64.0",
     "@payloadcms/plugin-seo": "^3.64.0",

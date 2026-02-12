@@ -7,13 +7,31 @@
  */
 
 import {
+  assertIsInstructionWithAccounts,
   containsBytes,
   fixEncoderSize,
   getBytesEncoder,
   type Address,
+  type Instruction,
+  type InstructionWithData,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
+  parseClaimFeesInstruction,
+  parseCreateTxInstruction,
+  parseDepositAssetsInstruction,
+  parseExecuteTxInstruction,
+  parseInitializeManagerRegistryInstruction,
+  parseInitializeVaultInstruction,
+  parseIssueChildVaultInstruction,
+  parsePingInstruction,
+  parseRecalculateBalanceInstruction,
+  parseRedeemSharesInstruction,
+  parseRegisterManagerInstruction,
+  parseReportOnFundsInstruction,
+  parseReturnFundsInstruction,
+  parseUseFundsInstruction,
+  parseVerifyManagerInstruction,
   type ParsedClaimFeesInstruction,
   type ParsedCreateTxInstruction,
   type ParsedDepositAssetsInstruction,
@@ -29,10 +47,10 @@ import {
   type ParsedReturnFundsInstruction,
   type ParsedUseFundsInstruction,
   type ParsedVerifyManagerInstruction,
-} from '../instructions';
+} from "../instructions";
 
 export const HYRO_PROTOCOL_PROGRAM_ADDRESS =
-  'HyroPk4VamtJfPfsxf77zRkMSx9FTV7FZqvH4JPup6fW' as Address<'HyroPk4VamtJfPfsxf77zRkMSx9FTV7FZqvH4JPup6fW'>;
+  "7gx2mxou2JwuBNiDhfPeXf8EVK8DUGnXPLKdiyYKT3NL" as Address<"7gx2mxou2JwuBNiDhfPeXf8EVK8DUGnXPLKdiyYKT3NL">;
 
 export enum HyroProtocolAccount {
   ManagerProfile,
@@ -42,16 +60,16 @@ export enum HyroProtocolAccount {
 }
 
 export function identifyHyroProtocolAccount(
-  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): HyroProtocolAccount {
-  const data = 'data' in account ? account.data : account;
+  const data = "data" in account ? account.data : account;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([135, 12, 238, 243, 236, 32, 123, 52])
+        new Uint8Array([135, 12, 238, 243, 236, 32, 123, 52]),
       ),
-      0
+      0,
     )
   ) {
     return HyroProtocolAccount.ManagerProfile;
@@ -60,9 +78,9 @@ export function identifyHyroProtocolAccount(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([181, 78, 54, 100, 122, 86, 63, 114])
+        new Uint8Array([181, 78, 54, 100, 122, 86, 63, 114]),
       ),
-      0
+      0,
     )
   ) {
     return HyroProtocolAccount.ManagerRegistry;
@@ -71,9 +89,9 @@ export function identifyHyroProtocolAccount(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([11, 24, 174, 129, 203, 117, 242, 23])
+        new Uint8Array([11, 24, 174, 129, 203, 117, 242, 23]),
       ),
-      0
+      0,
     )
   ) {
     return HyroProtocolAccount.Transaction;
@@ -82,15 +100,15 @@ export function identifyHyroProtocolAccount(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([211, 8, 232, 43, 2, 152, 117, 119])
+        new Uint8Array([211, 8, 232, 43, 2, 152, 117, 119]),
       ),
-      0
+      0,
     )
   ) {
     return HyroProtocolAccount.Vault;
   }
   throw new Error(
-    'The provided account could not be identified as a hyroProtocol account.'
+    "The provided account could not be identified as a hyroProtocol account.",
   );
 }
 
@@ -113,16 +131,16 @@ export enum HyroProtocolInstruction {
 }
 
 export function identifyHyroProtocolInstruction(
-  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): HyroProtocolInstruction {
-  const data = 'data' in instruction ? instruction.data : instruction;
+  const data = "data" in instruction ? instruction.data : instruction;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([82, 251, 233, 156, 12, 52, 184, 202])
+        new Uint8Array([82, 251, 233, 156, 12, 52, 184, 202]),
       ),
-      0
+      0,
     )
   ) {
     return HyroProtocolInstruction.ClaimFees;
@@ -131,9 +149,9 @@ export function identifyHyroProtocolInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([97, 223, 80, 153, 55, 13, 155, 12])
+        new Uint8Array([97, 223, 80, 153, 55, 13, 155, 12]),
       ),
-      0
+      0,
     )
   ) {
     return HyroProtocolInstruction.CreateTx;
@@ -142,9 +160,9 @@ export function identifyHyroProtocolInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([8, 21, 152, 34, 223, 94, 7, 176])
+        new Uint8Array([8, 21, 152, 34, 223, 94, 7, 176]),
       ),
-      0
+      0,
     )
   ) {
     return HyroProtocolInstruction.DepositAssets;
@@ -153,9 +171,9 @@ export function identifyHyroProtocolInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([249, 17, 145, 23, 12, 252, 17, 41])
+        new Uint8Array([249, 17, 145, 23, 12, 252, 17, 41]),
       ),
-      0
+      0,
     )
   ) {
     return HyroProtocolInstruction.ExecuteTx;
@@ -164,9 +182,9 @@ export function identifyHyroProtocolInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([45, 38, 8, 215, 181, 198, 110, 202])
+        new Uint8Array([45, 38, 8, 215, 181, 198, 110, 202]),
       ),
-      0
+      0,
     )
   ) {
     return HyroProtocolInstruction.InitializeManagerRegistry;
@@ -175,9 +193,9 @@ export function identifyHyroProtocolInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([48, 191, 163, 44, 71, 129, 63, 164])
+        new Uint8Array([48, 191, 163, 44, 71, 129, 63, 164]),
       ),
-      0
+      0,
     )
   ) {
     return HyroProtocolInstruction.InitializeVault;
@@ -186,9 +204,9 @@ export function identifyHyroProtocolInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([77, 93, 95, 1, 227, 206, 201, 173])
+        new Uint8Array([77, 93, 95, 1, 227, 206, 201, 173]),
       ),
-      0
+      0,
     )
   ) {
     return HyroProtocolInstruction.IssueChildVault;
@@ -197,9 +215,9 @@ export function identifyHyroProtocolInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([173, 0, 94, 236, 73, 133, 225, 153])
+        new Uint8Array([173, 0, 94, 236, 73, 133, 225, 153]),
       ),
-      0
+      0,
     )
   ) {
     return HyroProtocolInstruction.Ping;
@@ -208,9 +226,9 @@ export function identifyHyroProtocolInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([119, 21, 228, 154, 19, 193, 246, 8])
+        new Uint8Array([119, 21, 228, 154, 19, 193, 246, 8]),
       ),
-      0
+      0,
     )
   ) {
     return HyroProtocolInstruction.RecalculateBalance;
@@ -219,9 +237,9 @@ export function identifyHyroProtocolInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([239, 154, 224, 89, 240, 196, 42, 187])
+        new Uint8Array([239, 154, 224, 89, 240, 196, 42, 187]),
       ),
-      0
+      0,
     )
   ) {
     return HyroProtocolInstruction.RedeemShares;
@@ -230,9 +248,9 @@ export function identifyHyroProtocolInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([104, 14, 206, 198, 57, 194, 90, 109])
+        new Uint8Array([104, 14, 206, 198, 57, 194, 90, 109]),
       ),
-      0
+      0,
     )
   ) {
     return HyroProtocolInstruction.RegisterManager;
@@ -241,9 +259,9 @@ export function identifyHyroProtocolInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([106, 224, 151, 62, 55, 104, 47, 191])
+        new Uint8Array([106, 224, 151, 62, 55, 104, 47, 191]),
       ),
-      0
+      0,
     )
   ) {
     return HyroProtocolInstruction.ReportOnFunds;
@@ -252,9 +270,9 @@ export function identifyHyroProtocolInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([220, 104, 119, 202, 186, 1, 45, 90])
+        new Uint8Array([220, 104, 119, 202, 186, 1, 45, 90]),
       ),
-      0
+      0,
     )
   ) {
     return HyroProtocolInstruction.ReturnFunds;
@@ -263,9 +281,9 @@ export function identifyHyroProtocolInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([225, 89, 79, 83, 153, 141, 236, 230])
+        new Uint8Array([225, 89, 79, 83, 153, 141, 236, 230]),
       ),
-      0
+      0,
     )
   ) {
     return HyroProtocolInstruction.UseFunds;
@@ -274,20 +292,20 @@ export function identifyHyroProtocolInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([61, 121, 49, 235, 68, 94, 106, 30])
+        new Uint8Array([61, 121, 49, 235, 68, 94, 106, 30]),
       ),
-      0
+      0,
     )
   ) {
     return HyroProtocolInstruction.VerifyManager;
   }
   throw new Error(
-    'The provided instruction could not be identified as a hyroProtocol instruction.'
+    "The provided instruction could not be identified as a hyroProtocol instruction.",
   );
 }
 
 export type ParsedHyroProtocolInstruction<
-  TProgram extends string = 'HyroPk4VamtJfPfsxf77zRkMSx9FTV7FZqvH4JPup6fW',
+  TProgram extends string = "7gx2mxou2JwuBNiDhfPeXf8EVK8DUGnXPLKdiyYKT3NL",
 > =
   | ({
       instructionType: HyroProtocolInstruction.ClaimFees;
@@ -334,3 +352,120 @@ export type ParsedHyroProtocolInstruction<
   | ({
       instructionType: HyroProtocolInstruction.VerifyManager;
     } & ParsedVerifyManagerInstruction<TProgram>);
+
+export function parseHyroProtocolInstruction<TProgram extends string>(
+  instruction: Instruction<TProgram> & InstructionWithData<ReadonlyUint8Array>,
+): ParsedHyroProtocolInstruction<TProgram> {
+  const instructionType = identifyHyroProtocolInstruction(instruction);
+  switch (instructionType) {
+    case HyroProtocolInstruction.ClaimFees: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: HyroProtocolInstruction.ClaimFees,
+        ...parseClaimFeesInstruction(instruction),
+      };
+    }
+    case HyroProtocolInstruction.CreateTx: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: HyroProtocolInstruction.CreateTx,
+        ...parseCreateTxInstruction(instruction),
+      };
+    }
+    case HyroProtocolInstruction.DepositAssets: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: HyroProtocolInstruction.DepositAssets,
+        ...parseDepositAssetsInstruction(instruction),
+      };
+    }
+    case HyroProtocolInstruction.ExecuteTx: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: HyroProtocolInstruction.ExecuteTx,
+        ...parseExecuteTxInstruction(instruction),
+      };
+    }
+    case HyroProtocolInstruction.InitializeManagerRegistry: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: HyroProtocolInstruction.InitializeManagerRegistry,
+        ...parseInitializeManagerRegistryInstruction(instruction),
+      };
+    }
+    case HyroProtocolInstruction.InitializeVault: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: HyroProtocolInstruction.InitializeVault,
+        ...parseInitializeVaultInstruction(instruction),
+      };
+    }
+    case HyroProtocolInstruction.IssueChildVault: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: HyroProtocolInstruction.IssueChildVault,
+        ...parseIssueChildVaultInstruction(instruction),
+      };
+    }
+    case HyroProtocolInstruction.Ping: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: HyroProtocolInstruction.Ping,
+        ...parsePingInstruction(instruction),
+      };
+    }
+    case HyroProtocolInstruction.RecalculateBalance: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: HyroProtocolInstruction.RecalculateBalance,
+        ...parseRecalculateBalanceInstruction(instruction),
+      };
+    }
+    case HyroProtocolInstruction.RedeemShares: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: HyroProtocolInstruction.RedeemShares,
+        ...parseRedeemSharesInstruction(instruction),
+      };
+    }
+    case HyroProtocolInstruction.RegisterManager: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: HyroProtocolInstruction.RegisterManager,
+        ...parseRegisterManagerInstruction(instruction),
+      };
+    }
+    case HyroProtocolInstruction.ReportOnFunds: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: HyroProtocolInstruction.ReportOnFunds,
+        ...parseReportOnFundsInstruction(instruction),
+      };
+    }
+    case HyroProtocolInstruction.ReturnFunds: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: HyroProtocolInstruction.ReturnFunds,
+        ...parseReturnFundsInstruction(instruction),
+      };
+    }
+    case HyroProtocolInstruction.UseFunds: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: HyroProtocolInstruction.UseFunds,
+        ...parseUseFundsInstruction(instruction),
+      };
+    }
+    case HyroProtocolInstruction.VerifyManager: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: HyroProtocolInstruction.VerifyManager,
+        ...parseVerifyManagerInstruction(instruction),
+      };
+    }
+    default:
+      throw new Error(
+        `Unrecognized instruction type: ${instructionType as string}`,
+      );
+  }
+}

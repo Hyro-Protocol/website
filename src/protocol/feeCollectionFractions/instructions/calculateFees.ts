@@ -31,19 +31,19 @@ import {
   type InstructionWithData,
   type ReadonlyAccount,
   type ReadonlyUint8Array,
-} from '@solana/kit';
-import { FEE_COLLECTION_FRACTIONS_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { FEE_COLLECTION_FRACTIONS_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 import {
   getFeeOperationDecoder,
   getFeeOperationEncoder,
   type FeeOperation,
   type FeeOperationArgs,
-} from '../types';
+} from "../types";
 
 export const CALCULATE_FEES_DISCRIMINATOR = new Uint8Array([
   140, 235, 78, 9, 249, 8, 129, 101,
@@ -51,7 +51,7 @@ export const CALCULATE_FEES_DISCRIMINATOR = new Uint8Array([
 
 export function getCalculateFeesDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    CALCULATE_FEES_DISCRIMINATOR
+    CALCULATE_FEES_DISCRIMINATOR,
   );
 }
 
@@ -108,27 +108,27 @@ export type CalculateFeesInstructionDataArgs = {
 export function getCalculateFeesInstructionDataEncoder(): FixedSizeEncoder<CalculateFeesInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['operation', getFeeOperationEncoder()],
-      ['amount', getU64Encoder()],
-      ['totalBalance', getI64Encoder()],
-      ['timestamp', getI64Encoder()],
-      ['lastFeeTimestamp', getI64Encoder()],
-      ['highWaterMark', getU64Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["operation", getFeeOperationEncoder()],
+      ["amount", getU64Encoder()],
+      ["totalBalance", getI64Encoder()],
+      ["timestamp", getI64Encoder()],
+      ["lastFeeTimestamp", getI64Encoder()],
+      ["highWaterMark", getU64Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: CALCULATE_FEES_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: CALCULATE_FEES_DISCRIMINATOR }),
   );
 }
 
 export function getCalculateFeesInstructionDataDecoder(): FixedSizeDecoder<CalculateFeesInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['operation', getFeeOperationDecoder()],
-    ['amount', getU64Decoder()],
-    ['totalBalance', getI64Decoder()],
-    ['timestamp', getI64Decoder()],
-    ['lastFeeTimestamp', getI64Decoder()],
-    ['highWaterMark', getU64Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["operation", getFeeOperationDecoder()],
+    ["amount", getU64Decoder()],
+    ["totalBalance", getI64Decoder()],
+    ["timestamp", getI64Decoder()],
+    ["lastFeeTimestamp", getI64Decoder()],
+    ["highWaterMark", getU64Decoder()],
   ]);
 }
 
@@ -138,7 +138,7 @@ export function getCalculateFeesInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getCalculateFeesInstructionDataEncoder(),
-    getCalculateFeesInstructionDataDecoder()
+    getCalculateFeesInstructionDataDecoder(),
   );
 }
 
@@ -148,22 +148,22 @@ export type CalculateFeesAsyncInput<
 > = {
   vault: Address<TAccountVault>;
   configAccount?: Address<TAccountConfigAccount>;
-  operation: CalculateFeesInstructionDataArgs['operation'];
-  amount: CalculateFeesInstructionDataArgs['amount'];
-  totalBalance: CalculateFeesInstructionDataArgs['totalBalance'];
-  timestamp: CalculateFeesInstructionDataArgs['timestamp'];
-  lastFeeTimestamp: CalculateFeesInstructionDataArgs['lastFeeTimestamp'];
-  highWaterMark: CalculateFeesInstructionDataArgs['highWaterMark'];
+  operation: CalculateFeesInstructionDataArgs["operation"];
+  amount: CalculateFeesInstructionDataArgs["amount"];
+  totalBalance: CalculateFeesInstructionDataArgs["totalBalance"];
+  timestamp: CalculateFeesInstructionDataArgs["timestamp"];
+  lastFeeTimestamp: CalculateFeesInstructionDataArgs["lastFeeTimestamp"];
+  highWaterMark: CalculateFeesInstructionDataArgs["highWaterMark"];
 };
 
 export async function getCalculateFeesInstructionAsync<
   TAccountVault extends string,
   TAccountConfigAccount extends string,
-  TProgramAddress extends
-    Address = typeof FEE_COLLECTION_FRACTIONS_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof FEE_COLLECTION_FRACTIONS_PROGRAM_ADDRESS,
 >(
   input: CalculateFeesAsyncInput<TAccountVault, TAccountConfigAccount>,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   CalculateFeesInstruction<
     TProgramAddress,
@@ -197,21 +197,21 @@ export async function getCalculateFeesInstructionAsync<
           new Uint8Array([
             102, 114, 97, 99, 116, 105, 111, 110, 95, 99, 111, 110, 102, 105,
             103,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
       ],
     });
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
       getAccountMeta(accounts.configAccount),
     ],
     data: getCalculateFeesInstructionDataEncoder().encode(
-      args as CalculateFeesInstructionDataArgs
+      args as CalculateFeesInstructionDataArgs,
     ),
     programAddress,
   } as CalculateFeesInstruction<
@@ -227,22 +227,22 @@ export type CalculateFeesInput<
 > = {
   vault: Address<TAccountVault>;
   configAccount: Address<TAccountConfigAccount>;
-  operation: CalculateFeesInstructionDataArgs['operation'];
-  amount: CalculateFeesInstructionDataArgs['amount'];
-  totalBalance: CalculateFeesInstructionDataArgs['totalBalance'];
-  timestamp: CalculateFeesInstructionDataArgs['timestamp'];
-  lastFeeTimestamp: CalculateFeesInstructionDataArgs['lastFeeTimestamp'];
-  highWaterMark: CalculateFeesInstructionDataArgs['highWaterMark'];
+  operation: CalculateFeesInstructionDataArgs["operation"];
+  amount: CalculateFeesInstructionDataArgs["amount"];
+  totalBalance: CalculateFeesInstructionDataArgs["totalBalance"];
+  timestamp: CalculateFeesInstructionDataArgs["timestamp"];
+  lastFeeTimestamp: CalculateFeesInstructionDataArgs["lastFeeTimestamp"];
+  highWaterMark: CalculateFeesInstructionDataArgs["highWaterMark"];
 };
 
 export function getCalculateFeesInstruction<
   TAccountVault extends string,
   TAccountConfigAccount extends string,
-  TProgramAddress extends
-    Address = typeof FEE_COLLECTION_FRACTIONS_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof FEE_COLLECTION_FRACTIONS_PROGRAM_ADDRESS,
 >(
   input: CalculateFeesInput<TAccountVault, TAccountConfigAccount>,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): CalculateFeesInstruction<
   TProgramAddress,
   TAccountVault,
@@ -265,14 +265,14 @@ export function getCalculateFeesInstruction<
   // Original args.
   const args = { ...input };
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
       getAccountMeta(accounts.configAccount),
     ],
     data: getCalculateFeesInstructionDataEncoder().encode(
-      args as CalculateFeesInstructionDataArgs
+      args as CalculateFeesInstructionDataArgs,
     ),
     programAddress,
   } as CalculateFeesInstruction<
@@ -300,11 +300,11 @@ export function parseCalculateFeesInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedCalculateFeesInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 2) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

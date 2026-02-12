@@ -13,7 +13,7 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 
 export enum ValidateOperation {
   Creation,
@@ -39,6 +39,6 @@ export function getValidateOperationCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getValidateOperationEncoder(),
-    getValidateOperationDecoder()
+    getValidateOperationDecoder(),
   );
 }

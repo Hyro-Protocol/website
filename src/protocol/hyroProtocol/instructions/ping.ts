@@ -27,9 +27,9 @@ import {
   type ReadonlySignerAccount,
   type ReadonlyUint8Array,
   type TransactionSigner,
-} from '@solana/kit';
-import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const PING_DISCRIMINATOR = new Uint8Array([
   173, 0, 94, 236, 73, 133, 225, 153,
@@ -61,14 +61,14 @@ export type PingInstructionDataArgs = {};
 
 export function getPingInstructionDataEncoder(): FixedSizeEncoder<PingInstructionDataArgs> {
   return transformEncoder(
-    getStructEncoder([['discriminator', fixEncoderSize(getBytesEncoder(), 8)]]),
-    (value) => ({ ...value, discriminator: PING_DISCRIMINATOR })
+    getStructEncoder([["discriminator", fixEncoderSize(getBytesEncoder(), 8)]]),
+    (value) => ({ ...value, discriminator: PING_DISCRIMINATOR }),
   );
 }
 
 export function getPingInstructionDataDecoder(): FixedSizeDecoder<PingInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
   ]);
 }
 
@@ -78,7 +78,7 @@ export function getPingInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getPingInstructionDataEncoder(),
-    getPingInstructionDataDecoder()
+    getPingInstructionDataDecoder(),
   );
 }
 
@@ -91,7 +91,7 @@ export function getPingInstruction<
   TProgramAddress extends Address = typeof HYRO_PROTOCOL_PROGRAM_ADDRESS,
 >(
   input: PingInput<TAccountSigner>,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): PingInstruction<TProgramAddress, TAccountSigner> {
   // Program address.
   const programAddress =
@@ -106,7 +106,7 @@ export function getPingInstruction<
     ResolvedAccount
   >;
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [getAccountMeta(accounts.signer)],
     data: getPingInstructionDataEncoder().encode({}),
@@ -131,11 +131,11 @@ export function parsePingInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedPingInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 1) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

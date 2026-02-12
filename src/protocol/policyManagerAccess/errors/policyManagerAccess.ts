@@ -11,8 +11,8 @@ import {
   type Address,
   type SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM,
   type SolanaError,
-} from '@solana/kit';
-import { POLICY_MANAGER_ACCESS_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { POLICY_MANAGER_ACCESS_PROGRAM_ADDRESS } from "../programs";
 
 /** UnregisteredManager: Unregistered manager. */
 export const POLICY_MANAGER_ACCESS_ERROR__UNREGISTERED_MANAGER = 0x1770; // 6000
@@ -26,7 +26,7 @@ export type PolicyManagerAccessError =
 let policyManagerAccessErrorMessages:
   | Record<PolicyManagerAccessError, string>
   | undefined;
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   policyManagerAccessErrorMessages = {
     [POLICY_MANAGER_ACCESS_ERROR__INVALID_POLICY_PDA]: `Invalid policy PDA.`,
     [POLICY_MANAGER_ACCESS_ERROR__UNREGISTERED_MANAGER]: `Unregistered manager.`,
@@ -34,9 +34,9 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export function getPolicyManagerAccessErrorMessage(
-  code: PolicyManagerAccessError
+  code: PolicyManagerAccessError,
 ): string {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     return (
       policyManagerAccessErrorMessages as Record<
         PolicyManagerAccessError,
@@ -45,7 +45,7 @@ export function getPolicyManagerAccessErrorMessage(
     )[code];
   }
 
-  return 'Error message not available in production bundles.';
+  return "Error message not available in production bundles.";
 }
 
 export function isPolicyManagerAccessError<
@@ -55,13 +55,13 @@ export function isPolicyManagerAccessError<
   transactionMessage: {
     instructions: Record<number, { programAddress: Address }>;
   },
-  code?: TProgramErrorCode
+  code?: TProgramErrorCode,
 ): error is SolanaError<typeof SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM> &
   Readonly<{ context: Readonly<{ code: TProgramErrorCode }> }> {
   return isProgramError<TProgramErrorCode>(
     error,
     transactionMessage,
     POLICY_MANAGER_ACCESS_PROGRAM_ADDRESS,
-    code
+    code,
   );
 }

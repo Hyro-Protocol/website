@@ -33,13 +33,13 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 
 export const UPDATE_HIGH_WATER_MARK_DISCRIMINATOR = new Uint8Array([
   68, 148, 239, 216, 150, 14, 205, 238,
@@ -47,7 +47,7 @@ export const UPDATE_HIGH_WATER_MARK_DISCRIMINATOR = new Uint8Array([
 
 export function getUpdateHighWaterMarkDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    UPDATE_HIGH_WATER_MARK_DISCRIMINATOR
+    UPDATE_HIGH_WATER_MARK_DISCRIMINATOR,
   );
 }
 
@@ -87,20 +87,20 @@ export type UpdateHighWaterMarkInstructionDataArgs = {
 export function getUpdateHighWaterMarkInstructionDataEncoder(): FixedSizeEncoder<UpdateHighWaterMarkInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['highWaterMark', getU64Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["highWaterMark", getU64Encoder()],
     ]),
     (value) => ({
       ...value,
       discriminator: UPDATE_HIGH_WATER_MARK_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getUpdateHighWaterMarkInstructionDataDecoder(): FixedSizeDecoder<UpdateHighWaterMarkInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['highWaterMark', getU64Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["highWaterMark", getU64Decoder()],
   ]);
 }
 
@@ -110,7 +110,7 @@ export function getUpdateHighWaterMarkInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getUpdateHighWaterMarkInstructionDataEncoder(),
-    getUpdateHighWaterMarkInstructionDataDecoder()
+    getUpdateHighWaterMarkInstructionDataDecoder(),
   );
 }
 
@@ -123,22 +123,22 @@ export type UpdateHighWaterMarkAsyncInput<
   configAccount?: Address<TAccountConfigAccount>;
   /** Authority that can update config (typically vault admin) */
   authority: TransactionSigner<TAccountAuthority>;
-  highWaterMark: UpdateHighWaterMarkInstructionDataArgs['highWaterMark'];
+  highWaterMark: UpdateHighWaterMarkInstructionDataArgs["highWaterMark"];
 };
 
 export async function getUpdateHighWaterMarkInstructionAsync<
   TAccountVault extends string,
   TAccountConfigAccount extends string,
   TAccountAuthority extends string,
-  TProgramAddress extends
-    Address = typeof FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS,
 >(
   input: UpdateHighWaterMarkAsyncInput<
     TAccountVault,
     TAccountConfigAccount,
     TAccountAuthority
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   UpdateHighWaterMarkInstruction<
     TProgramAddress,
@@ -174,14 +174,14 @@ export async function getUpdateHighWaterMarkInstructionAsync<
           new Uint8Array([
             97, 108, 108, 95, 105, 110, 95, 111, 110, 101, 95, 99, 111, 110,
             102, 105, 103,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
       ],
     });
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -189,7 +189,7 @@ export async function getUpdateHighWaterMarkInstructionAsync<
       getAccountMeta(accounts.authority),
     ],
     data: getUpdateHighWaterMarkInstructionDataEncoder().encode(
-      args as UpdateHighWaterMarkInstructionDataArgs
+      args as UpdateHighWaterMarkInstructionDataArgs,
     ),
     programAddress,
   } as UpdateHighWaterMarkInstruction<
@@ -209,22 +209,22 @@ export type UpdateHighWaterMarkInput<
   configAccount: Address<TAccountConfigAccount>;
   /** Authority that can update config (typically vault admin) */
   authority: TransactionSigner<TAccountAuthority>;
-  highWaterMark: UpdateHighWaterMarkInstructionDataArgs['highWaterMark'];
+  highWaterMark: UpdateHighWaterMarkInstructionDataArgs["highWaterMark"];
 };
 
 export function getUpdateHighWaterMarkInstruction<
   TAccountVault extends string,
   TAccountConfigAccount extends string,
   TAccountAuthority extends string,
-  TProgramAddress extends
-    Address = typeof FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS,
 >(
   input: UpdateHighWaterMarkInput<
     TAccountVault,
     TAccountConfigAccount,
     TAccountAuthority
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): UpdateHighWaterMarkInstruction<
   TProgramAddress,
   TAccountVault,
@@ -249,7 +249,7 @@ export function getUpdateHighWaterMarkInstruction<
   // Original args.
   const args = { ...input };
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -257,7 +257,7 @@ export function getUpdateHighWaterMarkInstruction<
       getAccountMeta(accounts.authority),
     ],
     data: getUpdateHighWaterMarkInstructionDataEncoder().encode(
-      args as UpdateHighWaterMarkInstructionDataArgs
+      args as UpdateHighWaterMarkInstructionDataArgs,
     ),
     programAddress,
   } as UpdateHighWaterMarkInstruction<
@@ -288,11 +288,11 @@ export function parseUpdateHighWaterMarkInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedUpdateHighWaterMarkInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 3) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -308,7 +308,7 @@ export function parseUpdateHighWaterMarkInstruction<
       authority: getNextAccount(),
     },
     data: getUpdateHighWaterMarkInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

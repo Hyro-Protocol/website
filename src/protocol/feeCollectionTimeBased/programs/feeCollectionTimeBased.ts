@@ -7,43 +7,50 @@
  */
 
 import {
+  assertIsInstructionWithAccounts,
   containsBytes,
   fixEncoderSize,
   getBytesEncoder,
   type Address,
+  type Instruction,
+  type InstructionWithData,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
+  parseCalculateFeesInstruction,
+  parseInitializeInstruction,
+  parseResetTimestampsInstruction,
+  parseUpdateConfigInstruction,
   type ParsedCalculateFeesInstruction,
   type ParsedInitializeInstruction,
   type ParsedResetTimestampsInstruction,
   type ParsedUpdateConfigInstruction,
-} from '../instructions';
+} from "../instructions";
 
 export const FEE_COLLECTION_TIME_BASED_PROGRAM_ADDRESS =
-  'HyroKSPrQKgrgLAG4HzXgGSxqEJtzmNgkVWcSsv5sVFY' as Address<'HyroKSPrQKgrgLAG4HzXgGSxqEJtzmNgkVWcSsv5sVFY'>;
+  "EGGcosshV6LQU4DSnCSv2GCtuukhEoi2QECsaM51L28S" as Address<"EGGcosshV6LQU4DSnCSv2GCtuukhEoi2QECsaM51L28S">;
 
 export enum FeeCollectionTimeBasedAccount {
   VaultTimeBasedConfig,
 }
 
 export function identifyFeeCollectionTimeBasedAccount(
-  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): FeeCollectionTimeBasedAccount {
-  const data = 'data' in account ? account.data : account;
+  const data = "data" in account ? account.data : account;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([37, 247, 4, 179, 149, 79, 143, 246])
+        new Uint8Array([37, 247, 4, 179, 149, 79, 143, 246]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionTimeBasedAccount.VaultTimeBasedConfig;
   }
   throw new Error(
-    'The provided account could not be identified as a feeCollectionTimeBased account.'
+    "The provided account could not be identified as a feeCollectionTimeBased account.",
   );
 }
 
@@ -55,16 +62,16 @@ export enum FeeCollectionTimeBasedInstruction {
 }
 
 export function identifyFeeCollectionTimeBasedInstruction(
-  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): FeeCollectionTimeBasedInstruction {
-  const data = 'data' in instruction ? instruction.data : instruction;
+  const data = "data" in instruction ? instruction.data : instruction;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([140, 235, 78, 9, 249, 8, 129, 101])
+        new Uint8Array([140, 235, 78, 9, 249, 8, 129, 101]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionTimeBasedInstruction.CalculateFees;
@@ -73,9 +80,9 @@ export function identifyFeeCollectionTimeBasedInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([175, 175, 109, 31, 13, 152, 155, 237])
+        new Uint8Array([175, 175, 109, 31, 13, 152, 155, 237]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionTimeBasedInstruction.Initialize;
@@ -84,9 +91,9 @@ export function identifyFeeCollectionTimeBasedInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([145, 21, 122, 247, 201, 112, 88, 236])
+        new Uint8Array([145, 21, 122, 247, 201, 112, 88, 236]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionTimeBasedInstruction.ResetTimestamps;
@@ -95,20 +102,20 @@ export function identifyFeeCollectionTimeBasedInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([29, 158, 252, 191, 10, 83, 219, 99])
+        new Uint8Array([29, 158, 252, 191, 10, 83, 219, 99]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionTimeBasedInstruction.UpdateConfig;
   }
   throw new Error(
-    'The provided instruction could not be identified as a feeCollectionTimeBased instruction.'
+    "The provided instruction could not be identified as a feeCollectionTimeBased instruction.",
   );
 }
 
 export type ParsedFeeCollectionTimeBasedInstruction<
-  TProgram extends string = 'HyroKSPrQKgrgLAG4HzXgGSxqEJtzmNgkVWcSsv5sVFY',
+  TProgram extends string = "EGGcosshV6LQU4DSnCSv2GCtuukhEoi2QECsaM51L28S",
 > =
   | ({
       instructionType: FeeCollectionTimeBasedInstruction.CalculateFees;
@@ -122,3 +129,44 @@ export type ParsedFeeCollectionTimeBasedInstruction<
   | ({
       instructionType: FeeCollectionTimeBasedInstruction.UpdateConfig;
     } & ParsedUpdateConfigInstruction<TProgram>);
+
+export function parseFeeCollectionTimeBasedInstruction<TProgram extends string>(
+  instruction: Instruction<TProgram> & InstructionWithData<ReadonlyUint8Array>,
+): ParsedFeeCollectionTimeBasedInstruction<TProgram> {
+  const instructionType =
+    identifyFeeCollectionTimeBasedInstruction(instruction);
+  switch (instructionType) {
+    case FeeCollectionTimeBasedInstruction.CalculateFees: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionTimeBasedInstruction.CalculateFees,
+        ...parseCalculateFeesInstruction(instruction),
+      };
+    }
+    case FeeCollectionTimeBasedInstruction.Initialize: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionTimeBasedInstruction.Initialize,
+        ...parseInitializeInstruction(instruction),
+      };
+    }
+    case FeeCollectionTimeBasedInstruction.ResetTimestamps: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionTimeBasedInstruction.ResetTimestamps,
+        ...parseResetTimestampsInstruction(instruction),
+      };
+    }
+    case FeeCollectionTimeBasedInstruction.UpdateConfig: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionTimeBasedInstruction.UpdateConfig,
+        ...parseUpdateConfigInstruction(instruction),
+      };
+    }
+    default:
+      throw new Error(
+        `Unrecognized instruction type: ${instructionType as string}`,
+      );
+  }
+}

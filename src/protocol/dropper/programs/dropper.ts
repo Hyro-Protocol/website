@@ -7,43 +7,68 @@
  */
 
 import {
+  assertIsInstructionWithAccounts,
   containsBytes,
   fixEncoderSize,
   getBytesEncoder,
   type Address,
+  type Instruction,
+  type InstructionWithData,
   type ReadonlyUint8Array,
-} from '@solana/kit';
-import { type ParsedTransferLamportsInstruction } from '../instructions';
+} from "@solana/kit";
+import {
+  parseTransferLamportsInstruction,
+  type ParsedTransferLamportsInstruction,
+} from "../instructions";
 
 export const DROPPER_PROGRAM_ADDRESS =
-  'Hkkgrs8b4jUhsTG5P1rUtAyi2kPKgEkQ4EuRaxe82tDN' as Address<'Hkkgrs8b4jUhsTG5P1rUtAyi2kPKgEkQ4EuRaxe82tDN'>;
+  "Hkkgrs8b4jUhsTG5P1rUtAyi2kPKgEkQ4EuRaxe82tDN" as Address<"Hkkgrs8b4jUhsTG5P1rUtAyi2kPKgEkQ4EuRaxe82tDN">;
 
 export enum DropperInstruction {
   TransferLamports,
 }
 
 export function identifyDropperInstruction(
-  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): DropperInstruction {
-  const data = 'data' in instruction ? instruction.data : instruction;
+  const data = "data" in instruction ? instruction.data : instruction;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([62, 53, 201, 68, 102, 134, 83, 103])
+        new Uint8Array([62, 53, 201, 68, 102, 134, 83, 103]),
       ),
-      0
+      0,
     )
   ) {
     return DropperInstruction.TransferLamports;
   }
   throw new Error(
-    'The provided instruction could not be identified as a dropper instruction.'
+    "The provided instruction could not be identified as a dropper instruction.",
   );
 }
 
 export type ParsedDropperInstruction<
-  TProgram extends string = 'Hkkgrs8b4jUhsTG5P1rUtAyi2kPKgEkQ4EuRaxe82tDN',
+  TProgram extends string = "Hkkgrs8b4jUhsTG5P1rUtAyi2kPKgEkQ4EuRaxe82tDN",
 > = {
   instructionType: DropperInstruction.TransferLamports;
 } & ParsedTransferLamportsInstruction<TProgram>;
+
+export function parseDropperInstruction<TProgram extends string>(
+  instruction: Instruction<TProgram> & InstructionWithData<ReadonlyUint8Array>,
+): ParsedDropperInstruction<TProgram> {
+  const instructionType = identifyDropperInstruction(instruction);
+  switch (instructionType) {
+    case DropperInstruction.TransferLamports: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: DropperInstruction.TransferLamports,
+        ...parseTransferLamportsInstruction(instruction),
+      };
+    }
+    default:
+      throw new Error(
+        `Unrecognized instruction type: ${instructionType as string}`,
+      );
+  }
+}

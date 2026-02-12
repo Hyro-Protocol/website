@@ -15,7 +15,7 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
   getAmountDecoder,
   getAmountEncoder,
@@ -29,7 +29,7 @@ import {
   type DrawdownTypeArgs,
   type Percent,
   type PercentArgs,
-} from '.';
+} from ".";
 
 export type DailyDrawdown = {
   drawdownType: DrawdownType;
@@ -53,25 +53,25 @@ export type DailyDrawdownArgs = {
 
 export function getDailyDrawdownEncoder(): FixedSizeEncoder<DailyDrawdownArgs> {
   return getStructEncoder([
-    ['drawdownType', getDrawdownTypeEncoder()],
-    ['limitPercentage', getPercentEncoder()],
-    ['limitAmount', getAmountEncoder()],
-    ['maxEquity', getAmountEncoder()],
-    ['currentDrawdownPercentage', getPercentEncoder()],
-    ['currentDrawdownAmount', getAmountEncoder()],
-    ['violationTriggered', getBooleanEncoder()],
+    ["drawdownType", getDrawdownTypeEncoder()],
+    ["limitPercentage", getPercentEncoder()],
+    ["limitAmount", getAmountEncoder()],
+    ["maxEquity", getAmountEncoder()],
+    ["currentDrawdownPercentage", getPercentEncoder()],
+    ["currentDrawdownAmount", getAmountEncoder()],
+    ["violationTriggered", getBooleanEncoder()],
   ]);
 }
 
 export function getDailyDrawdownDecoder(): FixedSizeDecoder<DailyDrawdown> {
   return getStructDecoder([
-    ['drawdownType', getDrawdownTypeDecoder()],
-    ['limitPercentage', getPercentDecoder()],
-    ['limitAmount', getAmountDecoder()],
-    ['maxEquity', getAmountDecoder()],
-    ['currentDrawdownPercentage', getPercentDecoder()],
-    ['currentDrawdownAmount', getAmountDecoder()],
-    ['violationTriggered', getBooleanDecoder()],
+    ["drawdownType", getDrawdownTypeDecoder()],
+    ["limitPercentage", getPercentDecoder()],
+    ["limitAmount", getAmountDecoder()],
+    ["maxEquity", getAmountDecoder()],
+    ["currentDrawdownPercentage", getPercentDecoder()],
+    ["currentDrawdownAmount", getAmountDecoder()],
+    ["violationTriggered", getBooleanDecoder()],
   ]);
 }
 

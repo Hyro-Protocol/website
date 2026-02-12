@@ -45,7 +45,7 @@ import {
   type MaybeAccount,
   type MaybeEncodedAccount,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
   getChallengeStatusDecoder,
   getChallengeStatusEncoder,
@@ -71,7 +71,7 @@ import {
   type StageTypeArgs,
   type TradingDays,
   type TradingDaysArgs,
-} from '../types';
+} from "../types";
 
 export const CHALLENGE_DISCRIMINATOR = new Uint8Array([
   119, 250, 161, 121, 119, 81, 22, 208,
@@ -124,48 +124,48 @@ export type ChallengeArgs = {
 export function getChallengeEncoder(): Encoder<ChallengeArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['challengeId', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
-      ['stageId', getU16Encoder()],
-      ['stageSequence', getU8Encoder()],
-      ['stageType', getStageTypeEncoder()],
-      ['effectiveFrom', getU64Encoder()],
-      ['startingBalance', getU64Encoder()],
-      ['latestBalance', getU64Encoder()],
-      ['profitTarget', getProfitTargetEncoder()],
-      ['tradingDays', getTradingDaysEncoder()],
-      ['maximumLoss', getMaximumLossEncoder()],
-      ['dailyDrawdown', getDailyDrawdownEncoder()],
-      ['user', getAddressEncoder()],
-      ['status', getChallengeStatusEncoder()],
-      ['payout', getU64Encoder()],
-      ['createdAt', getU64Encoder()],
-      ['updatedAt', getU64Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["challengeId", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+      ["stageId", getU16Encoder()],
+      ["stageSequence", getU8Encoder()],
+      ["stageType", getStageTypeEncoder()],
+      ["effectiveFrom", getU64Encoder()],
+      ["startingBalance", getU64Encoder()],
+      ["latestBalance", getU64Encoder()],
+      ["profitTarget", getProfitTargetEncoder()],
+      ["tradingDays", getTradingDaysEncoder()],
+      ["maximumLoss", getMaximumLossEncoder()],
+      ["dailyDrawdown", getDailyDrawdownEncoder()],
+      ["user", getAddressEncoder()],
+      ["status", getChallengeStatusEncoder()],
+      ["payout", getU64Encoder()],
+      ["createdAt", getU64Encoder()],
+      ["updatedAt", getU64Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: CHALLENGE_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: CHALLENGE_DISCRIMINATOR }),
   );
 }
 
 /** Gets the decoder for {@link Challenge} account data. */
 export function getChallengeDecoder(): Decoder<Challenge> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['challengeId', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
-    ['stageId', getU16Decoder()],
-    ['stageSequence', getU8Decoder()],
-    ['stageType', getStageTypeDecoder()],
-    ['effectiveFrom', getU64Decoder()],
-    ['startingBalance', getU64Decoder()],
-    ['latestBalance', getU64Decoder()],
-    ['profitTarget', getProfitTargetDecoder()],
-    ['tradingDays', getTradingDaysDecoder()],
-    ['maximumLoss', getMaximumLossDecoder()],
-    ['dailyDrawdown', getDailyDrawdownDecoder()],
-    ['user', getAddressDecoder()],
-    ['status', getChallengeStatusDecoder()],
-    ['payout', getU64Decoder()],
-    ['createdAt', getU64Decoder()],
-    ['updatedAt', getU64Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["challengeId", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+    ["stageId", getU16Decoder()],
+    ["stageSequence", getU8Decoder()],
+    ["stageType", getStageTypeDecoder()],
+    ["effectiveFrom", getU64Decoder()],
+    ["startingBalance", getU64Decoder()],
+    ["latestBalance", getU64Decoder()],
+    ["profitTarget", getProfitTargetDecoder()],
+    ["tradingDays", getTradingDaysDecoder()],
+    ["maximumLoss", getMaximumLossDecoder()],
+    ["dailyDrawdown", getDailyDrawdownDecoder()],
+    ["user", getAddressDecoder()],
+    ["status", getChallengeStatusDecoder()],
+    ["payout", getU64Decoder()],
+    ["createdAt", getU64Decoder()],
+    ["updatedAt", getU64Decoder()],
   ]);
 }
 
@@ -175,24 +175,24 @@ export function getChallengeCodec(): Codec<ChallengeArgs, Challenge> {
 }
 
 export function decodeChallenge<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress>,
 ): Account<Challenge, TAddress>;
 export function decodeChallenge<TAddress extends string = string>(
-  encodedAccount: MaybeEncodedAccount<TAddress>
+  encodedAccount: MaybeEncodedAccount<TAddress>,
 ): MaybeAccount<Challenge, TAddress>;
 export function decodeChallenge<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>,
 ): Account<Challenge, TAddress> | MaybeAccount<Challenge, TAddress> {
   return decodeAccount(
     encodedAccount as MaybeEncodedAccount<TAddress>,
-    getChallengeDecoder()
+    getChallengeDecoder(),
   );
 }
 
 export async function fetchChallenge<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<Account<Challenge, TAddress>> {
   const maybeAccount = await fetchMaybeChallenge(rpc, address, config);
   assertAccountExists(maybeAccount);
@@ -202,7 +202,7 @@ export async function fetchChallenge<TAddress extends string = string>(
 export async function fetchMaybeChallenge<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<MaybeAccount<Challenge, TAddress>> {
   const maybeAccount = await fetchEncodedAccount(rpc, address, config);
   return decodeChallenge(maybeAccount);
@@ -211,7 +211,7 @@ export async function fetchMaybeChallenge<TAddress extends string = string>(
 export async function fetchAllChallenge(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<Account<Challenge>[]> {
   const maybeAccounts = await fetchAllMaybeChallenge(rpc, addresses, config);
   assertAccountsExist(maybeAccounts);
@@ -221,7 +221,7 @@ export async function fetchAllChallenge(
 export async function fetchAllMaybeChallenge(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<MaybeAccount<Challenge>[]> {
   const maybeAccounts = await fetchEncodedAccounts(rpc, addresses, config);
   return maybeAccounts.map((maybeAccount) => decodeChallenge(maybeAccount));

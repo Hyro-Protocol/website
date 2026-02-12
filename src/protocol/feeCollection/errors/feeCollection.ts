@@ -11,8 +11,8 @@ import {
   type Address,
   type SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM,
   type SolanaError,
-} from '@solana/kit';
-import { FEE_COLLECTION_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { FEE_COLLECTION_PROGRAM_ADDRESS } from "../programs";
 
 /** InsufficientFees: Insufficient fees to claim */
 export const FEE_COLLECTION_ERROR__INSUFFICIENT_FEES = 0x1770; // 6000
@@ -33,7 +33,7 @@ export type FeeCollectionError =
   | typeof FEE_COLLECTION_ERROR__NO_RETURN_DATA;
 
 let feeCollectionErrorMessages: Record<FeeCollectionError, string> | undefined;
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   feeCollectionErrorMessages = {
     [FEE_COLLECTION_ERROR__INSUFFICIENT_FEES]: `Insufficient fees to claim`,
     [FEE_COLLECTION_ERROR__INVALID_FEE_CALC_PROGRAM]: `Invalid fee calculation program`,
@@ -44,13 +44,13 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export function getFeeCollectionErrorMessage(code: FeeCollectionError): string {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     return (feeCollectionErrorMessages as Record<FeeCollectionError, string>)[
       code
     ];
   }
 
-  return 'Error message not available in production bundles.';
+  return "Error message not available in production bundles.";
 }
 
 export function isFeeCollectionError<
@@ -60,13 +60,13 @@ export function isFeeCollectionError<
   transactionMessage: {
     instructions: Record<number, { programAddress: Address }>;
   },
-  code?: TProgramErrorCode
+  code?: TProgramErrorCode,
 ): error is SolanaError<typeof SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM> &
   Readonly<{ context: Readonly<{ code: TProgramErrorCode }> }> {
   return isProgramError<TProgramErrorCode>(
     error,
     transactionMessage,
     FEE_COLLECTION_PROGRAM_ADDRESS,
-    code
+    code,
   );
 }

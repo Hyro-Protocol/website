@@ -28,30 +28,29 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 import {
   getPercentDecoder,
   getPercentEncoder,
   type Percent,
   type PercentArgs,
-} from '../types';
+} from "../types";
 
 export const UPDATE_CHALLENGE_TEMPLATE_MAXIMUM_LOSS_DISCRIMINATOR =
   new Uint8Array([111, 239, 61, 167, 113, 215, 92, 38]);
 
 export function getUpdateChallengeTemplateMaximumLossDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    UPDATE_CHALLENGE_TEMPLATE_MAXIMUM_LOSS_DISCRIMINATOR
+    UPDATE_CHALLENGE_TEMPLATE_MAXIMUM_LOSS_DISCRIMINATOR,
   );
 }
 
 export type UpdateChallengeTemplateMaximumLossInstruction<
   TProgram extends string = typeof POLICY_CHALLENGES_PROGRAM_ADDRESS,
-  TAccountChallengeTemplateAccount extends
-    | string
-    | AccountMeta<string> = string,
+  TAccountChallengeTemplateAccount extends string | AccountMeta<string> =
+    string,
   TAccountSigner extends string | AccountMeta<string> = string,
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
@@ -81,20 +80,20 @@ export type UpdateChallengeTemplateMaximumLossInstructionDataArgs = {
 export function getUpdateChallengeTemplateMaximumLossInstructionDataEncoder(): FixedSizeEncoder<UpdateChallengeTemplateMaximumLossInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['maximumLoss', getPercentEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["maximumLoss", getPercentEncoder()],
     ]),
     (value) => ({
       ...value,
       discriminator: UPDATE_CHALLENGE_TEMPLATE_MAXIMUM_LOSS_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getUpdateChallengeTemplateMaximumLossInstructionDataDecoder(): FixedSizeDecoder<UpdateChallengeTemplateMaximumLossInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['maximumLoss', getPercentDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["maximumLoss", getPercentDecoder()],
   ]);
 }
 
@@ -104,7 +103,7 @@ export function getUpdateChallengeTemplateMaximumLossInstructionDataCodec(): Fix
 > {
   return combineCodec(
     getUpdateChallengeTemplateMaximumLossInstructionDataEncoder(),
-    getUpdateChallengeTemplateMaximumLossInstructionDataDecoder()
+    getUpdateChallengeTemplateMaximumLossInstructionDataDecoder(),
   );
 }
 
@@ -114,7 +113,7 @@ export type UpdateChallengeTemplateMaximumLossInput<
 > = {
   challengeTemplateAccount: Address<TAccountChallengeTemplateAccount>;
   signer: TransactionSigner<TAccountSigner>;
-  maximumLoss: UpdateChallengeTemplateMaximumLossInstructionDataArgs['maximumLoss'];
+  maximumLoss: UpdateChallengeTemplateMaximumLossInstructionDataArgs["maximumLoss"];
 };
 
 export function getUpdateChallengeTemplateMaximumLossInstruction<
@@ -126,7 +125,7 @@ export function getUpdateChallengeTemplateMaximumLossInstruction<
     TAccountChallengeTemplateAccount,
     TAccountSigner
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): UpdateChallengeTemplateMaximumLossInstruction<
   TProgramAddress,
   TAccountChallengeTemplateAccount,
@@ -152,14 +151,14 @@ export function getUpdateChallengeTemplateMaximumLossInstruction<
   // Original args.
   const args = { ...input };
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.challengeTemplateAccount),
       getAccountMeta(accounts.signer),
     ],
     data: getUpdateChallengeTemplateMaximumLossInstructionDataEncoder().encode(
-      args as UpdateChallengeTemplateMaximumLossInstructionDataArgs
+      args as UpdateChallengeTemplateMaximumLossInstructionDataArgs,
     ),
     programAddress,
   } as UpdateChallengeTemplateMaximumLossInstruction<
@@ -187,14 +186,14 @@ export function parseUpdateChallengeTemplateMaximumLossInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedUpdateChallengeTemplateMaximumLossInstruction<
   TProgram,
   TAccountMetas
 > {
   if (instruction.accounts.length < 2) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -209,7 +208,7 @@ export function parseUpdateChallengeTemplateMaximumLossInstruction<
       signer: getNextAccount(),
     },
     data: getUpdateChallengeTemplateMaximumLossInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

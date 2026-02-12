@@ -6,7 +6,7 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './feeAmounts';
-export * from './feeOperation';
-export * from './feeRecipients';
-export * from './feeType';
+export * from "./feeAmounts";
+export * from "./feeOperation";
+export * from "./feeRecipients";
+export * from "./feeType";

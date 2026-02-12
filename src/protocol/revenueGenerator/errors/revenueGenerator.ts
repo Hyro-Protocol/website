@@ -11,8 +11,8 @@ import {
   type Address,
   type SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM,
   type SolanaError,
-} from '@solana/kit';
-import { REVENUE_GENERATOR_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { REVENUE_GENERATOR_PROGRAM_ADDRESS } from "../programs";
 
 /** MathOverflow: Math overflow */
 export const REVENUE_GENERATOR_ERROR__MATH_OVERFLOW = 0x1770; // 6000
@@ -23,22 +23,22 @@ export type RevenueGeneratorError =
 let revenueGeneratorErrorMessages:
   | Record<RevenueGeneratorError, string>
   | undefined;
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   revenueGeneratorErrorMessages = {
     [REVENUE_GENERATOR_ERROR__MATH_OVERFLOW]: `Math overflow`,
   };
 }
 
 export function getRevenueGeneratorErrorMessage(
-  code: RevenueGeneratorError
+  code: RevenueGeneratorError,
 ): string {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     return (
       revenueGeneratorErrorMessages as Record<RevenueGeneratorError, string>
     )[code];
   }
 
-  return 'Error message not available in production bundles.';
+  return "Error message not available in production bundles.";
 }
 
 export function isRevenueGeneratorError<
@@ -48,13 +48,13 @@ export function isRevenueGeneratorError<
   transactionMessage: {
     instructions: Record<number, { programAddress: Address }>;
   },
-  code?: TProgramErrorCode
+  code?: TProgramErrorCode,
 ): error is SolanaError<typeof SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM> &
   Readonly<{ context: Readonly<{ code: TProgramErrorCode }> }> {
   return isProgramError<TProgramErrorCode>(
     error,
     transactionMessage,
     REVENUE_GENERATOR_PROGRAM_ADDRESS,
-    code
+    code,
   );
 }

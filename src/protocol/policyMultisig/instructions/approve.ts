@@ -28,9 +28,9 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { POLICY_MULTISIG_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { POLICY_MULTISIG_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const APPROVE_DISCRIMINATOR = new Uint8Array([
   69, 74, 217, 36, 115, 117, 97, 76,
@@ -66,14 +66,14 @@ export type ApproveInstructionDataArgs = {};
 
 export function getApproveInstructionDataEncoder(): FixedSizeEncoder<ApproveInstructionDataArgs> {
   return transformEncoder(
-    getStructEncoder([['discriminator', fixEncoderSize(getBytesEncoder(), 8)]]),
-    (value) => ({ ...value, discriminator: APPROVE_DISCRIMINATOR })
+    getStructEncoder([["discriminator", fixEncoderSize(getBytesEncoder(), 8)]]),
+    (value) => ({ ...value, discriminator: APPROVE_DISCRIMINATOR }),
   );
 }
 
 export function getApproveInstructionDataDecoder(): FixedSizeDecoder<ApproveInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
   ]);
 }
 
@@ -83,7 +83,7 @@ export function getApproveInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getApproveInstructionDataEncoder(),
-    getApproveInstructionDataDecoder()
+    getApproveInstructionDataDecoder(),
   );
 }
 
@@ -101,7 +101,7 @@ export function getApproveInstruction<
   TProgramAddress extends Address = typeof POLICY_MULTISIG_PROGRAM_ADDRESS,
 >(
   input: ApproveInput<TAccountPolicyAccount, TAccountOwner>,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): ApproveInstruction<TProgramAddress, TAccountPolicyAccount, TAccountOwner> {
   // Program address.
   const programAddress =
@@ -117,7 +117,7 @@ export function getApproveInstruction<
     ResolvedAccount
   >;
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.policyAccount),
@@ -150,11 +150,11 @@ export function parseApproveInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedApproveInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 2) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

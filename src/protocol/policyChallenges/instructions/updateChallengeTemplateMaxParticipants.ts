@@ -28,30 +28,29 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 import {
   getSmallScalarDecoder,
   getSmallScalarEncoder,
   type SmallScalar,
   type SmallScalarArgs,
-} from '../types';
+} from "../types";
 
 export const UPDATE_CHALLENGE_TEMPLATE_MAX_PARTICIPANTS_DISCRIMINATOR =
   new Uint8Array([86, 71, 53, 242, 216, 57, 184, 109]);
 
 export function getUpdateChallengeTemplateMaxParticipantsDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    UPDATE_CHALLENGE_TEMPLATE_MAX_PARTICIPANTS_DISCRIMINATOR
+    UPDATE_CHALLENGE_TEMPLATE_MAX_PARTICIPANTS_DISCRIMINATOR,
   );
 }
 
 export type UpdateChallengeTemplateMaxParticipantsInstruction<
   TProgram extends string = typeof POLICY_CHALLENGES_PROGRAM_ADDRESS,
-  TAccountChallengeTemplateAccount extends
-    | string
-    | AccountMeta<string> = string,
+  TAccountChallengeTemplateAccount extends string | AccountMeta<string> =
+    string,
   TAccountSigner extends string | AccountMeta<string> = string,
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
@@ -81,20 +80,20 @@ export type UpdateChallengeTemplateMaxParticipantsInstructionDataArgs = {
 export function getUpdateChallengeTemplateMaxParticipantsInstructionDataEncoder(): FixedSizeEncoder<UpdateChallengeTemplateMaxParticipantsInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['maxParticipants', getSmallScalarEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["maxParticipants", getSmallScalarEncoder()],
     ]),
     (value) => ({
       ...value,
       discriminator: UPDATE_CHALLENGE_TEMPLATE_MAX_PARTICIPANTS_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getUpdateChallengeTemplateMaxParticipantsInstructionDataDecoder(): FixedSizeDecoder<UpdateChallengeTemplateMaxParticipantsInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['maxParticipants', getSmallScalarDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["maxParticipants", getSmallScalarDecoder()],
   ]);
 }
 
@@ -104,7 +103,7 @@ export function getUpdateChallengeTemplateMaxParticipantsInstructionDataCodec():
 > {
   return combineCodec(
     getUpdateChallengeTemplateMaxParticipantsInstructionDataEncoder(),
-    getUpdateChallengeTemplateMaxParticipantsInstructionDataDecoder()
+    getUpdateChallengeTemplateMaxParticipantsInstructionDataDecoder(),
   );
 }
 
@@ -114,7 +113,7 @@ export type UpdateChallengeTemplateMaxParticipantsInput<
 > = {
   challengeTemplateAccount: Address<TAccountChallengeTemplateAccount>;
   signer: TransactionSigner<TAccountSigner>;
-  maxParticipants: UpdateChallengeTemplateMaxParticipantsInstructionDataArgs['maxParticipants'];
+  maxParticipants: UpdateChallengeTemplateMaxParticipantsInstructionDataArgs["maxParticipants"];
 };
 
 export function getUpdateChallengeTemplateMaxParticipantsInstruction<
@@ -126,7 +125,7 @@ export function getUpdateChallengeTemplateMaxParticipantsInstruction<
     TAccountChallengeTemplateAccount,
     TAccountSigner
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): UpdateChallengeTemplateMaxParticipantsInstruction<
   TProgramAddress,
   TAccountChallengeTemplateAccount,
@@ -152,14 +151,14 @@ export function getUpdateChallengeTemplateMaxParticipantsInstruction<
   // Original args.
   const args = { ...input };
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.challengeTemplateAccount),
       getAccountMeta(accounts.signer),
     ],
     data: getUpdateChallengeTemplateMaxParticipantsInstructionDataEncoder().encode(
-      args as UpdateChallengeTemplateMaxParticipantsInstructionDataArgs
+      args as UpdateChallengeTemplateMaxParticipantsInstructionDataArgs,
     ),
     programAddress,
   } as UpdateChallengeTemplateMaxParticipantsInstruction<
@@ -187,14 +186,14 @@ export function parseUpdateChallengeTemplateMaxParticipantsInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedUpdateChallengeTemplateMaxParticipantsInstruction<
   TProgram,
   TAccountMetas
 > {
   if (instruction.accounts.length < 2) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -209,7 +208,7 @@ export function parseUpdateChallengeTemplateMaxParticipantsInstruction<
       signer: getNextAccount(),
     },
     data: getUpdateChallengeTemplateMaxParticipantsInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

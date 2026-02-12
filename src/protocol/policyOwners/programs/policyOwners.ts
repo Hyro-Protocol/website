@@ -7,41 +7,46 @@
  */
 
 import {
+  assertIsInstructionWithAccounts,
   containsBytes,
   fixEncoderSize,
   getBytesEncoder,
   type Address,
+  type Instruction,
+  type InstructionWithData,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
+  parseInitializeOwnersInstruction,
+  parseValidateInstruction,
   type ParsedInitializeOwnersInstruction,
   type ParsedValidateInstruction,
-} from '../instructions';
+} from "../instructions";
 
 export const POLICY_OWNERS_PROGRAM_ADDRESS =
-  'HyroXELvGkzBwgKz2Fsz2XEMDM6TYupZZ1A9qAtEM9Qs' as Address<'HyroXELvGkzBwgKz2Fsz2XEMDM6TYupZZ1A9qAtEM9Qs'>;
+  "G4wLdUkWJnqkN31sKA7t5RogsijrKryieVFaKuw1GvBL" as Address<"G4wLdUkWJnqkN31sKA7t5RogsijrKryieVFaKuw1GvBL">;
 
 export enum PolicyOwnersAccount {
   Owners,
 }
 
 export function identifyPolicyOwnersAccount(
-  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): PolicyOwnersAccount {
-  const data = 'data' in account ? account.data : account;
+  const data = "data" in account ? account.data : account;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([96, 145, 150, 191, 50, 61, 92, 51])
+        new Uint8Array([96, 145, 150, 191, 50, 61, 92, 51]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyOwnersAccount.Owners;
   }
   throw new Error(
-    'The provided account could not be identified as a policyOwners account.'
+    "The provided account could not be identified as a policyOwners account.",
   );
 }
 
@@ -51,16 +56,16 @@ export enum PolicyOwnersInstruction {
 }
 
 export function identifyPolicyOwnersInstruction(
-  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): PolicyOwnersInstruction {
-  const data = 'data' in instruction ? instruction.data : instruction;
+  const data = "data" in instruction ? instruction.data : instruction;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([145, 41, 103, 101, 229, 205, 135, 157])
+        new Uint8Array([145, 41, 103, 101, 229, 205, 135, 157]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyOwnersInstruction.InitializeOwners;
@@ -69,20 +74,20 @@ export function identifyPolicyOwnersInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([60, 252, 90, 66, 246, 253, 232, 139])
+        new Uint8Array([60, 252, 90, 66, 246, 253, 232, 139]),
       ),
-      0
+      0,
     )
   ) {
     return PolicyOwnersInstruction.Validate;
   }
   throw new Error(
-    'The provided instruction could not be identified as a policyOwners instruction.'
+    "The provided instruction could not be identified as a policyOwners instruction.",
   );
 }
 
 export type ParsedPolicyOwnersInstruction<
-  TProgram extends string = 'HyroXELvGkzBwgKz2Fsz2XEMDM6TYupZZ1A9qAtEM9Qs',
+  TProgram extends string = "G4wLdUkWJnqkN31sKA7t5RogsijrKryieVFaKuw1GvBL",
 > =
   | ({
       instructionType: PolicyOwnersInstruction.InitializeOwners;
@@ -90,3 +95,29 @@ export type ParsedPolicyOwnersInstruction<
   | ({
       instructionType: PolicyOwnersInstruction.Validate;
     } & ParsedValidateInstruction<TProgram>);
+
+export function parsePolicyOwnersInstruction<TProgram extends string>(
+  instruction: Instruction<TProgram> & InstructionWithData<ReadonlyUint8Array>,
+): ParsedPolicyOwnersInstruction<TProgram> {
+  const instructionType = identifyPolicyOwnersInstruction(instruction);
+  switch (instructionType) {
+    case PolicyOwnersInstruction.InitializeOwners: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: PolicyOwnersInstruction.InitializeOwners,
+        ...parseInitializeOwnersInstruction(instruction),
+      };
+    }
+    case PolicyOwnersInstruction.Validate: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: PolicyOwnersInstruction.Validate,
+        ...parseValidateInstruction(instruction),
+      };
+    }
+    default:
+      throw new Error(
+        `Unrecognized instruction type: ${instructionType as string}`,
+      );
+  }
+}

@@ -31,13 +31,13 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 
 export const RESET_TIMESTAMPS_DISCRIMINATOR = new Uint8Array([
   145, 21, 122, 247, 201, 112, 88, 236,
@@ -45,7 +45,7 @@ export const RESET_TIMESTAMPS_DISCRIMINATOR = new Uint8Array([
 
 export function getResetTimestampsDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    RESET_TIMESTAMPS_DISCRIMINATOR
+    RESET_TIMESTAMPS_DISCRIMINATOR,
   );
 }
 
@@ -81,14 +81,14 @@ export type ResetTimestampsInstructionDataArgs = {};
 
 export function getResetTimestampsInstructionDataEncoder(): FixedSizeEncoder<ResetTimestampsInstructionDataArgs> {
   return transformEncoder(
-    getStructEncoder([['discriminator', fixEncoderSize(getBytesEncoder(), 8)]]),
-    (value) => ({ ...value, discriminator: RESET_TIMESTAMPS_DISCRIMINATOR })
+    getStructEncoder([["discriminator", fixEncoderSize(getBytesEncoder(), 8)]]),
+    (value) => ({ ...value, discriminator: RESET_TIMESTAMPS_DISCRIMINATOR }),
   );
 }
 
 export function getResetTimestampsInstructionDataDecoder(): FixedSizeDecoder<ResetTimestampsInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
   ]);
 }
 
@@ -98,7 +98,7 @@ export function getResetTimestampsInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getResetTimestampsInstructionDataEncoder(),
-    getResetTimestampsInstructionDataDecoder()
+    getResetTimestampsInstructionDataDecoder(),
   );
 }
 
@@ -117,15 +117,15 @@ export async function getResetTimestampsInstructionAsync<
   TAccountVault extends string,
   TAccountConfigAccount extends string,
   TAccountAuthority extends string,
-  TProgramAddress extends
-    Address = typeof FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS,
 >(
   input: ResetTimestampsAsyncInput<
     TAccountVault,
     TAccountConfigAccount,
     TAccountAuthority
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   ResetTimestampsInstruction<
     TProgramAddress,
@@ -158,14 +158,14 @@ export async function getResetTimestampsInstructionAsync<
           new Uint8Array([
             97, 108, 108, 95, 105, 110, 95, 111, 110, 101, 95, 99, 111, 110,
             102, 105, 103,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
       ],
     });
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -197,15 +197,15 @@ export function getResetTimestampsInstruction<
   TAccountVault extends string,
   TAccountConfigAccount extends string,
   TAccountAuthority extends string,
-  TProgramAddress extends
-    Address = typeof FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS,
 >(
   input: ResetTimestampsInput<
     TAccountVault,
     TAccountConfigAccount,
     TAccountAuthority
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): ResetTimestampsInstruction<
   TProgramAddress,
   TAccountVault,
@@ -227,7 +227,7 @@ export function getResetTimestampsInstruction<
     ResolvedAccount
   >;
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -264,11 +264,11 @@ export function parseResetTimestampsInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedResetTimestampsInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 3) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

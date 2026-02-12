@@ -35,13 +35,13 @@ import {
   type MaybeAccount,
   type MaybeEncodedAccount,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
   getFractionFeeConfigDecoder,
   getFractionFeeConfigEncoder,
   type FractionFeeConfig,
   type FractionFeeConfigArgs,
-} from '../types';
+} from "../types";
 
 export const VAULT_FRACTION_CONFIG_DISCRIMINATOR = new Uint8Array([
   77, 158, 134, 33, 32, 150, 55, 95,
@@ -49,7 +49,7 @@ export const VAULT_FRACTION_CONFIG_DISCRIMINATOR = new Uint8Array([
 
 export function getVaultFractionConfigDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    VAULT_FRACTION_CONFIG_DISCRIMINATOR
+    VAULT_FRACTION_CONFIG_DISCRIMINATOR,
   );
 }
 
@@ -76,25 +76,25 @@ export type VaultFractionConfigArgs = {
 export function getVaultFractionConfigEncoder(): FixedSizeEncoder<VaultFractionConfigArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['vault', getAddressEncoder()],
-      ['config', getFractionFeeConfigEncoder()],
-      ['bump', getU8Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["vault", getAddressEncoder()],
+      ["config", getFractionFeeConfigEncoder()],
+      ["bump", getU8Encoder()],
     ]),
     (value) => ({
       ...value,
       discriminator: VAULT_FRACTION_CONFIG_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 /** Gets the decoder for {@link VaultFractionConfig} account data. */
 export function getVaultFractionConfigDecoder(): FixedSizeDecoder<VaultFractionConfig> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['vault', getAddressDecoder()],
-    ['config', getFractionFeeConfigDecoder()],
-    ['bump', getU8Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["vault", getAddressDecoder()],
+    ["config", getFractionFeeConfigDecoder()],
+    ["bump", getU8Decoder()],
   ]);
 }
 
@@ -105,24 +105,24 @@ export function getVaultFractionConfigCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getVaultFractionConfigEncoder(),
-    getVaultFractionConfigDecoder()
+    getVaultFractionConfigDecoder(),
   );
 }
 
 export function decodeVaultFractionConfig<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress>,
 ): Account<VaultFractionConfig, TAddress>;
 export function decodeVaultFractionConfig<TAddress extends string = string>(
-  encodedAccount: MaybeEncodedAccount<TAddress>
+  encodedAccount: MaybeEncodedAccount<TAddress>,
 ): MaybeAccount<VaultFractionConfig, TAddress>;
 export function decodeVaultFractionConfig<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>,
 ):
   | Account<VaultFractionConfig, TAddress>
   | MaybeAccount<VaultFractionConfig, TAddress> {
   return decodeAccount(
     encodedAccount as MaybeEncodedAccount<TAddress>,
-    getVaultFractionConfigDecoder()
+    getVaultFractionConfigDecoder(),
   );
 }
 
@@ -131,12 +131,12 @@ export async function fetchVaultFractionConfig<
 >(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<Account<VaultFractionConfig, TAddress>> {
   const maybeAccount = await fetchMaybeVaultFractionConfig(
     rpc,
     address,
-    config
+    config,
   );
   assertAccountExists(maybeAccount);
   return maybeAccount;
@@ -147,7 +147,7 @@ export async function fetchMaybeVaultFractionConfig<
 >(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<MaybeAccount<VaultFractionConfig, TAddress>> {
   const maybeAccount = await fetchEncodedAccount(rpc, address, config);
   return decodeVaultFractionConfig(maybeAccount);
@@ -156,12 +156,12 @@ export async function fetchMaybeVaultFractionConfig<
 export async function fetchAllVaultFractionConfig(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<Account<VaultFractionConfig>[]> {
   const maybeAccounts = await fetchAllMaybeVaultFractionConfig(
     rpc,
     addresses,
-    config
+    config,
   );
   assertAccountsExist(maybeAccounts);
   return maybeAccounts;
@@ -170,11 +170,11 @@ export async function fetchAllVaultFractionConfig(
 export async function fetchAllMaybeVaultFractionConfig(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<MaybeAccount<VaultFractionConfig>[]> {
   const maybeAccounts = await fetchEncodedAccounts(rpc, addresses, config);
   return maybeAccounts.map((maybeAccount) =>
-    decodeVaultFractionConfig(maybeAccount)
+    decodeVaultFractionConfig(maybeAccount),
   );
 }
 

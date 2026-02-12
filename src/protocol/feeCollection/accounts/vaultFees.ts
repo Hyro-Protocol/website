@@ -39,7 +39,7 @@ import {
   type MaybeAccount,
   type MaybeEncodedAccount,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
   getFeeAmountsDecoder,
   getFeeAmountsEncoder,
@@ -49,7 +49,7 @@ import {
   type FeeAmountsArgs,
   type FeeRecipients,
   type FeeRecipientsArgs,
-} from '../types';
+} from "../types";
 
 export const VAULT_FEES_DISCRIMINATOR = new Uint8Array([
   160, 42, 52, 120, 52, 123, 127, 118,
@@ -106,34 +106,34 @@ export type VaultFeesArgs = {
 export function getVaultFeesEncoder(): FixedSizeEncoder<VaultFeesArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['vault', getAddressEncoder()],
-      ['feeCalcProgram', getAddressEncoder()],
-      ['recipients', getFeeRecipientsEncoder()],
-      ['unclaimed', getFeeAmountsEncoder()],
-      ['totalCollected', getFeeAmountsEncoder()],
-      ['totalClaimed', getFeeAmountsEncoder()],
-      ['highWaterMark', getU64Encoder()],
-      ['lastUpdate', getI64Encoder()],
-      ['bump', getU8Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["vault", getAddressEncoder()],
+      ["feeCalcProgram", getAddressEncoder()],
+      ["recipients", getFeeRecipientsEncoder()],
+      ["unclaimed", getFeeAmountsEncoder()],
+      ["totalCollected", getFeeAmountsEncoder()],
+      ["totalClaimed", getFeeAmountsEncoder()],
+      ["highWaterMark", getU64Encoder()],
+      ["lastUpdate", getI64Encoder()],
+      ["bump", getU8Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: VAULT_FEES_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: VAULT_FEES_DISCRIMINATOR }),
   );
 }
 
 /** Gets the decoder for {@link VaultFees} account data. */
 export function getVaultFeesDecoder(): FixedSizeDecoder<VaultFees> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['vault', getAddressDecoder()],
-    ['feeCalcProgram', getAddressDecoder()],
-    ['recipients', getFeeRecipientsDecoder()],
-    ['unclaimed', getFeeAmountsDecoder()],
-    ['totalCollected', getFeeAmountsDecoder()],
-    ['totalClaimed', getFeeAmountsDecoder()],
-    ['highWaterMark', getU64Decoder()],
-    ['lastUpdate', getI64Decoder()],
-    ['bump', getU8Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["vault", getAddressDecoder()],
+    ["feeCalcProgram", getAddressDecoder()],
+    ["recipients", getFeeRecipientsDecoder()],
+    ["unclaimed", getFeeAmountsDecoder()],
+    ["totalCollected", getFeeAmountsDecoder()],
+    ["totalClaimed", getFeeAmountsDecoder()],
+    ["highWaterMark", getU64Decoder()],
+    ["lastUpdate", getI64Decoder()],
+    ["bump", getU8Decoder()],
   ]);
 }
 
@@ -143,24 +143,24 @@ export function getVaultFeesCodec(): FixedSizeCodec<VaultFeesArgs, VaultFees> {
 }
 
 export function decodeVaultFees<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress>,
 ): Account<VaultFees, TAddress>;
 export function decodeVaultFees<TAddress extends string = string>(
-  encodedAccount: MaybeEncodedAccount<TAddress>
+  encodedAccount: MaybeEncodedAccount<TAddress>,
 ): MaybeAccount<VaultFees, TAddress>;
 export function decodeVaultFees<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>,
 ): Account<VaultFees, TAddress> | MaybeAccount<VaultFees, TAddress> {
   return decodeAccount(
     encodedAccount as MaybeEncodedAccount<TAddress>,
-    getVaultFeesDecoder()
+    getVaultFeesDecoder(),
   );
 }
 
 export async function fetchVaultFees<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<Account<VaultFees, TAddress>> {
   const maybeAccount = await fetchMaybeVaultFees(rpc, address, config);
   assertAccountExists(maybeAccount);
@@ -170,7 +170,7 @@ export async function fetchVaultFees<TAddress extends string = string>(
 export async function fetchMaybeVaultFees<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<MaybeAccount<VaultFees, TAddress>> {
   const maybeAccount = await fetchEncodedAccount(rpc, address, config);
   return decodeVaultFees(maybeAccount);
@@ -179,7 +179,7 @@ export async function fetchMaybeVaultFees<TAddress extends string = string>(
 export async function fetchAllVaultFees(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<Account<VaultFees>[]> {
   const maybeAccounts = await fetchAllMaybeVaultFees(rpc, addresses, config);
   assertAccountsExist(maybeAccounts);
@@ -189,7 +189,7 @@ export async function fetchAllVaultFees(
 export async function fetchAllMaybeVaultFees(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<MaybeAccount<VaultFees>[]> {
   const maybeAccounts = await fetchEncodedAccounts(rpc, addresses, config);
   return maybeAccounts.map((maybeAccount) => decodeVaultFees(maybeAccount));

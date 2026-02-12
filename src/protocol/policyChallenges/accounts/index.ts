@@ -6,5 +6,5 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './challenge';
-export * from './challengeTemplate';
+export * from "./challenge";
+export * from "./challengeTemplate";

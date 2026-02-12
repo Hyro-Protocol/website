@@ -33,19 +33,19 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 import {
   getFeeTypeDecoder,
   getFeeTypeEncoder,
   type FeeType,
   type FeeTypeArgs,
-} from '../types';
+} from "../types";
 
 export const CLAIM_FEES_DISCRIMINATOR = new Uint8Array([
   82, 251, 233, 156, 12, 52, 184, 202,
@@ -66,9 +66,8 @@ export type ClaimFeesInstruction<
   TAccountFeeCollectionProgram extends string | AccountMeta<string> = string,
   TAccountVaultFees extends string | AccountMeta<string> = string,
   TAccountSigner extends string | AccountMeta<string> = string,
-  TAccountTokenProgram extends
-    | string
-    | AccountMeta<string> = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+  TAccountTokenProgram extends string | AccountMeta<string> =
+    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -123,19 +122,19 @@ export type ClaimFeesInstructionDataArgs = {
 export function getClaimFeesInstructionDataEncoder(): FixedSizeEncoder<ClaimFeesInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['feeType', getFeeTypeEncoder()],
-      ['amount', getU64Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["feeType", getFeeTypeEncoder()],
+      ["amount", getU64Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: CLAIM_FEES_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: CLAIM_FEES_DISCRIMINATOR }),
   );
 }
 
 export function getClaimFeesInstructionDataDecoder(): FixedSizeDecoder<ClaimFeesInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['feeType', getFeeTypeDecoder()],
-    ['amount', getU64Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["feeType", getFeeTypeDecoder()],
+    ["amount", getU64Decoder()],
   ]);
 }
 
@@ -145,7 +144,7 @@ export function getClaimFeesInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getClaimFeesInstructionDataEncoder(),
-    getClaimFeesInstructionDataDecoder()
+    getClaimFeesInstructionDataDecoder(),
   );
 }
 
@@ -171,8 +170,8 @@ export type ClaimFeesAsyncInput<
   vaultFees: Address<TAccountVaultFees>;
   signer: TransactionSigner<TAccountSigner>;
   tokenProgram?: Address<TAccountTokenProgram>;
-  feeType: ClaimFeesInstructionDataArgs['feeType'];
-  amount: ClaimFeesInstructionDataArgs['amount'];
+  feeType: ClaimFeesInstructionDataArgs["feeType"];
+  amount: ClaimFeesInstructionDataArgs["amount"];
 };
 
 export async function getClaimFeesInstructionAsync<
@@ -200,7 +199,7 @@ export async function getClaimFeesInstructionAsync<
     TAccountSigner,
     TAccountTokenProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   ClaimFeesInstruction<
     TProgramAddress,
@@ -259,7 +258,7 @@ export async function getClaimFeesInstructionAsync<
           new Uint8Array([
             118, 97, 117, 108, 116, 95, 115, 104, 97, 114, 101, 95, 115, 105,
             103, 110, 101, 114,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
       ],
@@ -273,21 +272,21 @@ export async function getClaimFeesInstructionAsync<
           new Uint8Array([
             118, 97, 117, 108, 116, 95, 116, 111, 107, 101, 110, 95, 97, 99, 99,
             111, 117, 110, 116,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
         getAddressEncoder().encode(
-          expectAddress(accounts.underlyingMint.value)
+          expectAddress(accounts.underlyingMint.value),
         ),
       ],
     });
   }
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.shareSignerPda),
@@ -302,7 +301,7 @@ export async function getClaimFeesInstructionAsync<
       getAccountMeta(accounts.tokenProgram),
     ],
     data: getClaimFeesInstructionDataEncoder().encode(
-      args as ClaimFeesInstructionDataArgs
+      args as ClaimFeesInstructionDataArgs,
     ),
     programAddress,
   } as ClaimFeesInstruction<
@@ -342,8 +341,8 @@ export type ClaimFeesInput<
   vaultFees: Address<TAccountVaultFees>;
   signer: TransactionSigner<TAccountSigner>;
   tokenProgram?: Address<TAccountTokenProgram>;
-  feeType: ClaimFeesInstructionDataArgs['feeType'];
-  amount: ClaimFeesInstructionDataArgs['amount'];
+  feeType: ClaimFeesInstructionDataArgs["feeType"];
+  amount: ClaimFeesInstructionDataArgs["amount"];
 };
 
 export function getClaimFeesInstruction<
@@ -371,7 +370,7 @@ export function getClaimFeesInstruction<
     TAccountSigner,
     TAccountTokenProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): ClaimFeesInstruction<
   TProgramAddress,
   TAccountShareSignerPda,
@@ -422,10 +421,10 @@ export function getClaimFeesInstruction<
   // Resolve default values.
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.shareSignerPda),
@@ -440,7 +439,7 @@ export function getClaimFeesInstruction<
       getAccountMeta(accounts.tokenProgram),
     ],
     data: getClaimFeesInstructionDataEncoder().encode(
-      args as ClaimFeesInstructionDataArgs
+      args as ClaimFeesInstructionDataArgs,
     ),
     programAddress,
   } as ClaimFeesInstruction<
@@ -484,11 +483,11 @@ export function parseClaimFeesInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedClaimFeesInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 10) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

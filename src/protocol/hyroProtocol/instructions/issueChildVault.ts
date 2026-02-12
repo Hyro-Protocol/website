@@ -39,20 +39,20 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   expectSome,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 import {
   getManagerFeeStructureDecoder,
   getManagerFeeStructureEncoder,
   type ManagerFeeStructure,
   type ManagerFeeStructureArgs,
-} from '../types';
+} from "../types";
 
 export const ISSUE_CHILD_VAULT_DISCRIMINATOR = new Uint8Array([
   77, 93, 95, 1, 227, 206, 201, 173,
@@ -60,7 +60,7 @@ export const ISSUE_CHILD_VAULT_DISCRIMINATOR = new Uint8Array([
 
 export function getIssueChildVaultDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    ISSUE_CHILD_VAULT_DISCRIMINATOR
+    ISSUE_CHILD_VAULT_DISCRIMINATOR,
   );
 }
 
@@ -74,9 +74,8 @@ export type IssueChildVaultInstruction<
   TAccountChildPolicy extends string | AccountMeta<string> = string,
   TAccountManager extends string | AccountMeta<string> = string,
   TAccountAdmin extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -130,21 +129,21 @@ export type IssueChildVaultInstructionDataArgs = {
 export function getIssueChildVaultInstructionDataEncoder(): Encoder<IssueChildVaultInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['seed', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
-      ['allocation', getU64Encoder()],
-      ['managerFees', getManagerFeeStructureEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["seed", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+      ["allocation", getU64Encoder()],
+      ["managerFees", getManagerFeeStructureEncoder()],
     ]),
-    (value) => ({ ...value, discriminator: ISSUE_CHILD_VAULT_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: ISSUE_CHILD_VAULT_DISCRIMINATOR }),
   );
 }
 
 export function getIssueChildVaultInstructionDataDecoder(): Decoder<IssueChildVaultInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['seed', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
-    ['allocation', getU64Decoder()],
-    ['managerFees', getManagerFeeStructureDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["seed", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+    ["allocation", getU64Decoder()],
+    ["managerFees", getManagerFeeStructureDecoder()],
   ]);
 }
 
@@ -154,7 +153,7 @@ export function getIssueChildVaultInstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getIssueChildVaultInstructionDataEncoder(),
-    getIssueChildVaultInstructionDataDecoder()
+    getIssueChildVaultInstructionDataDecoder(),
   );
 }
 
@@ -178,9 +177,9 @@ export type IssueChildVaultAsyncInput<
   manager: Address<TAccountManager>;
   admin: TransactionSigner<TAccountAdmin>;
   systemProgram?: Address<TAccountSystemProgram>;
-  seed: IssueChildVaultInstructionDataArgs['seed'];
-  allocation: IssueChildVaultInstructionDataArgs['allocation'];
-  managerFees: IssueChildVaultInstructionDataArgs['managerFees'];
+  seed: IssueChildVaultInstructionDataArgs["seed"];
+  allocation: IssueChildVaultInstructionDataArgs["allocation"];
+  managerFees: IssueChildVaultInstructionDataArgs["managerFees"];
 };
 
 export async function getIssueChildVaultInstructionAsync<
@@ -206,7 +205,7 @@ export async function getIssueChildVaultInstructionAsync<
     TAccountAdmin,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   IssueChildVaultInstruction<
     TProgramAddress,
@@ -267,10 +266,10 @@ export async function getIssueChildVaultInstructionAsync<
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.parentVault),
@@ -284,7 +283,7 @@ export async function getIssueChildVaultInstructionAsync<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getIssueChildVaultInstructionDataEncoder().encode(
-      args as IssueChildVaultInstructionDataArgs
+      args as IssueChildVaultInstructionDataArgs,
     ),
     programAddress,
   } as IssueChildVaultInstruction<
@@ -321,9 +320,9 @@ export type IssueChildVaultInput<
   manager: Address<TAccountManager>;
   admin: TransactionSigner<TAccountAdmin>;
   systemProgram?: Address<TAccountSystemProgram>;
-  seed: IssueChildVaultInstructionDataArgs['seed'];
-  allocation: IssueChildVaultInstructionDataArgs['allocation'];
-  managerFees: IssueChildVaultInstructionDataArgs['managerFees'];
+  seed: IssueChildVaultInstructionDataArgs["seed"];
+  allocation: IssueChildVaultInstructionDataArgs["allocation"];
+  managerFees: IssueChildVaultInstructionDataArgs["managerFees"];
 };
 
 export function getIssueChildVaultInstruction<
@@ -349,7 +348,7 @@ export function getIssueChildVaultInstruction<
     TAccountAdmin,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): IssueChildVaultInstruction<
   TProgramAddress,
   TAccountParentVault,
@@ -389,10 +388,10 @@ export function getIssueChildVaultInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.parentVault),
@@ -406,7 +405,7 @@ export function getIssueChildVaultInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getIssueChildVaultInstructionDataEncoder().encode(
-      args as IssueChildVaultInstructionDataArgs
+      args as IssueChildVaultInstructionDataArgs,
     ),
     programAddress,
   } as IssueChildVaultInstruction<
@@ -448,11 +447,11 @@ export function parseIssueChildVaultInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedIssueChildVaultInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 9) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

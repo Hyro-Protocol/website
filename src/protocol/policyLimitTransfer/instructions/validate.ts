@@ -25,15 +25,15 @@ import {
   type InstructionWithData,
   type ReadonlyAccount,
   type ReadonlyUint8Array,
-} from '@solana/kit';
-import { POLICY_LIMIT_TRANSFER_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { POLICY_LIMIT_TRANSFER_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 import {
   getValidateOperationDecoder,
   getValidateOperationEncoder,
   type ValidateOperation,
   type ValidateOperationArgs,
-} from '../types';
+} from "../types";
 
 export const VALIDATE_DISCRIMINATOR = new Uint8Array([
   60, 252, 90, 66, 246, 253, 232, 139,
@@ -68,17 +68,17 @@ export type ValidateInstructionDataArgs = { operation: ValidateOperationArgs };
 export function getValidateInstructionDataEncoder(): FixedSizeEncoder<ValidateInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['operation', getValidateOperationEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["operation", getValidateOperationEncoder()],
     ]),
-    (value) => ({ ...value, discriminator: VALIDATE_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: VALIDATE_DISCRIMINATOR }),
   );
 }
 
 export function getValidateInstructionDataDecoder(): FixedSizeDecoder<ValidateInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['operation', getValidateOperationDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["operation", getValidateOperationDecoder()],
   ]);
 }
 
@@ -88,22 +88,22 @@ export function getValidateInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getValidateInstructionDataEncoder(),
-    getValidateInstructionDataDecoder()
+    getValidateInstructionDataDecoder(),
   );
 }
 
 export type ValidateInput<TAccountVault extends string = string> = {
   vault: Address<TAccountVault>;
-  operation: ValidateInstructionDataArgs['operation'];
+  operation: ValidateInstructionDataArgs["operation"];
 };
 
 export function getValidateInstruction<
   TAccountVault extends string,
-  TProgramAddress extends
-    Address = typeof POLICY_LIMIT_TRANSFER_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof POLICY_LIMIT_TRANSFER_PROGRAM_ADDRESS,
 >(
   input: ValidateInput<TAccountVault>,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): ValidateInstruction<TProgramAddress, TAccountVault> {
   // Program address.
   const programAddress =
@@ -121,11 +121,11 @@ export function getValidateInstruction<
   // Original args.
   const args = { ...input };
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [getAccountMeta(accounts.vault)],
     data: getValidateInstructionDataEncoder().encode(
-      args as ValidateInstructionDataArgs
+      args as ValidateInstructionDataArgs,
     ),
     programAddress,
   } as ValidateInstruction<TProgramAddress, TAccountVault>);
@@ -148,11 +148,11 @@ export function parseValidateInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedValidateInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 1) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

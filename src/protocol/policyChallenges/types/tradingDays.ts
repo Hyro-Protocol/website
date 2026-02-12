@@ -15,13 +15,13 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
   getSmallScalarDecoder,
   getSmallScalarEncoder,
   type SmallScalar,
   type SmallScalarArgs,
-} from '.';
+} from ".";
 
 export type TradingDays = {
   required: SmallScalar;
@@ -39,19 +39,19 @@ export type TradingDaysArgs = {
 
 export function getTradingDaysEncoder(): FixedSizeEncoder<TradingDaysArgs> {
   return getStructEncoder([
-    ['required', getSmallScalarEncoder()],
-    ['completed', getSmallScalarEncoder()],
-    ['requirementsMet', getBooleanEncoder()],
-    ['remainingDays', getSmallScalarEncoder()],
+    ["required", getSmallScalarEncoder()],
+    ["completed", getSmallScalarEncoder()],
+    ["requirementsMet", getBooleanEncoder()],
+    ["remainingDays", getSmallScalarEncoder()],
   ]);
 }
 
 export function getTradingDaysDecoder(): FixedSizeDecoder<TradingDays> {
   return getStructDecoder([
-    ['required', getSmallScalarDecoder()],
-    ['completed', getSmallScalarDecoder()],
-    ['requirementsMet', getBooleanDecoder()],
-    ['remainingDays', getSmallScalarDecoder()],
+    ["required", getSmallScalarDecoder()],
+    ["completed", getSmallScalarDecoder()],
+    ["requirementsMet", getBooleanDecoder()],
+    ["remainingDays", getSmallScalarDecoder()],
   ]);
 }
 

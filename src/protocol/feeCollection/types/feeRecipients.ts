@@ -16,7 +16,7 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 
 /** Fee recipients - verified addresses for each fee type */
 export type FeeRecipients = {
@@ -30,19 +30,19 @@ export type FeeRecipientsArgs = FeeRecipients;
 
 export function getFeeRecipientsEncoder(): FixedSizeEncoder<FeeRecipientsArgs> {
   return getStructEncoder([
-    ['lpRecipient', getAddressEncoder()],
-    ['managerRecipient', getAddressEncoder()],
-    ['protocolRecipient', getAddressEncoder()],
-    ['performanceRecipient', getAddressEncoder()],
+    ["lpRecipient", getAddressEncoder()],
+    ["managerRecipient", getAddressEncoder()],
+    ["protocolRecipient", getAddressEncoder()],
+    ["performanceRecipient", getAddressEncoder()],
   ]);
 }
 
 export function getFeeRecipientsDecoder(): FixedSizeDecoder<FeeRecipients> {
   return getStructDecoder([
-    ['lpRecipient', getAddressDecoder()],
-    ['managerRecipient', getAddressDecoder()],
-    ['protocolRecipient', getAddressDecoder()],
-    ['performanceRecipient', getAddressDecoder()],
+    ["lpRecipient", getAddressDecoder()],
+    ["managerRecipient", getAddressDecoder()],
+    ["protocolRecipient", getAddressDecoder()],
+    ["performanceRecipient", getAddressDecoder()],
   ]);
 }
 

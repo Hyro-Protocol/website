@@ -11,8 +11,8 @@ import {
   type Address,
   type SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM,
   type SolanaError,
-} from '@solana/kit';
-import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from "../programs";
 
 /** UnauthorizedSender: Unauthorized sender. */
 export const POLICY_CHALLENGES_ERROR__UNAUTHORIZED_SENDER = 0x1770; // 6000
@@ -62,7 +62,7 @@ export type PolicyChallengesError =
 let policyChallengesErrorMessages:
   | Record<PolicyChallengesError, string>
   | undefined;
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   policyChallengesErrorMessages = {
     [POLICY_CHALLENGES_ERROR__ALREADY_PARTICIPATING]: `Already participating in challenge.`,
     [POLICY_CHALLENGES_ERROR__CHALLENGE_FULL]: `Challenge is full.`,
@@ -82,15 +82,15 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export function getPolicyChallengesErrorMessage(
-  code: PolicyChallengesError
+  code: PolicyChallengesError,
 ): string {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     return (
       policyChallengesErrorMessages as Record<PolicyChallengesError, string>
     )[code];
   }
 
-  return 'Error message not available in production bundles.';
+  return "Error message not available in production bundles.";
 }
 
 export function isPolicyChallengesError<
@@ -100,13 +100,13 @@ export function isPolicyChallengesError<
   transactionMessage: {
     instructions: Record<number, { programAddress: Address }>;
   },
-  code?: TProgramErrorCode
+  code?: TProgramErrorCode,
 ): error is SolanaError<typeof SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM> &
   Readonly<{ context: Readonly<{ code: TProgramErrorCode }> }> {
   return isProgramError<TProgramErrorCode>(
     error,
     transactionMessage,
     POLICY_CHALLENGES_PROGRAM_ADDRESS,
-    code
+    code,
   );
 }

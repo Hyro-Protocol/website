@@ -33,13 +33,13 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 
 export const DEPOSIT_ASSETS_DISCRIMINATOR = new Uint8Array([
   8, 21, 152, 34, 223, 94, 7, 176,
@@ -47,7 +47,7 @@ export const DEPOSIT_ASSETS_DISCRIMINATOR = new Uint8Array([
 
 export function getDepositAssetsDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    DEPOSIT_ASSETS_DISCRIMINATOR
+    DEPOSIT_ASSETS_DISCRIMINATOR,
   );
 }
 
@@ -62,12 +62,10 @@ export type DepositAssetsInstruction<
   TAccountVault extends string | AccountMeta<string> = string,
   TAccountFeeCollectionProgram extends string | AccountMeta<string> = string,
   TAccountSigner extends string | AccountMeta<string> = string,
-  TAccountTokenProgram extends
-    | string
-    | AccountMeta<string> = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-  TAccountHyroProtocol extends
-    | string
-    | AccountMeta<string> = 'HyroPk4VamtJfPfsxf77zRkMSx9FTV7FZqvH4JPup6fW',
+  TAccountTokenProgram extends string | AccountMeta<string> =
+    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+  TAccountHyroProtocol extends string | AccountMeta<string> =
+    "7gx2mxou2JwuBNiDhfPeXf8EVK8DUGnXPLKdiyYKT3NL",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -121,17 +119,17 @@ export type DepositAssetsInstructionDataArgs = { assets: number | bigint };
 export function getDepositAssetsInstructionDataEncoder(): FixedSizeEncoder<DepositAssetsInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['assets', getU64Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["assets", getU64Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: DEPOSIT_ASSETS_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: DEPOSIT_ASSETS_DISCRIMINATOR }),
   );
 }
 
 export function getDepositAssetsInstructionDataDecoder(): FixedSizeDecoder<DepositAssetsInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['assets', getU64Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["assets", getU64Decoder()],
   ]);
 }
 
@@ -141,7 +139,7 @@ export function getDepositAssetsInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getDepositAssetsInstructionDataEncoder(),
-    getDepositAssetsInstructionDataDecoder()
+    getDepositAssetsInstructionDataDecoder(),
   );
 }
 
@@ -169,7 +167,7 @@ export type DepositAssetsAsyncInput<
   signer: TransactionSigner<TAccountSigner>;
   tokenProgram?: Address<TAccountTokenProgram>;
   hyroProtocol?: Address<TAccountHyroProtocol>;
-  assets: DepositAssetsInstructionDataArgs['assets'];
+  assets: DepositAssetsInstructionDataArgs["assets"];
 };
 
 export async function getDepositAssetsInstructionAsync<
@@ -199,7 +197,7 @@ export async function getDepositAssetsInstructionAsync<
     TAccountTokenProgram,
     TAccountHyroProtocol
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   DepositAssetsInstruction<
     TProgramAddress,
@@ -263,7 +261,7 @@ export async function getDepositAssetsInstructionAsync<
           new Uint8Array([
             118, 97, 117, 108, 116, 95, 115, 104, 97, 114, 101, 95, 115, 105,
             103, 110, 101, 114,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
       ],
@@ -277,11 +275,11 @@ export async function getDepositAssetsInstructionAsync<
           new Uint8Array([
             118, 97, 117, 108, 116, 95, 116, 111, 107, 101, 110, 95, 97, 99, 99,
             111, 117, 110, 116,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
         getAddressEncoder().encode(
-          expectAddress(accounts.underlyingMint.value)
+          expectAddress(accounts.underlyingMint.value),
         ),
       ],
     });
@@ -294,7 +292,7 @@ export async function getDepositAssetsInstructionAsync<
           new Uint8Array([
             118, 97, 117, 108, 116, 95, 115, 104, 97, 114, 101, 95, 109, 105,
             110, 116,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
       ],
@@ -302,14 +300,14 @@ export async function getDepositAssetsInstructionAsync<
   }
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
   }
   if (!accounts.hyroProtocol.value) {
     accounts.hyroProtocol.value =
-      'HyroPk4VamtJfPfsxf77zRkMSx9FTV7FZqvH4JPup6fW' as Address<'HyroPk4VamtJfPfsxf77zRkMSx9FTV7FZqvH4JPup6fW'>;
+      "7gx2mxou2JwuBNiDhfPeXf8EVK8DUGnXPLKdiyYKT3NL" as Address<"7gx2mxou2JwuBNiDhfPeXf8EVK8DUGnXPLKdiyYKT3NL">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.shareSignerPda),
@@ -325,7 +323,7 @@ export async function getDepositAssetsInstructionAsync<
       getAccountMeta(accounts.hyroProtocol),
     ],
     data: getDepositAssetsInstructionDataEncoder().encode(
-      args as DepositAssetsInstructionDataArgs
+      args as DepositAssetsInstructionDataArgs,
     ),
     programAddress,
   } as DepositAssetsInstruction<
@@ -368,7 +366,7 @@ export type DepositAssetsInput<
   signer: TransactionSigner<TAccountSigner>;
   tokenProgram?: Address<TAccountTokenProgram>;
   hyroProtocol?: Address<TAccountHyroProtocol>;
-  assets: DepositAssetsInstructionDataArgs['assets'];
+  assets: DepositAssetsInstructionDataArgs["assets"];
 };
 
 export function getDepositAssetsInstruction<
@@ -398,7 +396,7 @@ export function getDepositAssetsInstruction<
     TAccountTokenProgram,
     TAccountHyroProtocol
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): DepositAssetsInstruction<
   TProgramAddress,
   TAccountShareSignerPda,
@@ -454,14 +452,14 @@ export function getDepositAssetsInstruction<
   // Resolve default values.
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
   }
   if (!accounts.hyroProtocol.value) {
     accounts.hyroProtocol.value =
-      'HyroPk4VamtJfPfsxf77zRkMSx9FTV7FZqvH4JPup6fW' as Address<'HyroPk4VamtJfPfsxf77zRkMSx9FTV7FZqvH4JPup6fW'>;
+      "7gx2mxou2JwuBNiDhfPeXf8EVK8DUGnXPLKdiyYKT3NL" as Address<"7gx2mxou2JwuBNiDhfPeXf8EVK8DUGnXPLKdiyYKT3NL">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.shareSignerPda),
@@ -477,7 +475,7 @@ export function getDepositAssetsInstruction<
       getAccountMeta(accounts.hyroProtocol),
     ],
     data: getDepositAssetsInstructionDataEncoder().encode(
-      args as DepositAssetsInstructionDataArgs
+      args as DepositAssetsInstructionDataArgs,
     ),
     programAddress,
   } as DepositAssetsInstruction<
@@ -523,11 +521,11 @@ export function parseDepositAssetsInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedDepositAssetsInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 11) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

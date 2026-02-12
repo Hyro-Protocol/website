@@ -29,15 +29,15 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 import {
   getBalanceUpdateDecoder,
   getBalanceUpdateEncoder,
   type BalanceUpdate,
   type BalanceUpdateArgs,
-} from '../types';
+} from "../types";
 
 export const REPORT_ON_FUNDS_DISCRIMINATOR = new Uint8Array([
   106, 224, 151, 62, 55, 104, 47, 191,
@@ -45,7 +45,7 @@ export const REPORT_ON_FUNDS_DISCRIMINATOR = new Uint8Array([
 
 export function getReportOnFundsDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    REPORT_ON_FUNDS_DISCRIMINATOR
+    REPORT_ON_FUNDS_DISCRIMINATOR,
   );
 }
 
@@ -87,17 +87,17 @@ export type ReportOnFundsInstructionDataArgs = { balance: BalanceUpdateArgs };
 export function getReportOnFundsInstructionDataEncoder(): FixedSizeEncoder<ReportOnFundsInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['balance', getBalanceUpdateEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["balance", getBalanceUpdateEncoder()],
     ]),
-    (value) => ({ ...value, discriminator: REPORT_ON_FUNDS_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: REPORT_ON_FUNDS_DISCRIMINATOR }),
   );
 }
 
 export function getReportOnFundsInstructionDataDecoder(): FixedSizeDecoder<ReportOnFundsInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['balance', getBalanceUpdateDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["balance", getBalanceUpdateDecoder()],
   ]);
 }
 
@@ -107,7 +107,7 @@ export function getReportOnFundsInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getReportOnFundsInstructionDataEncoder(),
-    getReportOnFundsInstructionDataDecoder()
+    getReportOnFundsInstructionDataDecoder(),
   );
 }
 
@@ -121,7 +121,7 @@ export type ReportOnFundsInput<
   policyProgram: Address<TAccountPolicyProgram>;
   feeCollectionProgram: Address<TAccountFeeCollectionProgram>;
   signer: TransactionSigner<TAccountSigner>;
-  balance: ReportOnFundsInstructionDataArgs['balance'];
+  balance: ReportOnFundsInstructionDataArgs["balance"];
 };
 
 export function getReportOnFundsInstruction<
@@ -137,7 +137,7 @@ export function getReportOnFundsInstruction<
     TAccountFeeCollectionProgram,
     TAccountSigner
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): ReportOnFundsInstruction<
   TProgramAddress,
   TAccountVault,
@@ -167,7 +167,7 @@ export function getReportOnFundsInstruction<
   // Original args.
   const args = { ...input };
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -176,7 +176,7 @@ export function getReportOnFundsInstruction<
       getAccountMeta(accounts.signer),
     ],
     data: getReportOnFundsInstructionDataEncoder().encode(
-      args as ReportOnFundsInstructionDataArgs
+      args as ReportOnFundsInstructionDataArgs,
     ),
     programAddress,
   } as ReportOnFundsInstruction<
@@ -208,11 +208,11 @@ export function parseReportOnFundsInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedReportOnFundsInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 4) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

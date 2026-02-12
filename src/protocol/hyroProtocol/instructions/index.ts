@@ -6,18 +6,18 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './claimFees';
-export * from './createTx';
-export * from './depositAssets';
-export * from './executeTx';
-export * from './initializeManagerRegistry';
-export * from './initializeVault';
-export * from './issueChildVault';
-export * from './ping';
-export * from './recalculateBalance';
-export * from './redeemShares';
-export * from './registerManager';
-export * from './reportOnFunds';
-export * from './returnFunds';
-export * from './useFunds';
-export * from './verifyManager';
+export * from "./claimFees";
+export * from "./createTx";
+export * from "./depositAssets";
+export * from "./executeTx";
+export * from "./initializeManagerRegistry";
+export * from "./initializeVault";
+export * from "./issueChildVault";
+export * from "./ping";
+export * from "./recalculateBalance";
+export * from "./redeemShares";
+export * from "./registerManager";
+export * from "./reportOnFunds";
+export * from "./returnFunds";
+export * from "./useFunds";
+export * from "./verifyManager";

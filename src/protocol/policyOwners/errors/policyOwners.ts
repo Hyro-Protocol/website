@@ -11,8 +11,8 @@ import {
   type Address,
   type SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM,
   type SolanaError,
-} from '@solana/kit';
-import { POLICY_OWNERS_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { POLICY_OWNERS_PROGRAM_ADDRESS } from "../programs";
 
 /** UnauthorizedSender: Unauthorized sender. */
 export const POLICY_OWNERS_ERROR__UNAUTHORIZED_SENDER = 0x1770; // 6000
@@ -24,7 +24,7 @@ export type PolicyOwnersError =
   | typeof POLICY_OWNERS_ERROR__UNAUTHORIZED_SENDER;
 
 let policyOwnersErrorMessages: Record<PolicyOwnersError, string> | undefined;
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   policyOwnersErrorMessages = {
     [POLICY_OWNERS_ERROR__INVALID_POLICY_PDA]: `Invalid policy PDA.`,
     [POLICY_OWNERS_ERROR__UNAUTHORIZED_SENDER]: `Unauthorized sender.`,
@@ -32,13 +32,13 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export function getPolicyOwnersErrorMessage(code: PolicyOwnersError): string {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     return (policyOwnersErrorMessages as Record<PolicyOwnersError, string>)[
       code
     ];
   }
 
-  return 'Error message not available in production bundles.';
+  return "Error message not available in production bundles.";
 }
 
 export function isPolicyOwnersError<
@@ -48,13 +48,13 @@ export function isPolicyOwnersError<
   transactionMessage: {
     instructions: Record<number, { programAddress: Address }>;
   },
-  code?: TProgramErrorCode
+  code?: TProgramErrorCode,
 ): error is SolanaError<typeof SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM> &
   Readonly<{ context: Readonly<{ code: TProgramErrorCode }> }> {
   return isProgramError<TProgramErrorCode>(
     error,
     transactionMessage,
     POLICY_OWNERS_PROGRAM_ADDRESS,
-    code
+    code,
   );
 }

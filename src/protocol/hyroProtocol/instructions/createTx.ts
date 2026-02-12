@@ -40,20 +40,20 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   expectSome,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 import {
   getTransactionAccountDecoder,
   getTransactionAccountEncoder,
   type TransactionAccount,
   type TransactionAccountArgs,
-} from '../types';
+} from "../types";
 
 export const CREATE_TX_DISCRIMINATOR = new Uint8Array([
   97, 223, 80, 153, 55, 13, 155, 12,
@@ -71,9 +71,8 @@ export type CreateTxInstruction<
   TAccountPolicyProgram extends string | AccountMeta<string> = string,
   TAccountVaultSigner extends string | AccountMeta<string> = string,
   TAccountSigner extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -123,23 +122,23 @@ export type CreateTxInstructionDataArgs = {
 export function getCreateTxInstructionDataEncoder(): Encoder<CreateTxInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['nonce', getU64Encoder()],
-      ['pid', getAddressEncoder()],
-      ['accs', getArrayEncoder(getTransactionAccountEncoder())],
-      ['data', addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["nonce", getU64Encoder()],
+      ["pid", getAddressEncoder()],
+      ["accs", getArrayEncoder(getTransactionAccountEncoder())],
+      ["data", addEncoderSizePrefix(getBytesEncoder(), getU32Encoder())],
     ]),
-    (value) => ({ ...value, discriminator: CREATE_TX_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: CREATE_TX_DISCRIMINATOR }),
   );
 }
 
 export function getCreateTxInstructionDataDecoder(): Decoder<CreateTxInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['nonce', getU64Decoder()],
-    ['pid', getAddressDecoder()],
-    ['accs', getArrayDecoder(getTransactionAccountDecoder())],
-    ['data', addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["nonce", getU64Decoder()],
+    ["pid", getAddressDecoder()],
+    ["accs", getArrayDecoder(getTransactionAccountDecoder())],
+    ["data", addDecoderSizePrefix(getBytesDecoder(), getU32Decoder())],
   ]);
 }
 
@@ -149,7 +148,7 @@ export function getCreateTxInstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getCreateTxInstructionDataEncoder(),
-    getCreateTxInstructionDataDecoder()
+    getCreateTxInstructionDataDecoder(),
   );
 }
 
@@ -169,10 +168,10 @@ export type CreateTxAsyncInput<
   vaultSigner?: Address<TAccountVaultSigner>;
   signer: TransactionSigner<TAccountSigner>;
   systemProgram?: Address<TAccountSystemProgram>;
-  nonce: CreateTxInstructionDataArgs['nonce'];
-  pid: CreateTxInstructionDataArgs['pid'];
-  accs: CreateTxInstructionDataArgs['accs'];
-  data: CreateTxInstructionDataArgs['data'];
+  nonce: CreateTxInstructionDataArgs["nonce"];
+  pid: CreateTxInstructionDataArgs["pid"];
+  accs: CreateTxInstructionDataArgs["accs"];
+  data: CreateTxInstructionDataArgs["data"];
 };
 
 export async function getCreateTxInstructionAsync<
@@ -194,7 +193,7 @@ export async function getCreateTxInstructionAsync<
     TAccountSigner,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   CreateTxInstruction<
     TProgramAddress,
@@ -247,10 +246,10 @@ export async function getCreateTxInstructionAsync<
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -262,7 +261,7 @@ export async function getCreateTxInstructionAsync<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getCreateTxInstructionDataEncoder().encode(
-      args as CreateTxInstructionDataArgs
+      args as CreateTxInstructionDataArgs,
     ),
     programAddress,
   } as CreateTxInstruction<
@@ -293,10 +292,10 @@ export type CreateTxInput<
   vaultSigner: Address<TAccountVaultSigner>;
   signer: TransactionSigner<TAccountSigner>;
   systemProgram?: Address<TAccountSystemProgram>;
-  nonce: CreateTxInstructionDataArgs['nonce'];
-  pid: CreateTxInstructionDataArgs['pid'];
-  accs: CreateTxInstructionDataArgs['accs'];
-  data: CreateTxInstructionDataArgs['data'];
+  nonce: CreateTxInstructionDataArgs["nonce"];
+  pid: CreateTxInstructionDataArgs["pid"];
+  accs: CreateTxInstructionDataArgs["accs"];
+  data: CreateTxInstructionDataArgs["data"];
 };
 
 export function getCreateTxInstruction<
@@ -318,7 +317,7 @@ export function getCreateTxInstruction<
     TAccountSigner,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): CreateTxInstruction<
   TProgramAddress,
   TAccountVault,
@@ -354,10 +353,10 @@ export function getCreateTxInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -369,7 +368,7 @@ export function getCreateTxInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getCreateTxInstructionDataEncoder().encode(
-      args as CreateTxInstructionDataArgs
+      args as CreateTxInstructionDataArgs,
     ),
     programAddress,
   } as CreateTxInstruction<
@@ -407,11 +406,11 @@ export function parseCreateTxInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedCreateTxInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 7) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

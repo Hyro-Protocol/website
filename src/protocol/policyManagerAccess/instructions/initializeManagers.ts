@@ -34,13 +34,13 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { POLICY_MANAGER_ACCESS_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { POLICY_MANAGER_ACCESS_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 
 export const INITIALIZE_MANAGERS_DISCRIMINATOR = new Uint8Array([
   184, 12, 75, 43, 10, 73, 29, 155,
@@ -48,7 +48,7 @@ export const INITIALIZE_MANAGERS_DISCRIMINATOR = new Uint8Array([
 
 export function getInitializeManagersDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    INITIALIZE_MANAGERS_DISCRIMINATOR
+    INITIALIZE_MANAGERS_DISCRIMINATOR,
   );
 }
 
@@ -57,9 +57,8 @@ export type InitializeManagersInstruction<
   TAccountVault extends string | AccountMeta<string> = string,
   TAccountPolicyAccount extends string | AccountMeta<string> = string,
   TAccountSigner extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -94,17 +93,17 @@ export type InitializeManagersInstructionDataArgs = {
 export function getInitializeManagersInstructionDataEncoder(): Encoder<InitializeManagersInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['managers', getArrayEncoder(getAddressEncoder())],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["managers", getArrayEncoder(getAddressEncoder())],
     ]),
-    (value) => ({ ...value, discriminator: INITIALIZE_MANAGERS_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: INITIALIZE_MANAGERS_DISCRIMINATOR }),
   );
 }
 
 export function getInitializeManagersInstructionDataDecoder(): Decoder<InitializeManagersInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['managers', getArrayDecoder(getAddressDecoder())],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["managers", getArrayDecoder(getAddressDecoder())],
   ]);
 }
 
@@ -114,7 +113,7 @@ export function getInitializeManagersInstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getInitializeManagersInstructionDataEncoder(),
-    getInitializeManagersInstructionDataDecoder()
+    getInitializeManagersInstructionDataDecoder(),
   );
 }
 
@@ -128,7 +127,7 @@ export type InitializeManagersAsyncInput<
   policyAccount?: Address<TAccountPolicyAccount>;
   signer: TransactionSigner<TAccountSigner>;
   systemProgram?: Address<TAccountSystemProgram>;
-  managers: InitializeManagersInstructionDataArgs['managers'];
+  managers: InitializeManagersInstructionDataArgs["managers"];
 };
 
 export async function getInitializeManagersInstructionAsync<
@@ -136,8 +135,8 @@ export async function getInitializeManagersInstructionAsync<
   TAccountPolicyAccount extends string,
   TAccountSigner extends string,
   TAccountSystemProgram extends string,
-  TProgramAddress extends
-    Address = typeof POLICY_MANAGER_ACCESS_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof POLICY_MANAGER_ACCESS_PROGRAM_ADDRESS,
 >(
   input: InitializeManagersAsyncInput<
     TAccountVault,
@@ -145,7 +144,7 @@ export async function getInitializeManagersInstructionAsync<
     TAccountSigner,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   InitializeManagersInstruction<
     TProgramAddress,
@@ -183,10 +182,10 @@ export async function getInitializeManagersInstructionAsync<
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -195,7 +194,7 @@ export async function getInitializeManagersInstructionAsync<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getInitializeManagersInstructionDataEncoder().encode(
-      args as InitializeManagersInstructionDataArgs
+      args as InitializeManagersInstructionDataArgs,
     ),
     programAddress,
   } as InitializeManagersInstruction<
@@ -217,7 +216,7 @@ export type InitializeManagersInput<
   policyAccount: Address<TAccountPolicyAccount>;
   signer: TransactionSigner<TAccountSigner>;
   systemProgram?: Address<TAccountSystemProgram>;
-  managers: InitializeManagersInstructionDataArgs['managers'];
+  managers: InitializeManagersInstructionDataArgs["managers"];
 };
 
 export function getInitializeManagersInstruction<
@@ -225,8 +224,8 @@ export function getInitializeManagersInstruction<
   TAccountPolicyAccount extends string,
   TAccountSigner extends string,
   TAccountSystemProgram extends string,
-  TProgramAddress extends
-    Address = typeof POLICY_MANAGER_ACCESS_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof POLICY_MANAGER_ACCESS_PROGRAM_ADDRESS,
 >(
   input: InitializeManagersInput<
     TAccountVault,
@@ -234,7 +233,7 @@ export function getInitializeManagersInstruction<
     TAccountSigner,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): InitializeManagersInstruction<
   TProgramAddress,
   TAccountVault,
@@ -264,10 +263,10 @@ export function getInitializeManagersInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -276,7 +275,7 @@ export function getInitializeManagersInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getInitializeManagersInstructionDataEncoder().encode(
-      args as InitializeManagersInstructionDataArgs
+      args as InitializeManagersInstructionDataArgs,
     ),
     programAddress,
   } as InitializeManagersInstruction<
@@ -308,11 +307,11 @@ export function parseInitializeManagersInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedInitializeManagersInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 4) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -329,7 +328,7 @@ export function parseInitializeManagersInstruction<
       systemProgram: getNextAccount(),
     },
     data: getInitializeManagersInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

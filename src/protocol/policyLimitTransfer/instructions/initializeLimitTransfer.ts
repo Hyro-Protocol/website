@@ -33,13 +33,13 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { POLICY_LIMIT_TRANSFER_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { POLICY_LIMIT_TRANSFER_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 
 export const INITIALIZE_LIMIT_TRANSFER_DISCRIMINATOR = new Uint8Array([
   231, 140, 57, 76, 17, 243, 161, 149,
@@ -47,7 +47,7 @@ export const INITIALIZE_LIMIT_TRANSFER_DISCRIMINATOR = new Uint8Array([
 
 export function getInitializeLimitTransferDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    INITIALIZE_LIMIT_TRANSFER_DISCRIMINATOR
+    INITIALIZE_LIMIT_TRANSFER_DISCRIMINATOR,
   );
 }
 
@@ -56,9 +56,8 @@ export type InitializeLimitTransferInstruction<
   TAccountVault extends string | AccountMeta<string> = string,
   TAccountPolicyAccount extends string | AccountMeta<string> = string,
   TAccountSigner extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -95,22 +94,22 @@ export type InitializeLimitTransferInstructionDataArgs = {
 export function getInitializeLimitTransferInstructionDataEncoder(): FixedSizeEncoder<InitializeLimitTransferInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['min', getU64Encoder()],
-      ['max', getU64Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["min", getU64Encoder()],
+      ["max", getU64Encoder()],
     ]),
     (value) => ({
       ...value,
       discriminator: INITIALIZE_LIMIT_TRANSFER_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getInitializeLimitTransferInstructionDataDecoder(): FixedSizeDecoder<InitializeLimitTransferInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['min', getU64Decoder()],
-    ['max', getU64Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["min", getU64Decoder()],
+    ["max", getU64Decoder()],
   ]);
 }
 
@@ -120,7 +119,7 @@ export function getInitializeLimitTransferInstructionDataCodec(): FixedSizeCodec
 > {
   return combineCodec(
     getInitializeLimitTransferInstructionDataEncoder(),
-    getInitializeLimitTransferInstructionDataDecoder()
+    getInitializeLimitTransferInstructionDataDecoder(),
   );
 }
 
@@ -134,8 +133,8 @@ export type InitializeLimitTransferAsyncInput<
   policyAccount?: Address<TAccountPolicyAccount>;
   signer: TransactionSigner<TAccountSigner>;
   systemProgram?: Address<TAccountSystemProgram>;
-  min: InitializeLimitTransferInstructionDataArgs['min'];
-  max: InitializeLimitTransferInstructionDataArgs['max'];
+  min: InitializeLimitTransferInstructionDataArgs["min"];
+  max: InitializeLimitTransferInstructionDataArgs["max"];
 };
 
 export async function getInitializeLimitTransferInstructionAsync<
@@ -143,8 +142,8 @@ export async function getInitializeLimitTransferInstructionAsync<
   TAccountPolicyAccount extends string,
   TAccountSigner extends string,
   TAccountSystemProgram extends string,
-  TProgramAddress extends
-    Address = typeof POLICY_LIMIT_TRANSFER_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof POLICY_LIMIT_TRANSFER_PROGRAM_ADDRESS,
 >(
   input: InitializeLimitTransferAsyncInput<
     TAccountVault,
@@ -152,7 +151,7 @@ export async function getInitializeLimitTransferInstructionAsync<
     TAccountSigner,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   InitializeLimitTransferInstruction<
     TProgramAddress,
@@ -190,10 +189,10 @@ export async function getInitializeLimitTransferInstructionAsync<
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -202,7 +201,7 @@ export async function getInitializeLimitTransferInstructionAsync<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getInitializeLimitTransferInstructionDataEncoder().encode(
-      args as InitializeLimitTransferInstructionDataArgs
+      args as InitializeLimitTransferInstructionDataArgs,
     ),
     programAddress,
   } as InitializeLimitTransferInstruction<
@@ -224,8 +223,8 @@ export type InitializeLimitTransferInput<
   policyAccount: Address<TAccountPolicyAccount>;
   signer: TransactionSigner<TAccountSigner>;
   systemProgram?: Address<TAccountSystemProgram>;
-  min: InitializeLimitTransferInstructionDataArgs['min'];
-  max: InitializeLimitTransferInstructionDataArgs['max'];
+  min: InitializeLimitTransferInstructionDataArgs["min"];
+  max: InitializeLimitTransferInstructionDataArgs["max"];
 };
 
 export function getInitializeLimitTransferInstruction<
@@ -233,8 +232,8 @@ export function getInitializeLimitTransferInstruction<
   TAccountPolicyAccount extends string,
   TAccountSigner extends string,
   TAccountSystemProgram extends string,
-  TProgramAddress extends
-    Address = typeof POLICY_LIMIT_TRANSFER_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof POLICY_LIMIT_TRANSFER_PROGRAM_ADDRESS,
 >(
   input: InitializeLimitTransferInput<
     TAccountVault,
@@ -242,7 +241,7 @@ export function getInitializeLimitTransferInstruction<
     TAccountSigner,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): InitializeLimitTransferInstruction<
   TProgramAddress,
   TAccountVault,
@@ -272,10 +271,10 @@ export function getInitializeLimitTransferInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -284,7 +283,7 @@ export function getInitializeLimitTransferInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getInitializeLimitTransferInstructionDataEncoder().encode(
-      args as InitializeLimitTransferInstructionDataArgs
+      args as InitializeLimitTransferInstructionDataArgs,
     ),
     programAddress,
   } as InitializeLimitTransferInstruction<
@@ -316,11 +315,11 @@ export function parseInitializeLimitTransferInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedInitializeLimitTransferInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 4) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -337,7 +336,7 @@ export function parseInitializeLimitTransferInstruction<
       systemProgram: getNextAccount(),
     },
     data: getInitializeLimitTransferInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

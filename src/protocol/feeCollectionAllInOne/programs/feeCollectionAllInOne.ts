@@ -7,13 +7,23 @@
  */
 
 import {
+  assertIsInstructionWithAccounts,
   containsBytes,
   fixEncoderSize,
   getBytesEncoder,
   type Address,
+  type Instruction,
+  type InstructionWithData,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
+  parseCalculateFeesInstruction,
+  parseInitializeInstruction,
+  parseResetTimestampsInstruction,
+  parseUpdateConfigInstruction,
+  parseUpdateFractionConfigInstruction,
+  parseUpdateHighWaterMarkInstruction,
+  parseUpdateTimeBasedConfigInstruction,
   type ParsedCalculateFeesInstruction,
   type ParsedInitializeInstruction,
   type ParsedResetTimestampsInstruction,
@@ -21,32 +31,32 @@ import {
   type ParsedUpdateFractionConfigInstruction,
   type ParsedUpdateHighWaterMarkInstruction,
   type ParsedUpdateTimeBasedConfigInstruction,
-} from '../instructions';
+} from "../instructions";
 
 export const FEE_COLLECTION_ALL_IN_ONE_PROGRAM_ADDRESS =
-  'Hyro5wTP435ihATk9Leio5npKdTqynNdpNey4S6BZPmi' as Address<'Hyro5wTP435ihATk9Leio5npKdTqynNdpNey4S6BZPmi'>;
+  "DzAecV65f1Cuyr1h5F2khGThE3aQEB5ccJVCRRZSoQZT" as Address<"DzAecV65f1Cuyr1h5F2khGThE3aQEB5ccJVCRRZSoQZT">;
 
 export enum FeeCollectionAllInOneAccount {
   VaultAllInOneConfig,
 }
 
 export function identifyFeeCollectionAllInOneAccount(
-  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): FeeCollectionAllInOneAccount {
-  const data = 'data' in account ? account.data : account;
+  const data = "data" in account ? account.data : account;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([124, 88, 126, 126, 39, 118, 51, 134])
+        new Uint8Array([124, 88, 126, 126, 39, 118, 51, 134]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionAllInOneAccount.VaultAllInOneConfig;
   }
   throw new Error(
-    'The provided account could not be identified as a feeCollectionAllInOne account.'
+    "The provided account could not be identified as a feeCollectionAllInOne account.",
   );
 }
 
@@ -61,16 +71,16 @@ export enum FeeCollectionAllInOneInstruction {
 }
 
 export function identifyFeeCollectionAllInOneInstruction(
-  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): FeeCollectionAllInOneInstruction {
-  const data = 'data' in instruction ? instruction.data : instruction;
+  const data = "data" in instruction ? instruction.data : instruction;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([140, 235, 78, 9, 249, 8, 129, 101])
+        new Uint8Array([140, 235, 78, 9, 249, 8, 129, 101]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionAllInOneInstruction.CalculateFees;
@@ -79,9 +89,9 @@ export function identifyFeeCollectionAllInOneInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([175, 175, 109, 31, 13, 152, 155, 237])
+        new Uint8Array([175, 175, 109, 31, 13, 152, 155, 237]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionAllInOneInstruction.Initialize;
@@ -90,9 +100,9 @@ export function identifyFeeCollectionAllInOneInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([145, 21, 122, 247, 201, 112, 88, 236])
+        new Uint8Array([145, 21, 122, 247, 201, 112, 88, 236]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionAllInOneInstruction.ResetTimestamps;
@@ -101,9 +111,9 @@ export function identifyFeeCollectionAllInOneInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([29, 158, 252, 191, 10, 83, 219, 99])
+        new Uint8Array([29, 158, 252, 191, 10, 83, 219, 99]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionAllInOneInstruction.UpdateConfig;
@@ -112,9 +122,9 @@ export function identifyFeeCollectionAllInOneInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([251, 44, 246, 37, 62, 95, 147, 171])
+        new Uint8Array([251, 44, 246, 37, 62, 95, 147, 171]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionAllInOneInstruction.UpdateFractionConfig;
@@ -123,9 +133,9 @@ export function identifyFeeCollectionAllInOneInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([68, 148, 239, 216, 150, 14, 205, 238])
+        new Uint8Array([68, 148, 239, 216, 150, 14, 205, 238]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionAllInOneInstruction.UpdateHighWaterMark;
@@ -134,20 +144,20 @@ export function identifyFeeCollectionAllInOneInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([1, 170, 161, 15, 4, 42, 89, 118])
+        new Uint8Array([1, 170, 161, 15, 4, 42, 89, 118]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionAllInOneInstruction.UpdateTimeBasedConfig;
   }
   throw new Error(
-    'The provided instruction could not be identified as a feeCollectionAllInOne instruction.'
+    "The provided instruction could not be identified as a feeCollectionAllInOne instruction.",
   );
 }
 
 export type ParsedFeeCollectionAllInOneInstruction<
-  TProgram extends string = 'Hyro5wTP435ihATk9Leio5npKdTqynNdpNey4S6BZPmi',
+  TProgram extends string = "DzAecV65f1Cuyr1h5F2khGThE3aQEB5ccJVCRRZSoQZT",
 > =
   | ({
       instructionType: FeeCollectionAllInOneInstruction.CalculateFees;
@@ -170,3 +180,64 @@ export type ParsedFeeCollectionAllInOneInstruction<
   | ({
       instructionType: FeeCollectionAllInOneInstruction.UpdateTimeBasedConfig;
     } & ParsedUpdateTimeBasedConfigInstruction<TProgram>);
+
+export function parseFeeCollectionAllInOneInstruction<TProgram extends string>(
+  instruction: Instruction<TProgram> & InstructionWithData<ReadonlyUint8Array>,
+): ParsedFeeCollectionAllInOneInstruction<TProgram> {
+  const instructionType = identifyFeeCollectionAllInOneInstruction(instruction);
+  switch (instructionType) {
+    case FeeCollectionAllInOneInstruction.CalculateFees: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionAllInOneInstruction.CalculateFees,
+        ...parseCalculateFeesInstruction(instruction),
+      };
+    }
+    case FeeCollectionAllInOneInstruction.Initialize: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionAllInOneInstruction.Initialize,
+        ...parseInitializeInstruction(instruction),
+      };
+    }
+    case FeeCollectionAllInOneInstruction.ResetTimestamps: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionAllInOneInstruction.ResetTimestamps,
+        ...parseResetTimestampsInstruction(instruction),
+      };
+    }
+    case FeeCollectionAllInOneInstruction.UpdateConfig: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionAllInOneInstruction.UpdateConfig,
+        ...parseUpdateConfigInstruction(instruction),
+      };
+    }
+    case FeeCollectionAllInOneInstruction.UpdateFractionConfig: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionAllInOneInstruction.UpdateFractionConfig,
+        ...parseUpdateFractionConfigInstruction(instruction),
+      };
+    }
+    case FeeCollectionAllInOneInstruction.UpdateHighWaterMark: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionAllInOneInstruction.UpdateHighWaterMark,
+        ...parseUpdateHighWaterMarkInstruction(instruction),
+      };
+    }
+    case FeeCollectionAllInOneInstruction.UpdateTimeBasedConfig: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionAllInOneInstruction.UpdateTimeBasedConfig,
+        ...parseUpdateTimeBasedConfigInstruction(instruction),
+      };
+    }
+    default:
+      throw new Error(
+        `Unrecognized instruction type: ${instructionType as string}`,
+      );
+  }
+}

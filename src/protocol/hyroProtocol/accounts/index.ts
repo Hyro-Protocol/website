@@ -6,7 +6,7 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './managerProfile';
-export * from './managerRegistry';
-export * from './transaction';
-export * from './vault';
+export * from "./managerProfile";
+export * from "./managerRegistry";
+export * from "./transaction";
+export * from "./vault";

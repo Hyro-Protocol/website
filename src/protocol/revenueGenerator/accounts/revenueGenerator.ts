@@ -37,7 +37,7 @@ import {
   type MaybeAccount,
   type MaybeEncodedAccount,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 
 export const REVENUE_GENERATOR_DISCRIMINATOR = new Uint8Array([
   11, 124, 77, 223, 158, 124, 234, 56,
@@ -45,7 +45,7 @@ export const REVENUE_GENERATOR_DISCRIMINATOR = new Uint8Array([
 
 export function getRevenueGeneratorDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    REVENUE_GENERATOR_DISCRIMINATOR
+    REVENUE_GENERATOR_DISCRIMINATOR,
   );
 }
 
@@ -72,28 +72,28 @@ export type RevenueGeneratorArgs = {
 export function getRevenueGeneratorEncoder(): FixedSizeEncoder<RevenueGeneratorArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['authority', getAddressEncoder()],
-      ['underlyingMint', getAddressEncoder()],
-      ['rewardsPerCycle', getU64Encoder()],
-      ['totalRewardsGenerated', getU64Encoder()],
-      ['lastMintSlot', getU64Encoder()],
-      ['bump', getU8Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["authority", getAddressEncoder()],
+      ["underlyingMint", getAddressEncoder()],
+      ["rewardsPerCycle", getU64Encoder()],
+      ["totalRewardsGenerated", getU64Encoder()],
+      ["lastMintSlot", getU64Encoder()],
+      ["bump", getU8Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: REVENUE_GENERATOR_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: REVENUE_GENERATOR_DISCRIMINATOR }),
   );
 }
 
 /** Gets the decoder for {@link RevenueGenerator} account data. */
 export function getRevenueGeneratorDecoder(): FixedSizeDecoder<RevenueGenerator> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['authority', getAddressDecoder()],
-    ['underlyingMint', getAddressDecoder()],
-    ['rewardsPerCycle', getU64Decoder()],
-    ['totalRewardsGenerated', getU64Decoder()],
-    ['lastMintSlot', getU64Decoder()],
-    ['bump', getU8Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["authority", getAddressDecoder()],
+    ["underlyingMint", getAddressDecoder()],
+    ["rewardsPerCycle", getU64Decoder()],
+    ["totalRewardsGenerated", getU64Decoder()],
+    ["lastMintSlot", getU64Decoder()],
+    ["bump", getU8Decoder()],
   ]);
 }
 
@@ -104,31 +104,31 @@ export function getRevenueGeneratorCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getRevenueGeneratorEncoder(),
-    getRevenueGeneratorDecoder()
+    getRevenueGeneratorDecoder(),
   );
 }
 
 export function decodeRevenueGenerator<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress>,
 ): Account<RevenueGenerator, TAddress>;
 export function decodeRevenueGenerator<TAddress extends string = string>(
-  encodedAccount: MaybeEncodedAccount<TAddress>
+  encodedAccount: MaybeEncodedAccount<TAddress>,
 ): MaybeAccount<RevenueGenerator, TAddress>;
 export function decodeRevenueGenerator<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>,
 ):
   | Account<RevenueGenerator, TAddress>
   | MaybeAccount<RevenueGenerator, TAddress> {
   return decodeAccount(
     encodedAccount as MaybeEncodedAccount<TAddress>,
-    getRevenueGeneratorDecoder()
+    getRevenueGeneratorDecoder(),
   );
 }
 
 export async function fetchRevenueGenerator<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<Account<RevenueGenerator, TAddress>> {
   const maybeAccount = await fetchMaybeRevenueGenerator(rpc, address, config);
   assertAccountExists(maybeAccount);
@@ -140,7 +140,7 @@ export async function fetchMaybeRevenueGenerator<
 >(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<MaybeAccount<RevenueGenerator, TAddress>> {
   const maybeAccount = await fetchEncodedAccount(rpc, address, config);
   return decodeRevenueGenerator(maybeAccount);
@@ -149,12 +149,12 @@ export async function fetchMaybeRevenueGenerator<
 export async function fetchAllRevenueGenerator(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<Account<RevenueGenerator>[]> {
   const maybeAccounts = await fetchAllMaybeRevenueGenerator(
     rpc,
     addresses,
-    config
+    config,
   );
   assertAccountsExist(maybeAccounts);
   return maybeAccounts;
@@ -163,11 +163,11 @@ export async function fetchAllRevenueGenerator(
 export async function fetchAllMaybeRevenueGenerator(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<MaybeAccount<RevenueGenerator>[]> {
   const maybeAccounts = await fetchEncodedAccounts(rpc, addresses, config);
   return maybeAccounts.map((maybeAccount) =>
-    decodeRevenueGenerator(maybeAccount)
+    decodeRevenueGenerator(maybeAccount),
   );
 }
 

@@ -30,24 +30,23 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const UPDATE_CHALLENGE_TEMPLATE_ENTRANCE_TOKEN_MINT_DISCRIMINATOR =
   new Uint8Array([94, 23, 238, 69, 73, 130, 153, 89]);
 
 export function getUpdateChallengeTemplateEntranceTokenMintDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    UPDATE_CHALLENGE_TEMPLATE_ENTRANCE_TOKEN_MINT_DISCRIMINATOR
+    UPDATE_CHALLENGE_TEMPLATE_ENTRANCE_TOKEN_MINT_DISCRIMINATOR,
   );
 }
 
 export type UpdateChallengeTemplateEntranceTokenMintInstruction<
   TProgram extends string = typeof POLICY_CHALLENGES_PROGRAM_ADDRESS,
-  TAccountChallengeTemplateAccount extends
-    | string
-    | AccountMeta<string> = string,
+  TAccountChallengeTemplateAccount extends string | AccountMeta<string> =
+    string,
   TAccountSigner extends string | AccountMeta<string> = string,
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
@@ -77,21 +76,21 @@ export type UpdateChallengeTemplateEntranceTokenMintInstructionDataArgs = {
 export function getUpdateChallengeTemplateEntranceTokenMintInstructionDataEncoder(): FixedSizeEncoder<UpdateChallengeTemplateEntranceTokenMintInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['entranceTokenMint', getAddressEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["entranceTokenMint", getAddressEncoder()],
     ]),
     (value) => ({
       ...value,
       discriminator:
         UPDATE_CHALLENGE_TEMPLATE_ENTRANCE_TOKEN_MINT_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getUpdateChallengeTemplateEntranceTokenMintInstructionDataDecoder(): FixedSizeDecoder<UpdateChallengeTemplateEntranceTokenMintInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['entranceTokenMint', getAddressDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["entranceTokenMint", getAddressDecoder()],
   ]);
 }
 
@@ -101,7 +100,7 @@ export function getUpdateChallengeTemplateEntranceTokenMintInstructionDataCodec(
 > {
   return combineCodec(
     getUpdateChallengeTemplateEntranceTokenMintInstructionDataEncoder(),
-    getUpdateChallengeTemplateEntranceTokenMintInstructionDataDecoder()
+    getUpdateChallengeTemplateEntranceTokenMintInstructionDataDecoder(),
   );
 }
 
@@ -111,7 +110,7 @@ export type UpdateChallengeTemplateEntranceTokenMintInput<
 > = {
   challengeTemplateAccount: Address<TAccountChallengeTemplateAccount>;
   signer: TransactionSigner<TAccountSigner>;
-  entranceTokenMint: UpdateChallengeTemplateEntranceTokenMintInstructionDataArgs['entranceTokenMint'];
+  entranceTokenMint: UpdateChallengeTemplateEntranceTokenMintInstructionDataArgs["entranceTokenMint"];
 };
 
 export function getUpdateChallengeTemplateEntranceTokenMintInstruction<
@@ -123,7 +122,7 @@ export function getUpdateChallengeTemplateEntranceTokenMintInstruction<
     TAccountChallengeTemplateAccount,
     TAccountSigner
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): UpdateChallengeTemplateEntranceTokenMintInstruction<
   TProgramAddress,
   TAccountChallengeTemplateAccount,
@@ -149,14 +148,14 @@ export function getUpdateChallengeTemplateEntranceTokenMintInstruction<
   // Original args.
   const args = { ...input };
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.challengeTemplateAccount),
       getAccountMeta(accounts.signer),
     ],
     data: getUpdateChallengeTemplateEntranceTokenMintInstructionDataEncoder().encode(
-      args as UpdateChallengeTemplateEntranceTokenMintInstructionDataArgs
+      args as UpdateChallengeTemplateEntranceTokenMintInstructionDataArgs,
     ),
     programAddress,
   } as UpdateChallengeTemplateEntranceTokenMintInstruction<
@@ -184,14 +183,14 @@ export function parseUpdateChallengeTemplateEntranceTokenMintInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedUpdateChallengeTemplateEntranceTokenMintInstruction<
   TProgram,
   TAccountMetas
 > {
   if (instruction.accounts.length < 2) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -206,7 +205,7 @@ export function parseUpdateChallengeTemplateEntranceTokenMintInstruction<
       signer: getNextAccount(),
     },
     data: getUpdateChallengeTemplateEntranceTokenMintInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

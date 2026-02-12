@@ -15,7 +15,7 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
   getFractionConfigDecoder,
   getFractionConfigEncoder,
@@ -25,7 +25,7 @@ import {
   type FractionConfigArgs,
   type TimeBasedConfig,
   type TimeBasedConfigArgs,
-} from '.';
+} from ".";
 
 /** Combined fee configuration */
 export type AllInOneConfig = {
@@ -60,23 +60,23 @@ export type AllInOneConfigArgs = {
 
 export function getAllInOneConfigEncoder(): FixedSizeEncoder<AllInOneConfigArgs> {
   return getStructEncoder([
-    ['fraction', getFractionConfigEncoder()],
-    ['timeBased', getTimeBasedConfigEncoder()],
-    ['chargeOnDeposit', getBooleanEncoder()],
-    ['chargeOnWithdraw', getBooleanEncoder()],
-    ['chargeOnUseFunds', getBooleanEncoder()],
-    ['chargeOnReturnFunds', getBooleanEncoder()],
+    ["fraction", getFractionConfigEncoder()],
+    ["timeBased", getTimeBasedConfigEncoder()],
+    ["chargeOnDeposit", getBooleanEncoder()],
+    ["chargeOnWithdraw", getBooleanEncoder()],
+    ["chargeOnUseFunds", getBooleanEncoder()],
+    ["chargeOnReturnFunds", getBooleanEncoder()],
   ]);
 }
 
 export function getAllInOneConfigDecoder(): FixedSizeDecoder<AllInOneConfig> {
   return getStructDecoder([
-    ['fraction', getFractionConfigDecoder()],
-    ['timeBased', getTimeBasedConfigDecoder()],
-    ['chargeOnDeposit', getBooleanDecoder()],
-    ['chargeOnWithdraw', getBooleanDecoder()],
-    ['chargeOnUseFunds', getBooleanDecoder()],
-    ['chargeOnReturnFunds', getBooleanDecoder()],
+    ["fraction", getFractionConfigDecoder()],
+    ["timeBased", getTimeBasedConfigDecoder()],
+    ["chargeOnDeposit", getBooleanDecoder()],
+    ["chargeOnWithdraw", getBooleanDecoder()],
+    ["chargeOnUseFunds", getBooleanDecoder()],
+    ["chargeOnReturnFunds", getBooleanDecoder()],
   ]);
 }
 

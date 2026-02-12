@@ -33,13 +33,13 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 
 export const REDEEM_SHARES_DISCRIMINATOR = new Uint8Array([
   239, 154, 224, 89, 240, 196, 42, 187,
@@ -47,7 +47,7 @@ export const REDEEM_SHARES_DISCRIMINATOR = new Uint8Array([
 
 export function getRedeemSharesDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    REDEEM_SHARES_DISCRIMINATOR
+    REDEEM_SHARES_DISCRIMINATOR,
   );
 }
 
@@ -62,12 +62,10 @@ export type RedeemSharesInstruction<
   TAccountVault extends string | AccountMeta<string> = string,
   TAccountFeeCollectionProgram extends string | AccountMeta<string> = string,
   TAccountSigner extends string | AccountMeta<string> = string,
-  TAccountTokenProgram extends
-    | string
-    | AccountMeta<string> = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-  TAccountHyroProtocol extends
-    | string
-    | AccountMeta<string> = 'HyroPk4VamtJfPfsxf77zRkMSx9FTV7FZqvH4JPup6fW',
+  TAccountTokenProgram extends string | AccountMeta<string> =
+    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+  TAccountHyroProtocol extends string | AccountMeta<string> =
+    "7gx2mxou2JwuBNiDhfPeXf8EVK8DUGnXPLKdiyYKT3NL",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -121,17 +119,17 @@ export type RedeemSharesInstructionDataArgs = { shares: number | bigint };
 export function getRedeemSharesInstructionDataEncoder(): FixedSizeEncoder<RedeemSharesInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['shares', getU64Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["shares", getU64Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: REDEEM_SHARES_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: REDEEM_SHARES_DISCRIMINATOR }),
   );
 }
 
 export function getRedeemSharesInstructionDataDecoder(): FixedSizeDecoder<RedeemSharesInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['shares', getU64Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["shares", getU64Decoder()],
   ]);
 }
 
@@ -141,7 +139,7 @@ export function getRedeemSharesInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getRedeemSharesInstructionDataEncoder(),
-    getRedeemSharesInstructionDataDecoder()
+    getRedeemSharesInstructionDataDecoder(),
   );
 }
 
@@ -169,7 +167,7 @@ export type RedeemSharesAsyncInput<
   signer: TransactionSigner<TAccountSigner>;
   tokenProgram?: Address<TAccountTokenProgram>;
   hyroProtocol?: Address<TAccountHyroProtocol>;
-  shares: RedeemSharesInstructionDataArgs['shares'];
+  shares: RedeemSharesInstructionDataArgs["shares"];
 };
 
 export async function getRedeemSharesInstructionAsync<
@@ -199,7 +197,7 @@ export async function getRedeemSharesInstructionAsync<
     TAccountTokenProgram,
     TAccountHyroProtocol
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   RedeemSharesInstruction<
     TProgramAddress,
@@ -263,7 +261,7 @@ export async function getRedeemSharesInstructionAsync<
           new Uint8Array([
             118, 97, 117, 108, 116, 95, 115, 104, 97, 114, 101, 95, 115, 105,
             103, 110, 101, 114,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
       ],
@@ -277,11 +275,11 @@ export async function getRedeemSharesInstructionAsync<
           new Uint8Array([
             118, 97, 117, 108, 116, 95, 116, 111, 107, 101, 110, 95, 97, 99, 99,
             111, 117, 110, 116,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
         getAddressEncoder().encode(
-          expectAddress(accounts.underlyingMint.value)
+          expectAddress(accounts.underlyingMint.value),
         ),
       ],
     });
@@ -294,7 +292,7 @@ export async function getRedeemSharesInstructionAsync<
           new Uint8Array([
             118, 97, 117, 108, 116, 95, 115, 104, 97, 114, 101, 95, 109, 105,
             110, 116,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
       ],
@@ -302,14 +300,14 @@ export async function getRedeemSharesInstructionAsync<
   }
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
   }
   if (!accounts.hyroProtocol.value) {
     accounts.hyroProtocol.value =
-      'HyroPk4VamtJfPfsxf77zRkMSx9FTV7FZqvH4JPup6fW' as Address<'HyroPk4VamtJfPfsxf77zRkMSx9FTV7FZqvH4JPup6fW'>;
+      "7gx2mxou2JwuBNiDhfPeXf8EVK8DUGnXPLKdiyYKT3NL" as Address<"7gx2mxou2JwuBNiDhfPeXf8EVK8DUGnXPLKdiyYKT3NL">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.shareSignerPda),
@@ -325,7 +323,7 @@ export async function getRedeemSharesInstructionAsync<
       getAccountMeta(accounts.hyroProtocol),
     ],
     data: getRedeemSharesInstructionDataEncoder().encode(
-      args as RedeemSharesInstructionDataArgs
+      args as RedeemSharesInstructionDataArgs,
     ),
     programAddress,
   } as RedeemSharesInstruction<
@@ -368,7 +366,7 @@ export type RedeemSharesInput<
   signer: TransactionSigner<TAccountSigner>;
   tokenProgram?: Address<TAccountTokenProgram>;
   hyroProtocol?: Address<TAccountHyroProtocol>;
-  shares: RedeemSharesInstructionDataArgs['shares'];
+  shares: RedeemSharesInstructionDataArgs["shares"];
 };
 
 export function getRedeemSharesInstruction<
@@ -398,7 +396,7 @@ export function getRedeemSharesInstruction<
     TAccountTokenProgram,
     TAccountHyroProtocol
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): RedeemSharesInstruction<
   TProgramAddress,
   TAccountShareSignerPda,
@@ -454,14 +452,14 @@ export function getRedeemSharesInstruction<
   // Resolve default values.
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
   }
   if (!accounts.hyroProtocol.value) {
     accounts.hyroProtocol.value =
-      'HyroPk4VamtJfPfsxf77zRkMSx9FTV7FZqvH4JPup6fW' as Address<'HyroPk4VamtJfPfsxf77zRkMSx9FTV7FZqvH4JPup6fW'>;
+      "7gx2mxou2JwuBNiDhfPeXf8EVK8DUGnXPLKdiyYKT3NL" as Address<"7gx2mxou2JwuBNiDhfPeXf8EVK8DUGnXPLKdiyYKT3NL">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.shareSignerPda),
@@ -477,7 +475,7 @@ export function getRedeemSharesInstruction<
       getAccountMeta(accounts.hyroProtocol),
     ],
     data: getRedeemSharesInstructionDataEncoder().encode(
-      args as RedeemSharesInstructionDataArgs
+      args as RedeemSharesInstructionDataArgs,
     ),
     programAddress,
   } as RedeemSharesInstruction<
@@ -523,11 +521,11 @@ export function parseRedeemSharesInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedRedeemSharesInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 11) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

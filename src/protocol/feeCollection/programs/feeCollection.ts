@@ -7,13 +7,24 @@
  */
 
 import {
+  assertIsInstructionWithAccounts,
   containsBytes,
   fixEncoderSize,
   getBytesEncoder,
   type Address,
+  type Instruction,
+  type InstructionWithData,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
+  parseChargeFeesCpiInstruction,
+  parseClaimFeesInstruction,
+  parseGetTotalUnclaimedFeesInstruction,
+  parseGetUnclaimedFeesInstruction,
+  parseInitializeInstruction,
+  parseSetFeeCalcProgramInstruction,
+  parseUpdateHighWaterMarkInstruction,
+  parseUpdateRecipientsInstruction,
   type ParsedChargeFeesCpiInstruction,
   type ParsedClaimFeesInstruction,
   type ParsedGetTotalUnclaimedFeesInstruction,
@@ -22,32 +33,32 @@ import {
   type ParsedSetFeeCalcProgramInstruction,
   type ParsedUpdateHighWaterMarkInstruction,
   type ParsedUpdateRecipientsInstruction,
-} from '../instructions';
+} from "../instructions";
 
 export const FEE_COLLECTION_PROGRAM_ADDRESS =
-  'Hyro1e6sqYJEGvwy6Yszq5JZXL6KcR5fLQC4dYq7UU96' as Address<'Hyro1e6sqYJEGvwy6Yszq5JZXL6KcR5fLQC4dYq7UU96'>;
+  "FxfWi58wV2rMGWCJw79MzM8zJAQ9ngWVmzH7MDpo3Vnd" as Address<"FxfWi58wV2rMGWCJw79MzM8zJAQ9ngWVmzH7MDpo3Vnd">;
 
 export enum FeeCollectionAccount {
   VaultFees,
 }
 
 export function identifyFeeCollectionAccount(
-  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): FeeCollectionAccount {
-  const data = 'data' in account ? account.data : account;
+  const data = "data" in account ? account.data : account;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([160, 42, 52, 120, 52, 123, 127, 118])
+        new Uint8Array([160, 42, 52, 120, 52, 123, 127, 118]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionAccount.VaultFees;
   }
   throw new Error(
-    'The provided account could not be identified as a feeCollection account.'
+    "The provided account could not be identified as a feeCollection account.",
   );
 }
 
@@ -63,16 +74,16 @@ export enum FeeCollectionInstruction {
 }
 
 export function identifyFeeCollectionInstruction(
-  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): FeeCollectionInstruction {
-  const data = 'data' in instruction ? instruction.data : instruction;
+  const data = "data" in instruction ? instruction.data : instruction;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([27, 58, 69, 9, 245, 105, 154, 0])
+        new Uint8Array([27, 58, 69, 9, 245, 105, 154, 0]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionInstruction.ChargeFeesCpi;
@@ -81,9 +92,9 @@ export function identifyFeeCollectionInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([82, 251, 233, 156, 12, 52, 184, 202])
+        new Uint8Array([82, 251, 233, 156, 12, 52, 184, 202]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionInstruction.ClaimFees;
@@ -92,9 +103,9 @@ export function identifyFeeCollectionInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([42, 90, 205, 36, 10, 78, 126, 72])
+        new Uint8Array([42, 90, 205, 36, 10, 78, 126, 72]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionInstruction.GetTotalUnclaimedFees;
@@ -103,9 +114,9 @@ export function identifyFeeCollectionInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([245, 106, 131, 106, 119, 180, 24, 222])
+        new Uint8Array([245, 106, 131, 106, 119, 180, 24, 222]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionInstruction.GetUnclaimedFees;
@@ -114,9 +125,9 @@ export function identifyFeeCollectionInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([175, 175, 109, 31, 13, 152, 155, 237])
+        new Uint8Array([175, 175, 109, 31, 13, 152, 155, 237]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionInstruction.Initialize;
@@ -125,9 +136,9 @@ export function identifyFeeCollectionInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([147, 88, 46, 194, 190, 141, 216, 84])
+        new Uint8Array([147, 88, 46, 194, 190, 141, 216, 84]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionInstruction.SetFeeCalcProgram;
@@ -136,9 +147,9 @@ export function identifyFeeCollectionInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([68, 148, 239, 216, 150, 14, 205, 238])
+        new Uint8Array([68, 148, 239, 216, 150, 14, 205, 238]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionInstruction.UpdateHighWaterMark;
@@ -147,20 +158,20 @@ export function identifyFeeCollectionInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([92, 134, 20, 47, 48, 34, 175, 112])
+        new Uint8Array([92, 134, 20, 47, 48, 34, 175, 112]),
       ),
-      0
+      0,
     )
   ) {
     return FeeCollectionInstruction.UpdateRecipients;
   }
   throw new Error(
-    'The provided instruction could not be identified as a feeCollection instruction.'
+    "The provided instruction could not be identified as a feeCollection instruction.",
   );
 }
 
 export type ParsedFeeCollectionInstruction<
-  TProgram extends string = 'Hyro1e6sqYJEGvwy6Yszq5JZXL6KcR5fLQC4dYq7UU96',
+  TProgram extends string = "FxfWi58wV2rMGWCJw79MzM8zJAQ9ngWVmzH7MDpo3Vnd",
 > =
   | ({
       instructionType: FeeCollectionInstruction.ChargeFeesCpi;
@@ -186,3 +197,71 @@ export type ParsedFeeCollectionInstruction<
   | ({
       instructionType: FeeCollectionInstruction.UpdateRecipients;
     } & ParsedUpdateRecipientsInstruction<TProgram>);
+
+export function parseFeeCollectionInstruction<TProgram extends string>(
+  instruction: Instruction<TProgram> & InstructionWithData<ReadonlyUint8Array>,
+): ParsedFeeCollectionInstruction<TProgram> {
+  const instructionType = identifyFeeCollectionInstruction(instruction);
+  switch (instructionType) {
+    case FeeCollectionInstruction.ChargeFeesCpi: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionInstruction.ChargeFeesCpi,
+        ...parseChargeFeesCpiInstruction(instruction),
+      };
+    }
+    case FeeCollectionInstruction.ClaimFees: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionInstruction.ClaimFees,
+        ...parseClaimFeesInstruction(instruction),
+      };
+    }
+    case FeeCollectionInstruction.GetTotalUnclaimedFees: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionInstruction.GetTotalUnclaimedFees,
+        ...parseGetTotalUnclaimedFeesInstruction(instruction),
+      };
+    }
+    case FeeCollectionInstruction.GetUnclaimedFees: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionInstruction.GetUnclaimedFees,
+        ...parseGetUnclaimedFeesInstruction(instruction),
+      };
+    }
+    case FeeCollectionInstruction.Initialize: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionInstruction.Initialize,
+        ...parseInitializeInstruction(instruction),
+      };
+    }
+    case FeeCollectionInstruction.SetFeeCalcProgram: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionInstruction.SetFeeCalcProgram,
+        ...parseSetFeeCalcProgramInstruction(instruction),
+      };
+    }
+    case FeeCollectionInstruction.UpdateHighWaterMark: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionInstruction.UpdateHighWaterMark,
+        ...parseUpdateHighWaterMarkInstruction(instruction),
+      };
+    }
+    case FeeCollectionInstruction.UpdateRecipients: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: FeeCollectionInstruction.UpdateRecipients,
+        ...parseUpdateRecipientsInstruction(instruction),
+      };
+    }
+    default:
+      throw new Error(
+        `Unrecognized instruction type: ${instructionType as string}`,
+      );
+  }
+}

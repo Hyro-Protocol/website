@@ -31,13 +31,13 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { REVENUE_GENERATOR_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { REVENUE_GENERATOR_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 
 export const GENERATE_REVENUE_DISCRIMINATOR = new Uint8Array([
   251, 232, 131, 80, 58, 114, 70, 83,
@@ -45,7 +45,7 @@ export const GENERATE_REVENUE_DISCRIMINATOR = new Uint8Array([
 
 export function getGenerateRevenueDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    GENERATE_REVENUE_DISCRIMINATOR
+    GENERATE_REVENUE_DISCRIMINATOR,
   );
 }
 
@@ -55,9 +55,8 @@ export type GenerateRevenueInstruction<
   TAccountUnderlyingMint extends string | AccountMeta<string> = string,
   TAccountVaultTokenAccount extends string | AccountMeta<string> = string,
   TAccountAuthority extends string | AccountMeta<string> = string,
-  TAccountTokenProgram extends
-    | string
-    | AccountMeta<string> = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+  TAccountTokenProgram extends string | AccountMeta<string> =
+    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -91,14 +90,14 @@ export type GenerateRevenueInstructionDataArgs = {};
 
 export function getGenerateRevenueInstructionDataEncoder(): FixedSizeEncoder<GenerateRevenueInstructionDataArgs> {
   return transformEncoder(
-    getStructEncoder([['discriminator', fixEncoderSize(getBytesEncoder(), 8)]]),
-    (value) => ({ ...value, discriminator: GENERATE_REVENUE_DISCRIMINATOR })
+    getStructEncoder([["discriminator", fixEncoderSize(getBytesEncoder(), 8)]]),
+    (value) => ({ ...value, discriminator: GENERATE_REVENUE_DISCRIMINATOR }),
   );
 }
 
 export function getGenerateRevenueInstructionDataDecoder(): FixedSizeDecoder<GenerateRevenueInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
   ]);
 }
 
@@ -108,7 +107,7 @@ export function getGenerateRevenueInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getGenerateRevenueInstructionDataEncoder(),
-    getGenerateRevenueInstructionDataDecoder()
+    getGenerateRevenueInstructionDataDecoder(),
   );
 }
 
@@ -141,7 +140,7 @@ export async function getGenerateRevenueInstructionAsync<
     TAccountAuthority,
     TAccountTokenProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   GenerateRevenueInstruction<
     TProgramAddress,
@@ -178,7 +177,7 @@ export async function getGenerateRevenueInstructionAsync<
       programAddress,
       seeds: [
         getBytesEncoder().encode(
-          new Uint8Array([103, 101, 110, 101, 114, 97, 116, 111, 114])
+          new Uint8Array([103, 101, 110, 101, 114, 97, 116, 111, 114]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.authority.value)),
       ],
@@ -186,10 +185,10 @@ export async function getGenerateRevenueInstructionAsync<
   }
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.generator),
@@ -239,7 +238,7 @@ export function getGenerateRevenueInstruction<
     TAccountAuthority,
     TAccountTokenProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): GenerateRevenueInstruction<
   TProgramAddress,
   TAccountGenerator,
@@ -271,10 +270,10 @@ export function getGenerateRevenueInstruction<
   // Resolve default values.
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.generator),
@@ -316,11 +315,11 @@ export function parseGenerateRevenueInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedGenerateRevenueInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 5) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

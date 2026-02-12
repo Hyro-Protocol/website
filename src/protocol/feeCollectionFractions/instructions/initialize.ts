@@ -31,19 +31,19 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { FEE_COLLECTION_FRACTIONS_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { FEE_COLLECTION_FRACTIONS_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 import {
   getFractionFeeConfigDecoder,
   getFractionFeeConfigEncoder,
   type FractionFeeConfig,
   type FractionFeeConfigArgs,
-} from '../types';
+} from "../types";
 
 export const INITIALIZE_DISCRIMINATOR = new Uint8Array([
   175, 175, 109, 31, 13, 152, 155, 237,
@@ -58,9 +58,8 @@ export type InitializeInstruction<
   TAccountVault extends string | AccountMeta<string> = string,
   TAccountConfigAccount extends string | AccountMeta<string> = string,
   TAccountPayer extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -93,17 +92,17 @@ export type InitializeInstructionDataArgs = { config: FractionFeeConfigArgs };
 export function getInitializeInstructionDataEncoder(): FixedSizeEncoder<InitializeInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['config', getFractionFeeConfigEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["config", getFractionFeeConfigEncoder()],
     ]),
-    (value) => ({ ...value, discriminator: INITIALIZE_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: INITIALIZE_DISCRIMINATOR }),
   );
 }
 
 export function getInitializeInstructionDataDecoder(): FixedSizeDecoder<InitializeInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['config', getFractionFeeConfigDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["config", getFractionFeeConfigDecoder()],
   ]);
 }
 
@@ -113,7 +112,7 @@ export function getInitializeInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getInitializeInstructionDataEncoder(),
-    getInitializeInstructionDataDecoder()
+    getInitializeInstructionDataDecoder(),
   );
 }
 
@@ -127,7 +126,7 @@ export type InitializeAsyncInput<
   configAccount?: Address<TAccountConfigAccount>;
   payer: TransactionSigner<TAccountPayer>;
   systemProgram?: Address<TAccountSystemProgram>;
-  config: InitializeInstructionDataArgs['config'];
+  config: InitializeInstructionDataArgs["config"];
 };
 
 export async function getInitializeInstructionAsync<
@@ -135,8 +134,8 @@ export async function getInitializeInstructionAsync<
   TAccountConfigAccount extends string,
   TAccountPayer extends string,
   TAccountSystemProgram extends string,
-  TProgramAddress extends
-    Address = typeof FEE_COLLECTION_FRACTIONS_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof FEE_COLLECTION_FRACTIONS_PROGRAM_ADDRESS,
 >(
   input: InitializeAsyncInput<
     TAccountVault,
@@ -144,7 +143,7 @@ export async function getInitializeInstructionAsync<
     TAccountPayer,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   InitializeInstruction<
     TProgramAddress,
@@ -182,7 +181,7 @@ export async function getInitializeInstructionAsync<
           new Uint8Array([
             102, 114, 97, 99, 116, 105, 111, 110, 95, 99, 111, 110, 102, 105,
             103,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
       ],
@@ -190,10 +189,10 @@ export async function getInitializeInstructionAsync<
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -202,7 +201,7 @@ export async function getInitializeInstructionAsync<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getInitializeInstructionDataEncoder().encode(
-      args as InitializeInstructionDataArgs
+      args as InitializeInstructionDataArgs,
     ),
     programAddress,
   } as InitializeInstruction<
@@ -224,7 +223,7 @@ export type InitializeInput<
   configAccount: Address<TAccountConfigAccount>;
   payer: TransactionSigner<TAccountPayer>;
   systemProgram?: Address<TAccountSystemProgram>;
-  config: InitializeInstructionDataArgs['config'];
+  config: InitializeInstructionDataArgs["config"];
 };
 
 export function getInitializeInstruction<
@@ -232,8 +231,8 @@ export function getInitializeInstruction<
   TAccountConfigAccount extends string,
   TAccountPayer extends string,
   TAccountSystemProgram extends string,
-  TProgramAddress extends
-    Address = typeof FEE_COLLECTION_FRACTIONS_PROGRAM_ADDRESS,
+  TProgramAddress extends Address =
+    typeof FEE_COLLECTION_FRACTIONS_PROGRAM_ADDRESS,
 >(
   input: InitializeInput<
     TAccountVault,
@@ -241,7 +240,7 @@ export function getInitializeInstruction<
     TAccountPayer,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): InitializeInstruction<
   TProgramAddress,
   TAccountVault,
@@ -271,10 +270,10 @@ export function getInitializeInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -283,7 +282,7 @@ export function getInitializeInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getInitializeInstructionDataEncoder().encode(
-      args as InitializeInstructionDataArgs
+      args as InitializeInstructionDataArgs,
     ),
     programAddress,
   } as InitializeInstruction<
@@ -315,11 +314,11 @@ export function parseInitializeInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedInitializeInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 4) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

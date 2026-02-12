@@ -31,19 +31,19 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 import {
   getRiskRatingDecoder,
   getRiskRatingEncoder,
   type RiskRating,
   type RiskRatingArgs,
-} from '../types';
+} from "../types";
 
 export const REGISTER_MANAGER_DISCRIMINATOR = new Uint8Array([
   104, 14, 206, 198, 57, 194, 90, 109,
@@ -51,7 +51,7 @@ export const REGISTER_MANAGER_DISCRIMINATOR = new Uint8Array([
 
 export function getRegisterManagerDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    REGISTER_MANAGER_DISCRIMINATOR
+    REGISTER_MANAGER_DISCRIMINATOR,
   );
 }
 
@@ -61,9 +61,8 @@ export type RegisterManagerInstruction<
   TAccountManager extends string | AccountMeta<string> = string,
   TAccountManagerProfile extends string | AccountMeta<string> = string,
   TAccountRegistry extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -99,17 +98,17 @@ export type RegisterManagerInstructionDataArgs = { riskRating: RiskRatingArgs };
 export function getRegisterManagerInstructionDataEncoder(): FixedSizeEncoder<RegisterManagerInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['riskRating', getRiskRatingEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["riskRating", getRiskRatingEncoder()],
     ]),
-    (value) => ({ ...value, discriminator: REGISTER_MANAGER_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: REGISTER_MANAGER_DISCRIMINATOR }),
   );
 }
 
 export function getRegisterManagerInstructionDataDecoder(): FixedSizeDecoder<RegisterManagerInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['riskRating', getRiskRatingDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["riskRating", getRiskRatingDecoder()],
   ]);
 }
 
@@ -119,7 +118,7 @@ export function getRegisterManagerInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getRegisterManagerInstructionDataEncoder(),
-    getRegisterManagerInstructionDataDecoder()
+    getRegisterManagerInstructionDataDecoder(),
   );
 }
 
@@ -135,7 +134,7 @@ export type RegisterManagerAsyncInput<
   managerProfile?: Address<TAccountManagerProfile>;
   registry: Address<TAccountRegistry>;
   systemProgram?: Address<TAccountSystemProgram>;
-  riskRating: RegisterManagerInstructionDataArgs['riskRating'];
+  riskRating: RegisterManagerInstructionDataArgs["riskRating"];
 };
 
 export async function getRegisterManagerInstructionAsync<
@@ -153,7 +152,7 @@ export async function getRegisterManagerInstructionAsync<
     TAccountRegistry,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   RegisterManagerInstruction<
     TProgramAddress,
@@ -193,7 +192,7 @@ export async function getRegisterManagerInstructionAsync<
           new Uint8Array([
             109, 97, 110, 97, 103, 101, 114, 95, 112, 114, 111, 102, 105, 108,
             101,
-          ])
+          ]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.manager.value)),
       ],
@@ -201,10 +200,10 @@ export async function getRegisterManagerInstructionAsync<
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.admin),
@@ -214,7 +213,7 @@ export async function getRegisterManagerInstructionAsync<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getRegisterManagerInstructionDataEncoder().encode(
-      args as RegisterManagerInstructionDataArgs
+      args as RegisterManagerInstructionDataArgs,
     ),
     programAddress,
   } as RegisterManagerInstruction<
@@ -239,7 +238,7 @@ export type RegisterManagerInput<
   managerProfile: Address<TAccountManagerProfile>;
   registry: Address<TAccountRegistry>;
   systemProgram?: Address<TAccountSystemProgram>;
-  riskRating: RegisterManagerInstructionDataArgs['riskRating'];
+  riskRating: RegisterManagerInstructionDataArgs["riskRating"];
 };
 
 export function getRegisterManagerInstruction<
@@ -257,7 +256,7 @@ export function getRegisterManagerInstruction<
     TAccountRegistry,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): RegisterManagerInstruction<
   TProgramAddress,
   TAccountAdmin,
@@ -289,10 +288,10 @@ export function getRegisterManagerInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.admin),
@@ -302,7 +301,7 @@ export function getRegisterManagerInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getRegisterManagerInstructionDataEncoder().encode(
-      args as RegisterManagerInstructionDataArgs
+      args as RegisterManagerInstructionDataArgs,
     ),
     programAddress,
   } as RegisterManagerInstruction<
@@ -336,11 +335,11 @@ export function parseRegisterManagerInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedRegisterManagerInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 5) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

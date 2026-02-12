@@ -39,13 +39,13 @@ import {
   type MaybeAccount,
   type MaybeEncodedAccount,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
   getAllInOneConfigDecoder,
   getAllInOneConfigEncoder,
   type AllInOneConfig,
   type AllInOneConfigArgs,
-} from '../types';
+} from "../types";
 
 export const VAULT_ALL_IN_ONE_CONFIG_DISCRIMINATOR = new Uint8Array([
   124, 88, 126, 126, 39, 118, 51, 134,
@@ -53,7 +53,7 @@ export const VAULT_ALL_IN_ONE_CONFIG_DISCRIMINATOR = new Uint8Array([
 
 export function getVaultAllInOneConfigDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    VAULT_ALL_IN_ONE_CONFIG_DISCRIMINATOR
+    VAULT_ALL_IN_ONE_CONFIG_DISCRIMINATOR,
   );
 }
 
@@ -94,35 +94,35 @@ export type VaultAllInOneConfigArgs = {
 export function getVaultAllInOneConfigEncoder(): FixedSizeEncoder<VaultAllInOneConfigArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['vault', getAddressEncoder()],
-      ['config', getAllInOneConfigEncoder()],
-      ['lastLpCalc', getI64Encoder()],
-      ['lastManagerCalc', getI64Encoder()],
-      ['lastProtocolCalc', getI64Encoder()],
-      ['lastPerformanceCalc', getI64Encoder()],
-      ['highWaterMark', getU64Encoder()],
-      ['bump', getU8Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["vault", getAddressEncoder()],
+      ["config", getAllInOneConfigEncoder()],
+      ["lastLpCalc", getI64Encoder()],
+      ["lastManagerCalc", getI64Encoder()],
+      ["lastProtocolCalc", getI64Encoder()],
+      ["lastPerformanceCalc", getI64Encoder()],
+      ["highWaterMark", getU64Encoder()],
+      ["bump", getU8Encoder()],
     ]),
     (value) => ({
       ...value,
       discriminator: VAULT_ALL_IN_ONE_CONFIG_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 /** Gets the decoder for {@link VaultAllInOneConfig} account data. */
 export function getVaultAllInOneConfigDecoder(): FixedSizeDecoder<VaultAllInOneConfig> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['vault', getAddressDecoder()],
-    ['config', getAllInOneConfigDecoder()],
-    ['lastLpCalc', getI64Decoder()],
-    ['lastManagerCalc', getI64Decoder()],
-    ['lastProtocolCalc', getI64Decoder()],
-    ['lastPerformanceCalc', getI64Decoder()],
-    ['highWaterMark', getU64Decoder()],
-    ['bump', getU8Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["vault", getAddressDecoder()],
+    ["config", getAllInOneConfigDecoder()],
+    ["lastLpCalc", getI64Decoder()],
+    ["lastManagerCalc", getI64Decoder()],
+    ["lastProtocolCalc", getI64Decoder()],
+    ["lastPerformanceCalc", getI64Decoder()],
+    ["highWaterMark", getU64Decoder()],
+    ["bump", getU8Decoder()],
   ]);
 }
 
@@ -133,24 +133,24 @@ export function getVaultAllInOneConfigCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getVaultAllInOneConfigEncoder(),
-    getVaultAllInOneConfigDecoder()
+    getVaultAllInOneConfigDecoder(),
   );
 }
 
 export function decodeVaultAllInOneConfig<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress>,
 ): Account<VaultAllInOneConfig, TAddress>;
 export function decodeVaultAllInOneConfig<TAddress extends string = string>(
-  encodedAccount: MaybeEncodedAccount<TAddress>
+  encodedAccount: MaybeEncodedAccount<TAddress>,
 ): MaybeAccount<VaultAllInOneConfig, TAddress>;
 export function decodeVaultAllInOneConfig<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>,
 ):
   | Account<VaultAllInOneConfig, TAddress>
   | MaybeAccount<VaultAllInOneConfig, TAddress> {
   return decodeAccount(
     encodedAccount as MaybeEncodedAccount<TAddress>,
-    getVaultAllInOneConfigDecoder()
+    getVaultAllInOneConfigDecoder(),
   );
 }
 
@@ -159,12 +159,12 @@ export async function fetchVaultAllInOneConfig<
 >(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<Account<VaultAllInOneConfig, TAddress>> {
   const maybeAccount = await fetchMaybeVaultAllInOneConfig(
     rpc,
     address,
-    config
+    config,
   );
   assertAccountExists(maybeAccount);
   return maybeAccount;
@@ -175,7 +175,7 @@ export async function fetchMaybeVaultAllInOneConfig<
 >(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<MaybeAccount<VaultAllInOneConfig, TAddress>> {
   const maybeAccount = await fetchEncodedAccount(rpc, address, config);
   return decodeVaultAllInOneConfig(maybeAccount);
@@ -184,12 +184,12 @@ export async function fetchMaybeVaultAllInOneConfig<
 export async function fetchAllVaultAllInOneConfig(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<Account<VaultAllInOneConfig>[]> {
   const maybeAccounts = await fetchAllMaybeVaultAllInOneConfig(
     rpc,
     addresses,
-    config
+    config,
   );
   assertAccountsExist(maybeAccounts);
   return maybeAccounts;
@@ -198,11 +198,11 @@ export async function fetchAllVaultAllInOneConfig(
 export async function fetchAllMaybeVaultAllInOneConfig(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<MaybeAccount<VaultAllInOneConfig>[]> {
   const maybeAccounts = await fetchEncodedAccounts(rpc, addresses, config);
   return maybeAccounts.map((maybeAccount) =>
-    decodeVaultAllInOneConfig(maybeAccount)
+    decodeVaultAllInOneConfig(maybeAccount),
   );
 }
 

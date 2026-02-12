@@ -18,7 +18,7 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 
 export type TransactionAccount = {
   pubkey: Address;
@@ -30,17 +30,17 @@ export type TransactionAccountArgs = TransactionAccount;
 
 export function getTransactionAccountEncoder(): FixedSizeEncoder<TransactionAccountArgs> {
   return getStructEncoder([
-    ['pubkey', getAddressEncoder()],
-    ['isSigner', getBooleanEncoder()],
-    ['isWritable', getBooleanEncoder()],
+    ["pubkey", getAddressEncoder()],
+    ["isSigner", getBooleanEncoder()],
+    ["isWritable", getBooleanEncoder()],
   ]);
 }
 
 export function getTransactionAccountDecoder(): FixedSizeDecoder<TransactionAccount> {
   return getStructDecoder([
-    ['pubkey', getAddressDecoder()],
-    ['isSigner', getBooleanDecoder()],
-    ['isWritable', getBooleanDecoder()],
+    ["pubkey", getAddressDecoder()],
+    ["isSigner", getBooleanDecoder()],
+    ["isWritable", getBooleanDecoder()],
   ]);
 }
 
@@ -50,6 +50,6 @@ export function getTransactionAccountCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getTransactionAccountEncoder(),
-    getTransactionAccountDecoder()
+    getTransactionAccountDecoder(),
   );
 }

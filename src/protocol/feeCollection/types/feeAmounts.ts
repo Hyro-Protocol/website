@@ -15,7 +15,7 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 
 /** Fee amounts - tracked per fee type */
 export type FeeAmounts = {
@@ -34,19 +34,19 @@ export type FeeAmountsArgs = {
 
 export function getFeeAmountsEncoder(): FixedSizeEncoder<FeeAmountsArgs> {
   return getStructEncoder([
-    ['lp', getU64Encoder()],
-    ['manager', getU64Encoder()],
-    ['protocol', getU64Encoder()],
-    ['performance', getU64Encoder()],
+    ["lp", getU64Encoder()],
+    ["manager", getU64Encoder()],
+    ["protocol", getU64Encoder()],
+    ["performance", getU64Encoder()],
   ]);
 }
 
 export function getFeeAmountsDecoder(): FixedSizeDecoder<FeeAmounts> {
   return getStructDecoder([
-    ['lp', getU64Decoder()],
-    ['manager', getU64Decoder()],
-    ['protocol', getU64Decoder()],
-    ['performance', getU64Decoder()],
+    ["lp", getU64Decoder()],
+    ["manager", getU64Decoder()],
+    ["protocol", getU64Decoder()],
+    ["performance", getU64Decoder()],
   ]);
 }
 

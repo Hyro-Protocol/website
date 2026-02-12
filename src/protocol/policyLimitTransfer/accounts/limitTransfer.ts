@@ -33,7 +33,7 @@ import {
   type MaybeAccount,
   type MaybeEncodedAccount,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 
 export const LIMIT_TRANSFER_DISCRIMINATOR = new Uint8Array([
   247, 207, 59, 55, 224, 191, 85, 213,
@@ -41,7 +41,7 @@ export const LIMIT_TRANSFER_DISCRIMINATOR = new Uint8Array([
 
 export function getLimitTransferDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    LIMIT_TRANSFER_DISCRIMINATOR
+    LIMIT_TRANSFER_DISCRIMINATOR,
   );
 }
 
@@ -57,20 +57,20 @@ export type LimitTransferArgs = { max: number | bigint; min: number | bigint };
 export function getLimitTransferEncoder(): FixedSizeEncoder<LimitTransferArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['max', getU64Encoder()],
-      ['min', getU64Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["max", getU64Encoder()],
+      ["min", getU64Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: LIMIT_TRANSFER_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: LIMIT_TRANSFER_DISCRIMINATOR }),
   );
 }
 
 /** Gets the decoder for {@link LimitTransfer} account data. */
 export function getLimitTransferDecoder(): FixedSizeDecoder<LimitTransfer> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['max', getU64Decoder()],
-    ['min', getU64Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["max", getU64Decoder()],
+    ["min", getU64Decoder()],
   ]);
 }
 
@@ -83,24 +83,24 @@ export function getLimitTransferCodec(): FixedSizeCodec<
 }
 
 export function decodeLimitTransfer<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress>,
 ): Account<LimitTransfer, TAddress>;
 export function decodeLimitTransfer<TAddress extends string = string>(
-  encodedAccount: MaybeEncodedAccount<TAddress>
+  encodedAccount: MaybeEncodedAccount<TAddress>,
 ): MaybeAccount<LimitTransfer, TAddress>;
 export function decodeLimitTransfer<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>,
 ): Account<LimitTransfer, TAddress> | MaybeAccount<LimitTransfer, TAddress> {
   return decodeAccount(
     encodedAccount as MaybeEncodedAccount<TAddress>,
-    getLimitTransferDecoder()
+    getLimitTransferDecoder(),
   );
 }
 
 export async function fetchLimitTransfer<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<Account<LimitTransfer, TAddress>> {
   const maybeAccount = await fetchMaybeLimitTransfer(rpc, address, config);
   assertAccountExists(maybeAccount);
@@ -110,7 +110,7 @@ export async function fetchLimitTransfer<TAddress extends string = string>(
 export async function fetchMaybeLimitTransfer<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<MaybeAccount<LimitTransfer, TAddress>> {
   const maybeAccount = await fetchEncodedAccount(rpc, address, config);
   return decodeLimitTransfer(maybeAccount);
@@ -119,12 +119,12 @@ export async function fetchMaybeLimitTransfer<TAddress extends string = string>(
 export async function fetchAllLimitTransfer(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<Account<LimitTransfer>[]> {
   const maybeAccounts = await fetchAllMaybeLimitTransfer(
     rpc,
     addresses,
-    config
+    config,
   );
   assertAccountsExist(maybeAccounts);
   return maybeAccounts;
@@ -133,7 +133,7 @@ export async function fetchAllLimitTransfer(
 export async function fetchAllMaybeLimitTransfer(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<MaybeAccount<LimitTransfer>[]> {
   const maybeAccounts = await fetchEncodedAccounts(rpc, addresses, config);
   return maybeAccounts.map((maybeAccount) => decodeLimitTransfer(maybeAccount));

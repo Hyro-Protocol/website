@@ -6,7 +6,7 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './calculateFees';
-export * from './initialize';
-export * from './resetTimestamps';
-export * from './updateConfig';
+export * from "./calculateFees";
+export * from "./initialize";
+export * from "./resetTimestamps";
+export * from "./updateConfig";

@@ -13,7 +13,7 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
   getAmountDecoder,
   getAmountEncoder,
@@ -23,7 +23,7 @@ import {
   type AmountArgs,
   type Percent,
   type PercentArgs,
-} from '.';
+} from ".";
 
 export type MaximumLoss = {
   maximumLossPercentage: Percent;
@@ -41,19 +41,19 @@ export type MaximumLossArgs = {
 
 export function getMaximumLossEncoder(): FixedSizeEncoder<MaximumLossArgs> {
   return getStructEncoder([
-    ['maximumLossPercentage', getPercentEncoder()],
-    ['maximumLossAmount', getAmountEncoder()],
-    ['currentLossAchieved', getPercentEncoder()],
-    ['currentLossAchievedAmount', getAmountEncoder()],
+    ["maximumLossPercentage", getPercentEncoder()],
+    ["maximumLossAmount", getAmountEncoder()],
+    ["currentLossAchieved", getPercentEncoder()],
+    ["currentLossAchievedAmount", getAmountEncoder()],
   ]);
 }
 
 export function getMaximumLossDecoder(): FixedSizeDecoder<MaximumLoss> {
   return getStructDecoder([
-    ['maximumLossPercentage', getPercentDecoder()],
-    ['maximumLossAmount', getAmountDecoder()],
-    ['currentLossAchieved', getPercentDecoder()],
-    ['currentLossAchievedAmount', getAmountDecoder()],
+    ["maximumLossPercentage", getPercentDecoder()],
+    ["maximumLossAmount", getAmountDecoder()],
+    ["currentLossAchieved", getPercentDecoder()],
+    ["currentLossAchievedAmount", getAmountDecoder()],
   ]);
 }
 

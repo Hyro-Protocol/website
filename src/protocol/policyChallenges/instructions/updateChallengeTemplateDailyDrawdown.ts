@@ -28,30 +28,29 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 import {
   getPercentDecoder,
   getPercentEncoder,
   type Percent,
   type PercentArgs,
-} from '../types';
+} from "../types";
 
 export const UPDATE_CHALLENGE_TEMPLATE_DAILY_DRAWDOWN_DISCRIMINATOR =
   new Uint8Array([100, 174, 225, 136, 76, 206, 146, 63]);
 
 export function getUpdateChallengeTemplateDailyDrawdownDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    UPDATE_CHALLENGE_TEMPLATE_DAILY_DRAWDOWN_DISCRIMINATOR
+    UPDATE_CHALLENGE_TEMPLATE_DAILY_DRAWDOWN_DISCRIMINATOR,
   );
 }
 
 export type UpdateChallengeTemplateDailyDrawdownInstruction<
   TProgram extends string = typeof POLICY_CHALLENGES_PROGRAM_ADDRESS,
-  TAccountChallengeTemplateAccount extends
-    | string
-    | AccountMeta<string> = string,
+  TAccountChallengeTemplateAccount extends string | AccountMeta<string> =
+    string,
   TAccountSigner extends string | AccountMeta<string> = string,
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
@@ -81,20 +80,20 @@ export type UpdateChallengeTemplateDailyDrawdownInstructionDataArgs = {
 export function getUpdateChallengeTemplateDailyDrawdownInstructionDataEncoder(): FixedSizeEncoder<UpdateChallengeTemplateDailyDrawdownInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['dailyDrawdown', getPercentEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["dailyDrawdown", getPercentEncoder()],
     ]),
     (value) => ({
       ...value,
       discriminator: UPDATE_CHALLENGE_TEMPLATE_DAILY_DRAWDOWN_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getUpdateChallengeTemplateDailyDrawdownInstructionDataDecoder(): FixedSizeDecoder<UpdateChallengeTemplateDailyDrawdownInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['dailyDrawdown', getPercentDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["dailyDrawdown", getPercentDecoder()],
   ]);
 }
 
@@ -104,7 +103,7 @@ export function getUpdateChallengeTemplateDailyDrawdownInstructionDataCodec(): F
 > {
   return combineCodec(
     getUpdateChallengeTemplateDailyDrawdownInstructionDataEncoder(),
-    getUpdateChallengeTemplateDailyDrawdownInstructionDataDecoder()
+    getUpdateChallengeTemplateDailyDrawdownInstructionDataDecoder(),
   );
 }
 
@@ -114,7 +113,7 @@ export type UpdateChallengeTemplateDailyDrawdownInput<
 > = {
   challengeTemplateAccount: Address<TAccountChallengeTemplateAccount>;
   signer: TransactionSigner<TAccountSigner>;
-  dailyDrawdown: UpdateChallengeTemplateDailyDrawdownInstructionDataArgs['dailyDrawdown'];
+  dailyDrawdown: UpdateChallengeTemplateDailyDrawdownInstructionDataArgs["dailyDrawdown"];
 };
 
 export function getUpdateChallengeTemplateDailyDrawdownInstruction<
@@ -126,7 +125,7 @@ export function getUpdateChallengeTemplateDailyDrawdownInstruction<
     TAccountChallengeTemplateAccount,
     TAccountSigner
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): UpdateChallengeTemplateDailyDrawdownInstruction<
   TProgramAddress,
   TAccountChallengeTemplateAccount,
@@ -152,14 +151,14 @@ export function getUpdateChallengeTemplateDailyDrawdownInstruction<
   // Original args.
   const args = { ...input };
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.challengeTemplateAccount),
       getAccountMeta(accounts.signer),
     ],
     data: getUpdateChallengeTemplateDailyDrawdownInstructionDataEncoder().encode(
-      args as UpdateChallengeTemplateDailyDrawdownInstructionDataArgs
+      args as UpdateChallengeTemplateDailyDrawdownInstructionDataArgs,
     ),
     programAddress,
   } as UpdateChallengeTemplateDailyDrawdownInstruction<
@@ -187,14 +186,14 @@ export function parseUpdateChallengeTemplateDailyDrawdownInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedUpdateChallengeTemplateDailyDrawdownInstruction<
   TProgram,
   TAccountMetas
 > {
   if (instruction.accounts.length < 2) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -209,7 +208,7 @@ export function parseUpdateChallengeTemplateDailyDrawdownInstruction<
       signer: getNextAccount(),
     },
     data: getUpdateChallengeTemplateDailyDrawdownInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

@@ -37,20 +37,20 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   expectSome,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 import {
   getChallengeInsertDtoDecoder,
   getChallengeInsertDtoEncoder,
   type ChallengeInsertDto,
   type ChallengeInsertDtoArgs,
-} from '../types';
+} from "../types";
 
 export const JOIN_CHALLENGE_DISCRIMINATOR = new Uint8Array([
   41, 104, 214, 73, 32, 168, 76, 79,
@@ -58,20 +58,18 @@ export const JOIN_CHALLENGE_DISCRIMINATOR = new Uint8Array([
 
 export function getJoinChallengeDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    JOIN_CHALLENGE_DISCRIMINATOR
+    JOIN_CHALLENGE_DISCRIMINATOR,
   );
 }
 
 export type JoinChallengeInstruction<
   TProgram extends string = typeof POLICY_CHALLENGES_PROGRAM_ADDRESS,
-  TAccountChallengeTemplateAccount extends
-    | string
-    | AccountMeta<string> = string,
+  TAccountChallengeTemplateAccount extends string | AccountMeta<string> =
+    string,
   TAccountChallengeAccount extends string | AccountMeta<string> = string,
   TAccountParticipant extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -108,19 +106,19 @@ export type JoinChallengeInstructionDataArgs = {
 export function getJoinChallengeInstructionDataEncoder(): Encoder<JoinChallengeInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['challengeId', addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
-      ['dto', getChallengeInsertDtoEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["challengeId", addEncoderSizePrefix(getUtf8Encoder(), getU32Encoder())],
+      ["dto", getChallengeInsertDtoEncoder()],
     ]),
-    (value) => ({ ...value, discriminator: JOIN_CHALLENGE_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: JOIN_CHALLENGE_DISCRIMINATOR }),
   );
 }
 
 export function getJoinChallengeInstructionDataDecoder(): Decoder<JoinChallengeInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['challengeId', addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
-    ['dto', getChallengeInsertDtoDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["challengeId", addDecoderSizePrefix(getUtf8Decoder(), getU32Decoder())],
+    ["dto", getChallengeInsertDtoDecoder()],
   ]);
 }
 
@@ -130,7 +128,7 @@ export function getJoinChallengeInstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getJoinChallengeInstructionDataEncoder(),
-    getJoinChallengeInstructionDataDecoder()
+    getJoinChallengeInstructionDataDecoder(),
   );
 }
 
@@ -144,8 +142,8 @@ export type JoinChallengeAsyncInput<
   challengeAccount?: Address<TAccountChallengeAccount>;
   participant: TransactionSigner<TAccountParticipant>;
   systemProgram?: Address<TAccountSystemProgram>;
-  challengeId: JoinChallengeInstructionDataArgs['challengeId'];
-  dto: JoinChallengeInstructionDataArgs['dto'];
+  challengeId: JoinChallengeInstructionDataArgs["challengeId"];
+  dto: JoinChallengeInstructionDataArgs["dto"];
 };
 
 export async function getJoinChallengeInstructionAsync<
@@ -161,7 +159,7 @@ export async function getJoinChallengeInstructionAsync<
     TAccountParticipant,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   JoinChallengeInstruction<
     TProgramAddress,
@@ -208,10 +206,10 @@ export async function getJoinChallengeInstructionAsync<
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.challengeTemplateAccount),
@@ -220,7 +218,7 @@ export async function getJoinChallengeInstructionAsync<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getJoinChallengeInstructionDataEncoder().encode(
-      args as JoinChallengeInstructionDataArgs
+      args as JoinChallengeInstructionDataArgs,
     ),
     programAddress,
   } as JoinChallengeInstruction<
@@ -242,8 +240,8 @@ export type JoinChallengeInput<
   challengeAccount: Address<TAccountChallengeAccount>;
   participant: TransactionSigner<TAccountParticipant>;
   systemProgram?: Address<TAccountSystemProgram>;
-  challengeId: JoinChallengeInstructionDataArgs['challengeId'];
-  dto: JoinChallengeInstructionDataArgs['dto'];
+  challengeId: JoinChallengeInstructionDataArgs["challengeId"];
+  dto: JoinChallengeInstructionDataArgs["dto"];
 };
 
 export function getJoinChallengeInstruction<
@@ -259,7 +257,7 @@ export function getJoinChallengeInstruction<
     TAccountParticipant,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): JoinChallengeInstruction<
   TProgramAddress,
   TAccountChallengeTemplateAccount,
@@ -295,10 +293,10 @@ export function getJoinChallengeInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.challengeTemplateAccount),
@@ -307,7 +305,7 @@ export function getJoinChallengeInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getJoinChallengeInstructionDataEncoder().encode(
-      args as JoinChallengeInstructionDataArgs
+      args as JoinChallengeInstructionDataArgs,
     ),
     programAddress,
   } as JoinChallengeInstruction<
@@ -339,11 +337,11 @@ export function parseJoinChallengeInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedJoinChallengeInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 4) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

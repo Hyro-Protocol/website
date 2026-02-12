@@ -37,7 +37,7 @@ import {
   type MaybeAccount,
   type MaybeEncodedAccount,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 
 export const MANAGER_REGISTRY_DISCRIMINATOR = new Uint8Array([
   181, 78, 54, 100, 122, 86, 63, 114,
@@ -45,7 +45,7 @@ export const MANAGER_REGISTRY_DISCRIMINATOR = new Uint8Array([
 
 export function getManagerRegistryDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    MANAGER_REGISTRY_DISCRIMINATOR
+    MANAGER_REGISTRY_DISCRIMINATOR,
   );
 }
 
@@ -68,24 +68,24 @@ export type ManagerRegistryArgs = {
 export function getManagerRegistryEncoder(): FixedSizeEncoder<ManagerRegistryArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['admin', getAddressEncoder()],
-      ['totalManagers', getU32Encoder()],
-      ['totalAum', getU64Encoder()],
-      ['createdAt', getU64Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["admin", getAddressEncoder()],
+      ["totalManagers", getU32Encoder()],
+      ["totalAum", getU64Encoder()],
+      ["createdAt", getU64Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: MANAGER_REGISTRY_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: MANAGER_REGISTRY_DISCRIMINATOR }),
   );
 }
 
 /** Gets the decoder for {@link ManagerRegistry} account data. */
 export function getManagerRegistryDecoder(): FixedSizeDecoder<ManagerRegistry> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['admin', getAddressDecoder()],
-    ['totalManagers', getU32Decoder()],
-    ['totalAum', getU64Decoder()],
-    ['createdAt', getU64Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["admin", getAddressDecoder()],
+    ["totalManagers", getU32Decoder()],
+    ["totalAum", getU64Decoder()],
+    ["createdAt", getU64Decoder()],
   ]);
 }
 
@@ -98,26 +98,26 @@ export function getManagerRegistryCodec(): FixedSizeCodec<
 }
 
 export function decodeManagerRegistry<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress>,
 ): Account<ManagerRegistry, TAddress>;
 export function decodeManagerRegistry<TAddress extends string = string>(
-  encodedAccount: MaybeEncodedAccount<TAddress>
+  encodedAccount: MaybeEncodedAccount<TAddress>,
 ): MaybeAccount<ManagerRegistry, TAddress>;
 export function decodeManagerRegistry<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>,
 ):
   | Account<ManagerRegistry, TAddress>
   | MaybeAccount<ManagerRegistry, TAddress> {
   return decodeAccount(
     encodedAccount as MaybeEncodedAccount<TAddress>,
-    getManagerRegistryDecoder()
+    getManagerRegistryDecoder(),
   );
 }
 
 export async function fetchManagerRegistry<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<Account<ManagerRegistry, TAddress>> {
   const maybeAccount = await fetchMaybeManagerRegistry(rpc, address, config);
   assertAccountExists(maybeAccount);
@@ -129,7 +129,7 @@ export async function fetchMaybeManagerRegistry<
 >(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<MaybeAccount<ManagerRegistry, TAddress>> {
   const maybeAccount = await fetchEncodedAccount(rpc, address, config);
   return decodeManagerRegistry(maybeAccount);
@@ -138,12 +138,12 @@ export async function fetchMaybeManagerRegistry<
 export async function fetchAllManagerRegistry(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<Account<ManagerRegistry>[]> {
   const maybeAccounts = await fetchAllMaybeManagerRegistry(
     rpc,
     addresses,
-    config
+    config,
   );
   assertAccountsExist(maybeAccounts);
   return maybeAccounts;
@@ -152,11 +152,11 @@ export async function fetchAllManagerRegistry(
 export async function fetchAllMaybeManagerRegistry(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<MaybeAccount<ManagerRegistry>[]> {
   const maybeAccounts = await fetchEncodedAccounts(rpc, addresses, config);
   return maybeAccounts.map((maybeAccount) =>
-    decodeManagerRegistry(maybeAccount)
+    decodeManagerRegistry(maybeAccount),
   );
 }
 

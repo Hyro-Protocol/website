@@ -27,13 +27,13 @@ import {
   type InstructionWithData,
   type ReadonlyAccount,
   type ReadonlyUint8Array,
-} from '@solana/kit';
-import { FEE_COLLECTION_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { FEE_COLLECTION_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 
 export const GET_TOTAL_UNCLAIMED_FEES_DISCRIMINATOR = new Uint8Array([
   42, 90, 205, 36, 10, 78, 126, 72,
@@ -41,7 +41,7 @@ export const GET_TOTAL_UNCLAIMED_FEES_DISCRIMINATOR = new Uint8Array([
 
 export function getGetTotalUnclaimedFeesDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    GET_TOTAL_UNCLAIMED_FEES_DISCRIMINATOR
+    GET_TOTAL_UNCLAIMED_FEES_DISCRIMINATOR,
   );
 }
 
@@ -72,17 +72,17 @@ export type GetTotalUnclaimedFeesInstructionDataArgs = {};
 
 export function getGetTotalUnclaimedFeesInstructionDataEncoder(): FixedSizeEncoder<GetTotalUnclaimedFeesInstructionDataArgs> {
   return transformEncoder(
-    getStructEncoder([['discriminator', fixEncoderSize(getBytesEncoder(), 8)]]),
+    getStructEncoder([["discriminator", fixEncoderSize(getBytesEncoder(), 8)]]),
     (value) => ({
       ...value,
       discriminator: GET_TOTAL_UNCLAIMED_FEES_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getGetTotalUnclaimedFeesInstructionDataDecoder(): FixedSizeDecoder<GetTotalUnclaimedFeesInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
   ]);
 }
 
@@ -92,7 +92,7 @@ export function getGetTotalUnclaimedFeesInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getGetTotalUnclaimedFeesInstructionDataEncoder(),
-    getGetTotalUnclaimedFeesInstructionDataDecoder()
+    getGetTotalUnclaimedFeesInstructionDataDecoder(),
   );
 }
 
@@ -110,7 +110,7 @@ export async function getGetTotalUnclaimedFeesInstructionAsync<
   TProgramAddress extends Address = typeof FEE_COLLECTION_PROGRAM_ADDRESS,
 >(
   input: GetTotalUnclaimedFeesAsyncInput<TAccountVault, TAccountVaultFees>,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   GetTotalUnclaimedFeesInstruction<
     TProgramAddress,
@@ -138,14 +138,14 @@ export async function getGetTotalUnclaimedFeesInstructionAsync<
       programAddress,
       seeds: [
         getBytesEncoder().encode(
-          new Uint8Array([118, 97, 117, 108, 116, 95, 102, 101, 101, 115])
+          new Uint8Array([118, 97, 117, 108, 116, 95, 102, 101, 101, 115]),
         ),
         getAddressEncoder().encode(expectAddress(accounts.vault.value)),
       ],
     });
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -174,7 +174,7 @@ export function getGetTotalUnclaimedFeesInstruction<
   TProgramAddress extends Address = typeof FEE_COLLECTION_PROGRAM_ADDRESS,
 >(
   input: GetTotalUnclaimedFeesInput<TAccountVault, TAccountVaultFees>,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): GetTotalUnclaimedFeesInstruction<
   TProgramAddress,
   TAccountVault,
@@ -194,7 +194,7 @@ export function getGetTotalUnclaimedFeesInstruction<
     ResolvedAccount
   >;
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -227,11 +227,11 @@ export function parseGetTotalUnclaimedFeesInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedGetTotalUnclaimedFeesInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 2) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -243,7 +243,7 @@ export function parseGetTotalUnclaimedFeesInstruction<
     programAddress: instruction.programAddress,
     accounts: { vault: getNextAccount(), vaultFees: getNextAccount() },
     data: getGetTotalUnclaimedFeesInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

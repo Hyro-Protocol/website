@@ -41,7 +41,7 @@ import {
   type MaybeAccount,
   type MaybeEncodedAccount,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
   getPercentDecoder,
   getPercentEncoder,
@@ -55,7 +55,7 @@ import {
   type SmallScalarArgs,
   type StageType,
   type StageTypeArgs,
-} from '../types';
+} from "../types";
 
 export const CHALLENGE_TEMPLATE_DISCRIMINATOR = new Uint8Array([
   83, 2, 108, 68, 110, 219, 175, 21,
@@ -63,7 +63,7 @@ export const CHALLENGE_TEMPLATE_DISCRIMINATOR = new Uint8Array([
 
 export function getChallengeTemplateDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    CHALLENGE_TEMPLATE_DISCRIMINATOR
+    CHALLENGE_TEMPLATE_DISCRIMINATOR,
   );
 }
 
@@ -108,46 +108,46 @@ export type ChallengeTemplateArgs = {
 export function getChallengeTemplateEncoder(): FixedSizeEncoder<ChallengeTemplateArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['stageId', getU16Encoder()],
-      ['stageSequence', getU8Encoder()],
-      ['stageType', getStageTypeEncoder()],
-      ['startingDeposit', getU64Encoder()],
-      ['admin', getAddressEncoder()],
-      ['entranceCost', getU64Encoder()],
-      ['entranceTokenMint', getAddressEncoder()],
-      ['minimumTradingDays', getSmallScalarEncoder()],
-      ['dailyDrawdown', getPercentEncoder()],
-      ['maximumLoss', getPercentEncoder()],
-      ['profitTarget', getPercentEncoder()],
-      ['maxParticipants', getSmallScalarEncoder()],
-      ['participants', getSmallScalarEncoder()],
-      ['totalPool', getU64Encoder()],
-      ['isActive', getBooleanEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["stageId", getU16Encoder()],
+      ["stageSequence", getU8Encoder()],
+      ["stageType", getStageTypeEncoder()],
+      ["startingDeposit", getU64Encoder()],
+      ["admin", getAddressEncoder()],
+      ["entranceCost", getU64Encoder()],
+      ["entranceTokenMint", getAddressEncoder()],
+      ["minimumTradingDays", getSmallScalarEncoder()],
+      ["dailyDrawdown", getPercentEncoder()],
+      ["maximumLoss", getPercentEncoder()],
+      ["profitTarget", getPercentEncoder()],
+      ["maxParticipants", getSmallScalarEncoder()],
+      ["participants", getSmallScalarEncoder()],
+      ["totalPool", getU64Encoder()],
+      ["isActive", getBooleanEncoder()],
     ]),
-    (value) => ({ ...value, discriminator: CHALLENGE_TEMPLATE_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: CHALLENGE_TEMPLATE_DISCRIMINATOR }),
   );
 }
 
 /** Gets the decoder for {@link ChallengeTemplate} account data. */
 export function getChallengeTemplateDecoder(): FixedSizeDecoder<ChallengeTemplate> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['stageId', getU16Decoder()],
-    ['stageSequence', getU8Decoder()],
-    ['stageType', getStageTypeDecoder()],
-    ['startingDeposit', getU64Decoder()],
-    ['admin', getAddressDecoder()],
-    ['entranceCost', getU64Decoder()],
-    ['entranceTokenMint', getAddressDecoder()],
-    ['minimumTradingDays', getSmallScalarDecoder()],
-    ['dailyDrawdown', getPercentDecoder()],
-    ['maximumLoss', getPercentDecoder()],
-    ['profitTarget', getPercentDecoder()],
-    ['maxParticipants', getSmallScalarDecoder()],
-    ['participants', getSmallScalarDecoder()],
-    ['totalPool', getU64Decoder()],
-    ['isActive', getBooleanDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["stageId", getU16Decoder()],
+    ["stageSequence", getU8Decoder()],
+    ["stageType", getStageTypeDecoder()],
+    ["startingDeposit", getU64Decoder()],
+    ["admin", getAddressDecoder()],
+    ["entranceCost", getU64Decoder()],
+    ["entranceTokenMint", getAddressDecoder()],
+    ["minimumTradingDays", getSmallScalarDecoder()],
+    ["dailyDrawdown", getPercentDecoder()],
+    ["maximumLoss", getPercentDecoder()],
+    ["profitTarget", getPercentDecoder()],
+    ["maxParticipants", getSmallScalarDecoder()],
+    ["participants", getSmallScalarDecoder()],
+    ["totalPool", getU64Decoder()],
+    ["isActive", getBooleanDecoder()],
   ]);
 }
 
@@ -158,31 +158,31 @@ export function getChallengeTemplateCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getChallengeTemplateEncoder(),
-    getChallengeTemplateDecoder()
+    getChallengeTemplateDecoder(),
   );
 }
 
 export function decodeChallengeTemplate<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress>,
 ): Account<ChallengeTemplate, TAddress>;
 export function decodeChallengeTemplate<TAddress extends string = string>(
-  encodedAccount: MaybeEncodedAccount<TAddress>
+  encodedAccount: MaybeEncodedAccount<TAddress>,
 ): MaybeAccount<ChallengeTemplate, TAddress>;
 export function decodeChallengeTemplate<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>,
 ):
   | Account<ChallengeTemplate, TAddress>
   | MaybeAccount<ChallengeTemplate, TAddress> {
   return decodeAccount(
     encodedAccount as MaybeEncodedAccount<TAddress>,
-    getChallengeTemplateDecoder()
+    getChallengeTemplateDecoder(),
   );
 }
 
 export async function fetchChallengeTemplate<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<Account<ChallengeTemplate, TAddress>> {
   const maybeAccount = await fetchMaybeChallengeTemplate(rpc, address, config);
   assertAccountExists(maybeAccount);
@@ -194,7 +194,7 @@ export async function fetchMaybeChallengeTemplate<
 >(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<MaybeAccount<ChallengeTemplate, TAddress>> {
   const maybeAccount = await fetchEncodedAccount(rpc, address, config);
   return decodeChallengeTemplate(maybeAccount);
@@ -203,12 +203,12 @@ export async function fetchMaybeChallengeTemplate<
 export async function fetchAllChallengeTemplate(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<Account<ChallengeTemplate>[]> {
   const maybeAccounts = await fetchAllMaybeChallengeTemplate(
     rpc,
     addresses,
-    config
+    config,
   );
   assertAccountsExist(maybeAccounts);
   return maybeAccounts;
@@ -217,11 +217,11 @@ export async function fetchAllChallengeTemplate(
 export async function fetchAllMaybeChallengeTemplate(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<MaybeAccount<ChallengeTemplate>[]> {
   const maybeAccounts = await fetchEncodedAccounts(rpc, addresses, config);
   return maybeAccounts.map((maybeAccount) =>
-    decodeChallengeTemplate(maybeAccount)
+    decodeChallengeTemplate(maybeAccount),
   );
 }
 

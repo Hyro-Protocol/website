@@ -31,13 +31,13 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from '../programs';
+} from "@solana/kit";
+import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from "../shared";
 
 export const EXECUTE_TX_DISCRIMINATOR = new Uint8Array([
   249, 17, 145, 23, 12, 252, 17, 41,
@@ -89,14 +89,14 @@ export type ExecuteTxInstructionDataArgs = {};
 
 export function getExecuteTxInstructionDataEncoder(): FixedSizeEncoder<ExecuteTxInstructionDataArgs> {
   return transformEncoder(
-    getStructEncoder([['discriminator', fixEncoderSize(getBytesEncoder(), 8)]]),
-    (value) => ({ ...value, discriminator: EXECUTE_TX_DISCRIMINATOR })
+    getStructEncoder([["discriminator", fixEncoderSize(getBytesEncoder(), 8)]]),
+    (value) => ({ ...value, discriminator: EXECUTE_TX_DISCRIMINATOR }),
   );
 }
 
 export function getExecuteTxInstructionDataDecoder(): FixedSizeDecoder<ExecuteTxInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
   ]);
 }
 
@@ -106,7 +106,7 @@ export function getExecuteTxInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getExecuteTxInstructionDataEncoder(),
-    getExecuteTxInstructionDataDecoder()
+    getExecuteTxInstructionDataDecoder(),
   );
 }
 
@@ -143,7 +143,7 @@ export async function getExecuteTxInstructionAsync<
     TAccountPolicyProgram,
     TAccountSigner
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   ExecuteTxInstruction<
     TProgramAddress,
@@ -181,7 +181,7 @@ export async function getExecuteTxInstructionAsync<
     });
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -237,7 +237,7 @@ export function getExecuteTxInstruction<
     TAccountPolicyProgram,
     TAccountSigner
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): ExecuteTxInstruction<
   TProgramAddress,
   TAccountVault,
@@ -265,7 +265,7 @@ export function getExecuteTxInstruction<
     ResolvedAccount
   >;
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.vault),
@@ -310,11 +310,11 @@ export function parseExecuteTxInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedExecuteTxInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 6) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

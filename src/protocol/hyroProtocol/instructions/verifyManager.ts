@@ -29,15 +29,15 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 import {
   getVerificationStatusDecoder,
   getVerificationStatusEncoder,
   type VerificationStatus,
   type VerificationStatusArgs,
-} from '../types';
+} from "../types";
 
 export const VERIFY_MANAGER_DISCRIMINATOR = new Uint8Array([
   61, 121, 49, 235, 68, 94, 106, 30,
@@ -45,7 +45,7 @@ export const VERIFY_MANAGER_DISCRIMINATOR = new Uint8Array([
 
 export function getVerifyManagerDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    VERIFY_MANAGER_DISCRIMINATOR
+    VERIFY_MANAGER_DISCRIMINATOR,
   );
 }
 
@@ -85,17 +85,17 @@ export type VerifyManagerInstructionDataArgs = {
 export function getVerifyManagerInstructionDataEncoder(): FixedSizeEncoder<VerifyManagerInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['verificationStatus', getVerificationStatusEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["verificationStatus", getVerificationStatusEncoder()],
     ]),
-    (value) => ({ ...value, discriminator: VERIFY_MANAGER_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: VERIFY_MANAGER_DISCRIMINATOR }),
   );
 }
 
 export function getVerifyManagerInstructionDataDecoder(): FixedSizeDecoder<VerifyManagerInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['verificationStatus', getVerificationStatusDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["verificationStatus", getVerificationStatusDecoder()],
   ]);
 }
 
@@ -105,7 +105,7 @@ export function getVerifyManagerInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getVerifyManagerInstructionDataEncoder(),
-    getVerifyManagerInstructionDataDecoder()
+    getVerifyManagerInstructionDataDecoder(),
   );
 }
 
@@ -117,7 +117,7 @@ export type VerifyManagerInput<
   admin: TransactionSigner<TAccountAdmin>;
   managerProfile: Address<TAccountManagerProfile>;
   registry: Address<TAccountRegistry>;
-  verificationStatus: VerifyManagerInstructionDataArgs['verificationStatus'];
+  verificationStatus: VerifyManagerInstructionDataArgs["verificationStatus"];
 };
 
 export function getVerifyManagerInstruction<
@@ -131,7 +131,7 @@ export function getVerifyManagerInstruction<
     TAccountManagerProfile,
     TAccountRegistry
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): VerifyManagerInstruction<
   TProgramAddress,
   TAccountAdmin,
@@ -156,7 +156,7 @@ export function getVerifyManagerInstruction<
   // Original args.
   const args = { ...input };
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.admin),
@@ -164,7 +164,7 @@ export function getVerifyManagerInstruction<
       getAccountMeta(accounts.registry),
     ],
     data: getVerifyManagerInstructionDataEncoder().encode(
-      args as VerifyManagerInstructionDataArgs
+      args as VerifyManagerInstructionDataArgs,
     ),
     programAddress,
   } as VerifyManagerInstruction<
@@ -194,11 +194,11 @@ export function parseVerifyManagerInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedVerifyManagerInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 3) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

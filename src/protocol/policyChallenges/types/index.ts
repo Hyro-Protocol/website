@@ -6,17 +6,17 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './amount';
-export * from './challengeInsertDto';
-export * from './challengeStatus';
-export * from './challengeTemplateUpdateInsertDto';
-export * from './challengeUpdateDto';
-export * from './dailyDrawdown';
-export * from './drawdownType';
-export * from './maximumLoss';
-export * from './percent';
-export * from './profitTarget';
-export * from './smallScalar';
-export * from './stageType';
-export * from './tradingDays';
-export * from './validateOperation';
+export * from "./amount";
+export * from "./challengeInsertDto";
+export * from "./challengeStatus";
+export * from "./challengeTemplateUpdateInsertDto";
+export * from "./challengeUpdateDto";
+export * from "./dailyDrawdown";
+export * from "./drawdownType";
+export * from "./maximumLoss";
+export * from "./percent";
+export * from "./profitTarget";
+export * from "./smallScalar";
+export * from "./stageType";
+export * from "./tradingDays";
+export * from "./validateOperation";

@@ -30,9 +30,9 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { HYRO_PROTOCOL_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const INITIALIZE_MANAGER_REGISTRY_DISCRIMINATOR = new Uint8Array([
   45, 38, 8, 215, 181, 198, 110, 202,
@@ -40,7 +40,7 @@ export const INITIALIZE_MANAGER_REGISTRY_DISCRIMINATOR = new Uint8Array([
 
 export function getInitializeManagerRegistryDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    INITIALIZE_MANAGER_REGISTRY_DISCRIMINATOR
+    INITIALIZE_MANAGER_REGISTRY_DISCRIMINATOR,
   );
 }
 
@@ -48,9 +48,8 @@ export type InitializeManagerRegistryInstruction<
   TProgram extends string = typeof HYRO_PROTOCOL_PROGRAM_ADDRESS,
   TAccountRegistry extends string | AccountMeta<string> = string,
   TAccountAdmin extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -78,17 +77,17 @@ export type InitializeManagerRegistryInstructionDataArgs = {};
 
 export function getInitializeManagerRegistryInstructionDataEncoder(): FixedSizeEncoder<InitializeManagerRegistryInstructionDataArgs> {
   return transformEncoder(
-    getStructEncoder([['discriminator', fixEncoderSize(getBytesEncoder(), 8)]]),
+    getStructEncoder([["discriminator", fixEncoderSize(getBytesEncoder(), 8)]]),
     (value) => ({
       ...value,
       discriminator: INITIALIZE_MANAGER_REGISTRY_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getInitializeManagerRegistryInstructionDataDecoder(): FixedSizeDecoder<InitializeManagerRegistryInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
   ]);
 }
 
@@ -98,7 +97,7 @@ export function getInitializeManagerRegistryInstructionDataCodec(): FixedSizeCod
 > {
   return combineCodec(
     getInitializeManagerRegistryInstructionDataEncoder(),
-    getInitializeManagerRegistryInstructionDataDecoder()
+    getInitializeManagerRegistryInstructionDataDecoder(),
   );
 }
 
@@ -123,7 +122,7 @@ export async function getInitializeManagerRegistryInstructionAsync<
     TAccountAdmin,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   InitializeManagerRegistryInstruction<
     TProgramAddress,
@@ -156,17 +155,17 @@ export async function getInitializeManagerRegistryInstructionAsync<
           new Uint8Array([
             109, 97, 110, 97, 103, 101, 114, 95, 114, 101, 103, 105, 115, 116,
             114, 121,
-          ])
+          ]),
         ),
       ],
     });
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.registry),
@@ -204,7 +203,7 @@ export function getInitializeManagerRegistryInstruction<
     TAccountAdmin,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): InitializeManagerRegistryInstruction<
   TProgramAddress,
   TAccountRegistry,
@@ -229,10 +228,10 @@ export function getInitializeManagerRegistryInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.registry),
@@ -268,11 +267,11 @@ export function parseInitializeManagerRegistryInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedInitializeManagerRegistryInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 3) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -288,7 +287,7 @@ export function parseInitializeManagerRegistryInstruction<
       systemProgram: getNextAccount(),
     },
     data: getInitializeManagerRegistryInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

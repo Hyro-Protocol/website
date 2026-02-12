@@ -35,7 +35,7 @@ import {
   type MaybeAccount,
   type MaybeEncodedAccount,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 
 export const MANAGERS_DISCRIMINATOR = new Uint8Array([
   50, 116, 200, 15, 255, 219, 93, 254,
@@ -56,18 +56,18 @@ export type ManagersArgs = { managers: Array<Address> };
 export function getManagersEncoder(): Encoder<ManagersArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['managers', getArrayEncoder(getAddressEncoder())],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["managers", getArrayEncoder(getAddressEncoder())],
     ]),
-    (value) => ({ ...value, discriminator: MANAGERS_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: MANAGERS_DISCRIMINATOR }),
   );
 }
 
 /** Gets the decoder for {@link Managers} account data. */
 export function getManagersDecoder(): Decoder<Managers> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['managers', getArrayDecoder(getAddressDecoder())],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["managers", getArrayDecoder(getAddressDecoder())],
   ]);
 }
 
@@ -77,24 +77,24 @@ export function getManagersCodec(): Codec<ManagersArgs, Managers> {
 }
 
 export function decodeManagers<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress>,
 ): Account<Managers, TAddress>;
 export function decodeManagers<TAddress extends string = string>(
-  encodedAccount: MaybeEncodedAccount<TAddress>
+  encodedAccount: MaybeEncodedAccount<TAddress>,
 ): MaybeAccount<Managers, TAddress>;
 export function decodeManagers<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>,
 ): Account<Managers, TAddress> | MaybeAccount<Managers, TAddress> {
   return decodeAccount(
     encodedAccount as MaybeEncodedAccount<TAddress>,
-    getManagersDecoder()
+    getManagersDecoder(),
   );
 }
 
 export async function fetchManagers<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<Account<Managers, TAddress>> {
   const maybeAccount = await fetchMaybeManagers(rpc, address, config);
   assertAccountExists(maybeAccount);
@@ -104,7 +104,7 @@ export async function fetchManagers<TAddress extends string = string>(
 export async function fetchMaybeManagers<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<MaybeAccount<Managers, TAddress>> {
   const maybeAccount = await fetchEncodedAccount(rpc, address, config);
   return decodeManagers(maybeAccount);
@@ -113,7 +113,7 @@ export async function fetchMaybeManagers<TAddress extends string = string>(
 export async function fetchAllManagers(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<Account<Managers>[]> {
   const maybeAccounts = await fetchAllMaybeManagers(rpc, addresses, config);
   assertAccountsExist(maybeAccounts);
@@ -123,7 +123,7 @@ export async function fetchAllManagers(
 export async function fetchAllMaybeManagers(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<MaybeAccount<Managers>[]> {
   const maybeAccounts = await fetchEncodedAccounts(rpc, addresses, config);
   return maybeAccounts.map((maybeAccount) => decodeManagers(maybeAccount));

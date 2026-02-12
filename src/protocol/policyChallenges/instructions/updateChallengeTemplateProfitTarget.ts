@@ -28,30 +28,29 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+} from "@solana/kit";
+import { POLICY_CHALLENGES_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 import {
   getPercentDecoder,
   getPercentEncoder,
   type Percent,
   type PercentArgs,
-} from '../types';
+} from "../types";
 
 export const UPDATE_CHALLENGE_TEMPLATE_PROFIT_TARGET_DISCRIMINATOR =
   new Uint8Array([64, 12, 173, 109, 35, 183, 191, 114]);
 
 export function getUpdateChallengeTemplateProfitTargetDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    UPDATE_CHALLENGE_TEMPLATE_PROFIT_TARGET_DISCRIMINATOR
+    UPDATE_CHALLENGE_TEMPLATE_PROFIT_TARGET_DISCRIMINATOR,
   );
 }
 
 export type UpdateChallengeTemplateProfitTargetInstruction<
   TProgram extends string = typeof POLICY_CHALLENGES_PROGRAM_ADDRESS,
-  TAccountChallengeTemplateAccount extends
-    | string
-    | AccountMeta<string> = string,
+  TAccountChallengeTemplateAccount extends string | AccountMeta<string> =
+    string,
   TAccountSigner extends string | AccountMeta<string> = string,
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
@@ -81,20 +80,20 @@ export type UpdateChallengeTemplateProfitTargetInstructionDataArgs = {
 export function getUpdateChallengeTemplateProfitTargetInstructionDataEncoder(): FixedSizeEncoder<UpdateChallengeTemplateProfitTargetInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['profitTarget', getPercentEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["profitTarget", getPercentEncoder()],
     ]),
     (value) => ({
       ...value,
       discriminator: UPDATE_CHALLENGE_TEMPLATE_PROFIT_TARGET_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getUpdateChallengeTemplateProfitTargetInstructionDataDecoder(): FixedSizeDecoder<UpdateChallengeTemplateProfitTargetInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['profitTarget', getPercentDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["profitTarget", getPercentDecoder()],
   ]);
 }
 
@@ -104,7 +103,7 @@ export function getUpdateChallengeTemplateProfitTargetInstructionDataCodec(): Fi
 > {
   return combineCodec(
     getUpdateChallengeTemplateProfitTargetInstructionDataEncoder(),
-    getUpdateChallengeTemplateProfitTargetInstructionDataDecoder()
+    getUpdateChallengeTemplateProfitTargetInstructionDataDecoder(),
   );
 }
 
@@ -114,7 +113,7 @@ export type UpdateChallengeTemplateProfitTargetInput<
 > = {
   challengeTemplateAccount: Address<TAccountChallengeTemplateAccount>;
   signer: TransactionSigner<TAccountSigner>;
-  profitTarget: UpdateChallengeTemplateProfitTargetInstructionDataArgs['profitTarget'];
+  profitTarget: UpdateChallengeTemplateProfitTargetInstructionDataArgs["profitTarget"];
 };
 
 export function getUpdateChallengeTemplateProfitTargetInstruction<
@@ -126,7 +125,7 @@ export function getUpdateChallengeTemplateProfitTargetInstruction<
     TAccountChallengeTemplateAccount,
     TAccountSigner
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): UpdateChallengeTemplateProfitTargetInstruction<
   TProgramAddress,
   TAccountChallengeTemplateAccount,
@@ -152,14 +151,14 @@ export function getUpdateChallengeTemplateProfitTargetInstruction<
   // Original args.
   const args = { ...input };
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.challengeTemplateAccount),
       getAccountMeta(accounts.signer),
     ],
     data: getUpdateChallengeTemplateProfitTargetInstructionDataEncoder().encode(
-      args as UpdateChallengeTemplateProfitTargetInstructionDataArgs
+      args as UpdateChallengeTemplateProfitTargetInstructionDataArgs,
     ),
     programAddress,
   } as UpdateChallengeTemplateProfitTargetInstruction<
@@ -187,14 +186,14 @@ export function parseUpdateChallengeTemplateProfitTargetInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedUpdateChallengeTemplateProfitTargetInstruction<
   TProgram,
   TAccountMetas
 > {
   if (instruction.accounts.length < 2) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -209,7 +208,7 @@ export function parseUpdateChallengeTemplateProfitTargetInstruction<
       signer: getNextAccount(),
     },
     data: getUpdateChallengeTemplateProfitTargetInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

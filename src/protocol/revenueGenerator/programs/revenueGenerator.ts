@@ -7,41 +7,46 @@
  */
 
 import {
+  assertIsInstructionWithAccounts,
   containsBytes,
   fixEncoderSize,
   getBytesEncoder,
   type Address,
+  type Instruction,
+  type InstructionWithData,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
+  parseGenerateRevenueInstruction,
+  parseInitializeInstruction,
   type ParsedGenerateRevenueInstruction,
   type ParsedInitializeInstruction,
-} from '../instructions';
+} from "../instructions";
 
 export const REVENUE_GENERATOR_PROGRAM_ADDRESS =
-  '3VoCe14ga9UykEHAjuXMk8frjehCW2vAs4mA6UQPjVeN' as Address<'3VoCe14ga9UykEHAjuXMk8frjehCW2vAs4mA6UQPjVeN'>;
+  "3VoCe14ga9UykEHAjuXMk8frjehCW2vAs4mA6UQPjVeN" as Address<"3VoCe14ga9UykEHAjuXMk8frjehCW2vAs4mA6UQPjVeN">;
 
 export enum RevenueGeneratorAccount {
   RevenueGenerator,
 }
 
 export function identifyRevenueGeneratorAccount(
-  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): RevenueGeneratorAccount {
-  const data = 'data' in account ? account.data : account;
+  const data = "data" in account ? account.data : account;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([11, 124, 77, 223, 158, 124, 234, 56])
+        new Uint8Array([11, 124, 77, 223, 158, 124, 234, 56]),
       ),
-      0
+      0,
     )
   ) {
     return RevenueGeneratorAccount.RevenueGenerator;
   }
   throw new Error(
-    'The provided account could not be identified as a revenueGenerator account.'
+    "The provided account could not be identified as a revenueGenerator account.",
   );
 }
 
@@ -51,16 +56,16 @@ export enum RevenueGeneratorInstruction {
 }
 
 export function identifyRevenueGeneratorInstruction(
-  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): RevenueGeneratorInstruction {
-  const data = 'data' in instruction ? instruction.data : instruction;
+  const data = "data" in instruction ? instruction.data : instruction;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([251, 232, 131, 80, 58, 114, 70, 83])
+        new Uint8Array([251, 232, 131, 80, 58, 114, 70, 83]),
       ),
-      0
+      0,
     )
   ) {
     return RevenueGeneratorInstruction.GenerateRevenue;
@@ -69,20 +74,20 @@ export function identifyRevenueGeneratorInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([175, 175, 109, 31, 13, 152, 155, 237])
+        new Uint8Array([175, 175, 109, 31, 13, 152, 155, 237]),
       ),
-      0
+      0,
     )
   ) {
     return RevenueGeneratorInstruction.Initialize;
   }
   throw new Error(
-    'The provided instruction could not be identified as a revenueGenerator instruction.'
+    "The provided instruction could not be identified as a revenueGenerator instruction.",
   );
 }
 
 export type ParsedRevenueGeneratorInstruction<
-  TProgram extends string = '3VoCe14ga9UykEHAjuXMk8frjehCW2vAs4mA6UQPjVeN',
+  TProgram extends string = "3VoCe14ga9UykEHAjuXMk8frjehCW2vAs4mA6UQPjVeN",
 > =
   | ({
       instructionType: RevenueGeneratorInstruction.GenerateRevenue;
@@ -90,3 +95,29 @@ export type ParsedRevenueGeneratorInstruction<
   | ({
       instructionType: RevenueGeneratorInstruction.Initialize;
     } & ParsedInitializeInstruction<TProgram>);
+
+export function parseRevenueGeneratorInstruction<TProgram extends string>(
+  instruction: Instruction<TProgram> & InstructionWithData<ReadonlyUint8Array>,
+): ParsedRevenueGeneratorInstruction<TProgram> {
+  const instructionType = identifyRevenueGeneratorInstruction(instruction);
+  switch (instructionType) {
+    case RevenueGeneratorInstruction.GenerateRevenue: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: RevenueGeneratorInstruction.GenerateRevenue,
+        ...parseGenerateRevenueInstruction(instruction),
+      };
+    }
+    case RevenueGeneratorInstruction.Initialize: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: RevenueGeneratorInstruction.Initialize,
+        ...parseInitializeInstruction(instruction),
+      };
+    }
+    default:
+      throw new Error(
+        `Unrecognized instruction type: ${instructionType as string}`,
+      );
+  }
+}
